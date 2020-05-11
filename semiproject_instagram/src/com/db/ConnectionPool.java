@@ -38,4 +38,28 @@ public class ConnectionPool {
 			System.out.println(s.getMessage());
 		}
 	}
+	
+	public static void close(Connection con) {
+		try {
+			if(con!=null) con.close();
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+		}
+	}
+	
+	public static void close(PreparedStatement pstmt) {
+		try {
+			if(pstmt!=null) pstmt.close();
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+		}
+	}
+	
+	public static void close(ResultSet rs) {
+		try {
+			if(rs!=null) rs.close();
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+		}
+	}
 }
