@@ -23,11 +23,10 @@
 	
 	function sendMsg(){
 		var chatarea =document.getElementById("chatarea");
-		var msgtext =document.getElementById("msgtext").value;
-		websocket.send(msgtext);
-		chatarea.value +=msgtext + "\n";
-		document.getElementById("msgtext").value ="";
-		console.log(msgtext);
+		var msgtext =document.getElementById("msgtext");
+		websocket.send(msgtext.value);
+		chatarea.value +=msgtext.value + "\n";
+		msgtext.value ="";
 	}
 </script>
 </html>
