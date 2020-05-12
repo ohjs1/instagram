@@ -25,11 +25,10 @@
 		var chatarea =document.getElementById("chatarea");
 		var msgtext =document.getElementById("msgtext");
 		
-		var chatroom_no =0;
-		var myuser_no =0;
-		var youruser_no =0;
+		var myuser_no =1;
+		var youruser_no =1;
 		
-		websocket.send(msgtext.value + "#" + chatroom_no + "#" + myuser_no + "#" + youruser_no);
+		websocket.send(msgtext.value + "#" + myuser_no + "#" + youruser_no);
 		chatarea.value +=msgtext.value + "\n";
 		msgtext.value ="";
 	}
