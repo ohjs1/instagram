@@ -5,10 +5,18 @@
 <head>
 <meta charset="UTF-8">
 <title>Instagram MainPage 입니다.</title>
+<link rel="stylesheet" type="text/css" href="${cp}/css/main.css">
 </head>
 <body>
 <div id="warp">
-	<div id="header"></div>
+	<div id="header">
+		<img src="${ cp }/images/logo.png" alt="logo" id="logo"/>
+		<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
+		<a href="${ cp }/home"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
+		<a href="${ cp }/direct/inbox"><img src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지"/></a>
+		<img src="${ cp }/images/icon/location.jpg" alt="위치"/>
+		<img src="${ cp }/images/icon/likes.jpg" alt="좋아요"/>
+	</div>
 	<div id="content"></div>
 	<div id="footer"></div>
 </div>

@@ -25,8 +25,8 @@
 		var chatarea =document.getElementById("chatarea");
 		var msgtext =document.getElementById("msgtext");
 		
-		var myuser_no =1;
-		var youruser_no =1;
+		var myuser_no =1; //로그인 회원 번호 들어옴
+		var youruser_no =1; //DM보낼 회원번호 들어옴
 		
 		websocket.send(msgtext.value + "#" + myuser_no + "#" + youruser_no);
 		chatarea.value +=msgtext.value + "\n";
