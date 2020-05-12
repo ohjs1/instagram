@@ -1,4 +1,4 @@
-package com.ohjs1.dm;
+package com.dm;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -8,6 +8,7 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/websocket")
 public class DirectMessageServer {
+	
 	@OnOpen
 	public void joinUser() {
 		System.out.println("클라이언트 접속됨...");

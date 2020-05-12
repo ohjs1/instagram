@@ -17,14 +17,19 @@
 	var websocket =new WebSocket("ws://localhost:8081/semiproject_instagram/websocket");
 	
 	
-	websocket.onopen =function(message){
+	websocket.onopen =function(){
 		console.log("서버에 접속됨");
 	}
 	
 	function sendMsg(){
 		var chatarea =document.getElementById("chatarea");
 		var msgtext =document.getElementById("msgtext");
-		websocket.send(msgtext.value);
+		
+		var chatroom_no =0;
+		var myuser_no =0;
+		var youruser_no =0;
+		
+		websocket.send(msgtext.value + "#" + chatroom_no + "#" + myuser_no + "#" + youruser_no);
 		chatarea.value +=msgtext.value + "\n";
 		msgtext.value ="";
 	}
