@@ -1,4 +1,4 @@
-package dm;
+package com.ohjs1.dm;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;

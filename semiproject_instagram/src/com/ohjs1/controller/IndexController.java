@@ -1,4 +1,4 @@
-package controller;
+package com.ohjs1.controller;
 
 import java.io.IOException;
 
