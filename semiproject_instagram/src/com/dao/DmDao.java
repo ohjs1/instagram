@@ -1,7 +1,6 @@
 package com.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,9 +10,14 @@ import com.db.ConnectionPool;
 import com.vo.MemberVo;
 
 public class DmDao {
-	public DmDao() {}
+	private DmDao() {}
+	private static DmDao dmdao =null;
+	public static DmDao getInstance() {
+		dmdao =new DmDao();
+		return dmdao;
+	}
 	
-	
+	//채팅내용을 DB에 저장하는 메소드
 	public int insert(int mymember_no, int yourmember_no, String msg, boolean chk) {
 		Connection con =null;
 		PreparedStatement pstmtChatroom =null;
@@ -51,6 +55,28 @@ public class DmDao {
 		}
 	}
 	
+	//채팅방 생성하기
+	public int createChattingRoom(int mymember_no, int yourmember_no) {
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		
+		try {
+			String sql ="insert into chatroom values(chatroom_seq.nextval, ?, ?, sysdate)";
+			pstmt =con.prepareStatement(sql);
+			pstmt.setInt(1, mymember_no);
+			pstmt.setInt(2, yourmember_no);
+			return pstmt.executeUpdate();
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return -1;
+		} finally {
+			ConnectionPool.close(con, pstmt, null);
+		}
+	}
+	
+	//채팅내용을 DB에 저장하기
+	
+	//검색된 유저를 구하는 메소드
 	public ArrayList<MemberVo> getUserList(String keyword){
 		Connection con =null;
 		PreparedStatement pstmt =null;
@@ -85,4 +111,30 @@ public class DmDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	
+	//유저의 채팅내용을 불러와 보여주는 메소드
+//	public ArrayList<MemberVo> getChatShow(int chat_no){
+//		Connection con =null;
+//		PreparedStatement pstmt =null;
+//		ResultSet rs =null;
+//		
+//		try {
+//			con =ConnectionPool.getCon();
+//			String sql ="select * from chatcontent where chat_no =?";
+//			pstmt =con.prepareStatement(sql);
+//			pstmt.setInt(1, chat_no);
+//			rs =pstmt.executeQuery();
+//			
+//			ArrayList<MemberVo> list =new ArrayList<MemberVo>();
+//			
+//			while(rs.next()) {
+//				
+//			}
+//			
+//		} catch(SQLException s) {
+//			System.out.println(s.getMessage());
+//		} finally {
+//			ConnectionPool.close(con, pstmt, rs);
+//		}
+//	}
 }

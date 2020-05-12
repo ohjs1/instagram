@@ -24,7 +24,7 @@ public class DirectMessageSearchController extends HttpServlet {
 		
 		String keyword =req.getParameter("keyword");
 //		System.out.println(keyword);
-		DmDao dao =new DmDao();
+		DmDao dao =DmDao.getInstance();
 		ArrayList<MemberVo> list =dao.getUserList(keyword);
 		
 		JSONArray jrr =new JSONArray();

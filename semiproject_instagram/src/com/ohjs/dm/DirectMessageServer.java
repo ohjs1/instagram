@@ -25,13 +25,13 @@ public class DirectMessageServer {
 		
 		boolean chk =false;
 		
-		DmDao dao =new DmDao();
+		DmDao dao =DmDao.getInstance();
 		
 		System.out.println(arr[0]);
 		System.out.println(arr[1]);
 		System.out.println(arr[2]);
 		
-		int n =dao.insert(Integer.parseInt(myuser_no), Integer.parseInt(myuser_no), arr[0], chk);
+		int n =dao.insert(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no), arr[0], chk);
 		
 		if(n>0) {
 			System.out.println("chatroom insert ¼º°ø!");
