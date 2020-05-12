@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class StoryVo {
 	private int story_no;
-	private int memver_no;
+	private int member_no;
 	private String content;
 	private String filepath;
 	private Date storydate;
 	
 	public StoryVo() {}
 	
-	public StoryVo(int story_no, int memver_no, String content, String filepath, Date storydate) {
+	public StoryVo(int story_no, int member_no, String content, String filepath, Date storydate) {
 		super();
 		this.story_no = story_no;
-		this.memver_no = memver_no;
+		this.member_no = member_no;
 		this.content = content;
 		this.filepath = filepath;
 		this.storydate = storydate;
@@ -26,11 +26,11 @@ public class StoryVo {
 	public void setStory_no(int story_no) {
 		this.story_no = story_no;
 	}
-	public int getMemver_no() {
-		return memver_no;
+	public int getMember_no() {
+		return member_no;
 	}
-	public void setMemver_no(int memver_no) {
-		this.memver_no = memver_no;
+	public void setMember_no(int member_no) {
+		this.member_no = member_no;
 	}
 	public String getContent() {
 		return content;
