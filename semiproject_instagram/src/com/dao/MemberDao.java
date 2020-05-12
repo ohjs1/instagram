@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class MemberDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	//로그인
+	//로그인(아이디,로그인) 일치하면 로그인 성공
 	public int isMember(String id, String pwd) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -59,6 +60,7 @@ public class MemberDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	//비밀번호 변경
 	public int pwdupdate(String id, String newPwd) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -75,7 +77,37 @@ public class MemberDao {
 		}finally {
 			ConnectionPool.close(con, pstmt, null);
 		}
+	}
+	//회원정보
+	public MemberVo memberInfo(String id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select * from member where id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				int member_no=rs.getInt("member_no");
+				String pwd=rs.getString("pwd");
+				String name=rs.getString("name");
+				String nickname=rs.getString("nickname");
+				Date regdate=rs.getDate("regdate");
+				String profile=rs.getString("profile");
+				MemberVo vo=new MemberVo(member_no, id, pwd, name, nickname, regdate, profile);
+				return vo;
+			}
+			return null;
+		}catch (SQLException se) {
+			se.getStackTrace();
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
 	
+		
 	}
 }
 
