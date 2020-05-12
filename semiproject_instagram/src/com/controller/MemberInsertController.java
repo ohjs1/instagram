@@ -23,10 +23,6 @@ public class MemberInsertController extends HttpServlet{
 		String pwd=req.getParameter("pwd");
 		String nickname=req.getParameter("nickname");
 		String name=req.getParameter("name");
-		System.out.println(id);
-		System.out.println(pwd);
-		System.out.println(nickname);
-		System.out.println(name);
 		MemberVo vo=new MemberVo(0, id, pwd, name, nickname, null, null);
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.insert(vo);

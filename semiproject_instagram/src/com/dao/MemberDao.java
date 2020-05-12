@@ -56,8 +56,26 @@ public class MemberDao {
 			se.getStackTrace();
 			return -1;
 		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	public int pwdupdate(String id, String newPwd) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="update member set pwd=? where id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, newPwd);
+			pstmt.setString(2, id);
+			return pstmt.executeUpdate();
+		}catch (SQLException se) {
+			se.getStackTrace();
+			return -1;
+		}finally {
 			ConnectionPool.close(con, pstmt, null);
 		}
+	
 	}
 }
 
