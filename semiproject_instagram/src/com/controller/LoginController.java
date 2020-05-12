@@ -28,9 +28,10 @@ public class LoginController extends HttpServlet{
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.isMember(id,pwd);
 		System.out.println(n);
-		if(n==1) {
+		if(n>0) {
 			HttpSession session=req.getSession();
 			session.setAttribute("id", id);
+			session.setAttribute("member_no", n);
 //			resp.sendRedirect(req.getContextPath()+"");
 		}else {
 			req.setAttribute("errMsg", "아이디 또는 비밀번호가 맞지 않아요!");

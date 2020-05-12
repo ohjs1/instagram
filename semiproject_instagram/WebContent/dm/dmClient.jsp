@@ -8,6 +8,7 @@
 </head>
 <body>
 	<form>
+		<input type="hidden" id="myuser_no" value="${ member_no }" />
 		<textarea id="chatarea" cols="30" rows="10"></textarea><br>
 		<input type="text" id="msgtext"/>
 		<input type="button" value="전송" onclick="sendMsg()"/>
@@ -25,7 +26,8 @@
 		var chatarea =document.getElementById("chatarea");
 		var msgtext =document.getElementById("msgtext");
 		
-		var myuser_no =1; //로그인 회원 번호 들어옴
+		var myuser_no =document.getElementById("myuser_no").value; //로그인 회원 번호 들어옴
+		//console.log(myuser_no);
 		var youruser_no =1; //DM보낼 회원번호 들어옴
 		
 		websocket.send(msgtext.value + "#" + myuser_no + "#" + youruser_no);

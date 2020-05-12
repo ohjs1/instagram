@@ -42,15 +42,16 @@ public class MemberDao {
 		ResultSet rs=null;
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select * from member where id=? and pwd=?";
+			String sql="select member_no from member where id=? and pwd=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pwd);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
-				return 1;
+				int member_no =rs.getInt("member_no");
+				return member_no;
 			}
-			return 2;
+			return -1;
 		}catch (SQLException se) {
 			se.getStackTrace();
 			return -1;
