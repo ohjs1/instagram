@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,17 +10,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import com.dao.MemberDao;
-import com.vo.MemberVo;
-@WebServlet("/member/memberInfo")
-public class MemberFrofileController extends HttpServlet{
+@WebServlet("/member/profileUpdate")
+public class MemberProfileUpdateController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		String id=(String)session.getAttribute("id");
+		String profile=req.getParameter("profile");
 		MemberDao dao=MemberDao.getInstance();
-		MemberVo vo=dao.memberInfo(id);
-		req.setAttribute("vo", vo);
-		req.getRequestDispatcher(req.getContextPath()+"/member/frofile_update.jsp").forward(req, resp);
+		int n=dao.memberProfileUpdate(id,profile);
+		if(n>0) {
+			resp.setContentType("text/plian; charset=utf-8");
+			JSONObject json=new JSONObject();
+			json.put("profile", profile);
+			PrintWriter pw=resp.getWriter();
+			pw.print(json);
+		}
+		
+		
 	}
 }
+
+
+
+
+

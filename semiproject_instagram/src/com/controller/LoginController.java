@@ -25,7 +25,6 @@ public class LoginController extends HttpServlet{
 		String pwd=req.getParameter("pwd");
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.isMember(id,pwd);
-		System.out.println(n);
 		if(n>0) {
 			HttpSession session=req.getSession();
 			session.setAttribute("id", id);
