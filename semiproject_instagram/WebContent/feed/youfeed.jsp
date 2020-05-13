@@ -4,18 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상대피드</title>
 </head>
 <body>
 <h1>${id }</h1>
-	<form action="">
-		<input type="submit" value="팔로우">
-	</form>
-	<form action="${cp }/follow/select" method="post">
-		<input type="submit" value="팔로워">
-	</form>
-	<form action="">
-		<input type="submit" value="팔로잉">
-	</form>
+	<a href="">팔로우</a>
+	<a href="${cp }/follow/select?mymember_no=${member_no}">팔로워</a>
+	<a href="${cp }/follow/select?youmember_no=${member_no}">팔로잉</a>
 </body>
 </html>
