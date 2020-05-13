@@ -32,6 +32,10 @@ public class DirectMessageDao {
 			pstmt.setInt(1, mymember_no);
 			pstmt.setInt(2, yourmember_no);
 			
+			System.out.println("채팅방 생성하기!");
+			System.out.println("mymember_no:" + mymember_no);
+			System.out.println("yourmember_no:" + yourmember_no);
+			
 			return pstmt.executeUpdate();
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
@@ -109,7 +113,6 @@ public class DirectMessageDao {
 //int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,boolean status, Date senddate
 			String sql ="insert into chatcontent values(chatcontent_seq.nextval, ?, ?, ?, ?, ?, sysdate)";
 			pstmt =con.prepareStatement(sql);
-			System.out.println(vo.getChat_no() + ": vo.getChat_no()");
 			pstmt.setInt(1, vo.getChat_no());
 			pstmt.setInt(2, vo.getSmember_no());
 			pstmt.setInt(3, vo.getRmember_no());

@@ -32,10 +32,12 @@ public class DirectMessageClientController extends HttpServlet {
 		System.out.println("myMember_no : " + myMember_no);
 		System.out.println("yourMember_no : " + yourMember_no);
 		int chat_no =dao.getChattingRoomNumber(myMember_no);
+		System.out.println(chat_no + " 채팅 번호~~~~~~~~~~~~~~");
 		
 		//DB에서 유저 채팅기록 불러오기
 		ArrayList<ChatContentVo> list =dao.getChatShow(chat_no);
 		session.setAttribute("list", list);
+		session.setAttribute("chat_no", chat_no);
 		
 		resp.sendRedirect(req.getContextPath() + "/dm/dmClient.jsp");
 	}

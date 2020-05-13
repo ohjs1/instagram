@@ -10,12 +10,14 @@
 <body>
 	<form>
 		<input type="hidden" id="myuser_no" value="${ member_no }" />
-		<input type="hidden" id="your_member_no" value="${ myMember_no }" />
-		<textarea id="chatarea" cols="30" rows="10">
+		<input type="hidden" id="your_member_no" value="${ yourMember_no }" />
 			<c:forEach var="list" items="${ list }">
-				${ list.getContent() }
+			<c:if test="${ list.getChat_no()==chat_no }">
+				${ list.getContent() }<br>
+			</c:if>
 			</c:forEach>
-		</textarea><br>
+		<textarea id="chatarea" cols="30" rows="10" readonly="readonly"></textarea>
+		<br>
 		<input type="text" id="msgtext"/>
 		<input type="button" value="전송" onclick="sendMsg()"/>
 	</form>
@@ -31,6 +33,7 @@
 	function sendMsg(){
 		var chatarea =document.getElementById("chatarea");
 		var msgtext =document.getElementById("msgtext");
+		chatarea.scrollTop =chatarea.scrollHeight;
 		
 		var myuser_no =document.getElementById("myuser_no").value; //로그인 회원 번호 들어옴
 		var youruser_no =document.getElementById("your_member_no").value; //DM보낼 회원번호 들어옴
