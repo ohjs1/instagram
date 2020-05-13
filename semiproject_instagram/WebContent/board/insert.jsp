@@ -87,7 +87,7 @@
 	<input type="button" onclick="nextImg()" value="다음">
 	<textarea rows="5" cols="50" name="content" placeholder="문구 입력..." ></textarea><br>
 	이미지 추가<br>
-	<input type="file" id="file1" name="file1" accept=".jpg,.jpeg,.png,.gif,.mp4" multiple onchange="showImg(this.files)"><br>
+	<input type="file" id="file1" name="file1[]" accept=".jpg,.jpeg,.png,.gif,.mp4" multiple onchange="showImg(this.files)"><br>
 	<input type="submit" value="확인">
 </form>
 </body>
