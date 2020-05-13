@@ -11,21 +11,25 @@
 	function showStory(){	
 		
 		const divs=document.getElementsByClassName("divs");		
-		const cdivs=document.getElementsByClassName("cdivs");		
+		const cdivs=document.getElementsByClassName("cdivs");
 		const imgs=document.getElementsByClassName("imgs");	
-	
-			divs[index].style.display="block";
-			imgs[index].style.display="block";
-			cdivs[index].style.display="block";
-			
-			
-			
-		
+		for(let i=0;i<imgs.length;i++){
+			if(i==index){
+				divs[i].style.display="block";
+				imgs[i].style.display="block";
+				cdivs[i].style.display="block";
+			}else{
+				divs[i].style.display="none";
+				imgs[i].style.display="none";
+				cdivs[i].style.display="none";
+			}
+		}
+				
 		index++;	
 		if (index > imgs.length-1) {index = 0}   
 		setTimeout(showStory,2000);
 	}
-
+	
 </script>
 </head>
 <body onload="showStory()">
@@ -36,7 +40,6 @@
 
 <c:forEach var="vo" items="${list }">
 <div id="file" style="width:300px;height:500px;position:relative;display:none" class="divs">
-
 	<img src='../upload/${vo.getFilepath()}' style="width:300px;height:500px;display:none" id="output" class="imgs">
 		<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
 			${vo.getContent() }
