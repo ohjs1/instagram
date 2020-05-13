@@ -96,7 +96,6 @@ public class MemberDao {
 				String nickname=rs.getString("nickname");
 				Date regdate=rs.getDate("regdate");
 				String profile=rs.getString("profile");
-				System.out.println(profile);
 				MemberVo vo=new MemberVo(member_no, id, pwd, name, nickname, regdate, profile);
 				return vo;
 			}

@@ -3,6 +3,7 @@ package com.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 
 import com.dao.MemberDao;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 @WebServlet("/member/profileUpdate")
 public class MemberProfileUpdateController extends HttpServlet{
 	@Override
@@ -28,9 +31,9 @@ public class MemberProfileUpdateController extends HttpServlet{
 			json.put("profile", profile);
 			PrintWriter pw=resp.getWriter();
 			pw.print(json);
+			
+			
 		}
-		
-		
 	}
 }
 

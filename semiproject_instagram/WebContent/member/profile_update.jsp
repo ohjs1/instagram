@@ -10,11 +10,9 @@
 </head>
 <body>
 <h1>프로필 편집</h1>
-<form id="uploadForm" encType="multipart/form-data">
+<form>
 	<input type="file" name="profile" style="display: none"
   	onchange="fileupdate(this.files[0].name)" id="profile"><br>
-</form>
-<form>
 	<label for="profile" id="div"></label><br>
 	<input type="text" name="name" value="${vo.name }" id="name"><br>
 	<input type="text" name="nickname" value="${vo.nickname }" id="nickname"><br>
@@ -28,7 +26,6 @@
 
 </body>
 <script type="text/javascript">
-	var form = document.getElementById("uploadForm");
 	var div=document.getElementById("div");
 	var profile=document.getElementById("profile1");
 	if(profile.value=="" || profile.value==null){
@@ -38,6 +35,7 @@
 	}
 	var xhrfileupdate=null;
 	function fileupdate(filename) {
+		alert(filename)
 		xhrfileupdate=new XMLHttpRequest();
 		xhrfileupdate.onreadystatechange=fileupdateOk;
 		xhrfileupdate.open('post','/member/profileUpdate',true);

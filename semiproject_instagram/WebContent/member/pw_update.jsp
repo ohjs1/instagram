@@ -28,7 +28,6 @@
 <body>
 <form method="post" action="${cp }/member/pwdupdate" onsubmit="validate(event)">
 	<h3>닉네임</h3>
-	<input type="text" id="pw" value="${sessionScope.pwd }">
 	<input type="hidden" id="pw" value="${sessionScope.pwd }">
 	<label for="pwd">이전 비밀번호</label> <input type="text" name="pwd" id="pwd"><br>
 	<label for="newPwd1">새 비밀번호</label> <input type="text" name="newPwd1" id="newPwd1"><br>

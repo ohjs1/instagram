@@ -13,7 +13,11 @@ import com.dao.MemberDao;
 @WebServlet("/member/pwdupdate")
 public class MemberPassWordUpdateController extends HttpServlet{
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.sendRedirect(req.getContextPath()+"/member/pw_update.jsp");
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		String id=(String)session.getAttribute("id");
 		String newPwd=req.getParameter("newPwd1");
@@ -21,6 +25,7 @@ public class MemberPassWordUpdateController extends HttpServlet{
 		int n=dao.pwdupdate(id,newPwd);
 		if(n>0) {
 			System.out.println("비밀번호 변경 완료");
+			resp.sendRedirect(req.getContextPath()+"/home");
 		}
 	}
 }
