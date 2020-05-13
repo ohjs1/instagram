@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.dao.DmDao;
+import com.dao.DirectMessageDao;
 import com.vo.MemberVo;
 
 @WebServlet("/dm/usersearch")
@@ -23,9 +23,11 @@ public class DirectMessageSearchController extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		
 		String keyword =req.getParameter("keyword");
+		int member_no =Integer.parseInt(req.getParameter("member_no"));
+		
 //		System.out.println(keyword);
-		DmDao dao =DmDao.getInstance();
-		ArrayList<MemberVo> list =dao.getUserList(keyword);
+		DirectMessageDao dao =DirectMessageDao.getInstance();
+		ArrayList<MemberVo> list =dao.getUserList(keyword, member_no);
 		
 		JSONArray jrr =new JSONArray();
 		
