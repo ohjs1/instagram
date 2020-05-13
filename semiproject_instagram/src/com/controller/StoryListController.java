@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +18,14 @@ import com.vo.StoryVo;
 public class StoryListController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int member_no=Integer.parseInt(req.getParameter("member_no"));
+		int member_no=(int) req.getAttribute("member_no");
+		String filepath=(String)req.getAttribute("filepath");
+		System.out.println("방금업로드한 파일명:"+filepath);
 		StoryDao dao=new StoryDao();
 		ArrayList<StoryVo> list= dao.mem_list(member_no);
-	
+
+		req.setAttribute("list", list);
+		req.getRequestDispatcher("/story/mystory_list.jsp").forward(req, resp);
 	}
 
 }

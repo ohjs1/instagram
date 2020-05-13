@@ -7,13 +7,21 @@
 <meta charset="UTF-8">
 <title>story_upload</title>
 <script type="text/javascript">
-function getFile(event){
-	var output=document.getElementById("output");
-	output.src=URL.createObjectURL(event.target.files[0]);
+
+	function getFile(event){
+		var output=document.getElementById("output");
+		output.src=URL.createObjectURL(event.target.files[0]);
 	
-}
-
-
+	}
+	
+	function fileChk(){
+		const file=document.getElementById("file1").value;
+		if(file==null || file==""){
+			return false;
+		}else{
+			return true;
+		}
+	}
 </script>
 </head>
 <body>
@@ -21,7 +29,7 @@ function getFile(event){
 	String cp=application.getContextPath();
 %>
 
-<form method="post" action="${cp }/story/insert" enctype="multipart/form-data">
+<form method="post" action="${cp }/story/insert" onsubmit="return fileChk()" enctype="multipart/form-data">
 
 <label for="file1"><img src="../upload/plus.png"></label>
 <input type="file" name="file1" style="display:none" id="file1" onchange="getFile(event)" >
