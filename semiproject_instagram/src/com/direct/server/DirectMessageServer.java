@@ -16,9 +16,8 @@ import com.vo.ChatContentVo;
 public class DirectMessageServer {
 	
 	@OnOpen
-	public void joinUser(Session session) {
+	public void joinUser() {
 		System.out.println("클라이언트 접속됨...");
-		System.out.println(session.getId() + " 접속된 사용자의 세션 아이디");
 	}
 	
 	@OnMessage
@@ -37,16 +36,20 @@ public class DirectMessageServer {
 		System.out.println(arr[2]);
 		
 		//채팅방 존재여부 검사
-		int checkCroom =dao.isChattingRoom(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
+		int checkCroom =dao.isChattingRoom(Integer.parseInt(myuser_no));
 		if(checkCroom==1) {
 			//채팅방 생성
 			int result =dao.createChattingRoom(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
+			if(result>0) {
+				System.out.println("채팅방 새로생성 됨!");
+			} else {
+				System.out.println("채팅방 생성 실패..");
+			}
 			
 			//채팅방 번호 조회
-			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
-			
+			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no));
+			System.out.println("채팅방 번호 : " + cNum);
 			//채팅내용 DB에 저장
-			//int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,boolean status, Date senddate
 			ChatContentVo vo =new ChatContentVo(
 					0,
 					cNum,
@@ -58,12 +61,12 @@ public class DirectMessageServer {
 					);
 			
 			dao.saveChatDatabase(vo);
+			return arr[0]; //채팅내용 되돌려줌
 		} else {
 			//채팅방 번호 조회
-			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
-			
+			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no));
+			System.out.println("채팅방 번호 : " + cNum);
 			//채팅내용 DB에 저장
-			//int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,boolean status, Date senddate
 			ChatContentVo vo =new ChatContentVo(
 					0,
 					cNum,
@@ -75,9 +78,9 @@ public class DirectMessageServer {
 					);
 			
 			dao.saveChatDatabase(vo);
+			return arr[0]; //채팅내용 되돌려줌
 		}
 		
-		return arr[0]; //채팅내용 되돌려줌
 	}
 	
 	@OnClose

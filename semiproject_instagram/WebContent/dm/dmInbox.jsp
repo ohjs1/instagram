@@ -8,7 +8,7 @@
 </head>
 <body>
 	<input type="text" id="search" onkeyup="searchUser()" />
-	<input type="hidden" id="member_no" value="${ member_no }" />
+	<input type="hidden" id="myMember_no" value="${ member_no }" />
 	<div id="result"></div>
 </body>
 <script type="text/javascript">
@@ -20,9 +20,9 @@
 		xhr.onreadystatechange =onSearchUser;
 		
 		var keyword =document.getElementById("search").value;
-		var member_no =document.getElementById("member_no").value;
+		var myMember_no =document.getElementById("myMember_no").value;
 		if(!keyword==""){
-			xhr.open('get', '${cp}/dm/usersearch?keyword=' + keyword + "&member_no=" + member_no);
+			xhr.open('get', '${cp}/dm/usersearch?keyword=' + keyword + "&myMember_no=" + myMember_no);
 			xhr.send();
 		} else {
 			result.innerHTML ="";
@@ -38,9 +38,10 @@
 			
 			for(var i=0; i<json.length; i++){
 			console.log(json[i].member_no);
-				result.innerHTML += "맴버번호 : " + json[i].member_no + 
-				" 아이디:" + json[i].id + " 이름: <a href='${cp}/dm/client?member_no=" + json[i].member_no + "'>" + json[i].name + "</a>" + " 닉네임:" + json[i].nickname 
-				+ " 프로필:" + json[i].profile +"<br>";
+				result.innerHTML += "맴버번호 : " + json[i].yourMember_no + 
+				" 아이디:" + json[i].id + " 이름: <a href='${cp}/dm/client?yourMember_no=" + json[i].yourMember_no 
+						+ "&myMember_no=" + json[0].myMember_no + "'>" + json[i].name + "</a>" + " 닉네임:" + json[i].nickname 
+				+ " 프로필사진:" + json[i].profile +"<br>";
 			}
 		}
 	}

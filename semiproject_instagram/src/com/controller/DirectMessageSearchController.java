@@ -23,24 +23,24 @@ public class DirectMessageSearchController extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		
 		String keyword =req.getParameter("keyword");
-		int member_no =Integer.parseInt(req.getParameter("member_no"));
+		int myMember_no =Integer.parseInt(req.getParameter("myMember_no"));
 		
-//		System.out.println(keyword);
 		DirectMessageDao dao =DirectMessageDao.getInstance();
-		ArrayList<MemberVo> list =dao.getUserList(keyword, member_no);
+		ArrayList<MemberVo> list =dao.getUserList(keyword, myMember_no);
 		
 		JSONArray jrr =new JSONArray();
 		
 		for(MemberVo vo : list) {
 			JSONObject json =new JSONObject();
-			json.put("member_no", vo.getMember_no());
+			json.put("yourMember_no", vo.getMember_no());
 			json.put("id", vo.getId());
 			json.put("name", vo.getName());
 			json.put("nickname", vo.getNickname());
 			json.put("profile", vo.getProfile());
+			json.put("myMember_no", myMember_no); //나자신의 번호
 			jrr.put(json);
 		}
-		 
+		
 		
 		resp.setContentType("text/plain; charset=utf-8"); //plain 단순 문자열이라는 표시
 		
