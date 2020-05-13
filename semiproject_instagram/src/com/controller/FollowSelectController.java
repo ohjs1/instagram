@@ -29,6 +29,7 @@ public class FollowSelectController extends HttpServlet{
 			}
 			FollowDao dao=new FollowDao();
 			ArrayList<MemberVo> list=dao.followingMem(mymember_no, youmember_no, bl);
+			req.setAttribute("bl", bl);
 			req.setAttribute("list", list);
 			req.getRequestDispatcher("/follow/followList.jsp").forward(req,resp);
 	}

@@ -5,18 +5,29 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>팔로워 리스트</title>
+<title>팔로우 리스트</title>
 </head>
 <body>
 	<table>
 		<tr>
-		${list }
-		<c:forEach var="vo" items='${list }'>
-			<td>${vo.getId() }</td>
-			<td>${vo.getNickname() }</td>
-			<td><a href="#">삭제</a></td>			
-			</tr><tr>
-		</c:forEach>
+		<c:if test="${bl==true}">
+		<h1>팔로워</h1>
+			<c:forEach var="vo" items='${list }'>
+				<td>${vo.getId() }</td>
+				<td>${vo.getNickname() }</td>
+				<td><a href="#">삭제</a></td>			
+				</tr><tr>
+			</c:forEach>
+		</c:if>
+		<c:if test="${bl==false}">
+		<h1>팔로잉</h1>
+			<c:forEach var="vo" items='${list }'>
+				<td>${vo.getId() }</td>
+				<td>${vo.getNickname() }</td>
+				<td><a href="#">팔로우</a></td>			
+				</tr><tr>
+			</c:forEach>
+		</c:if>
 		</tr>
 	</table>
 </body>
