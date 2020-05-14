@@ -18,7 +18,9 @@
 				</c:if>
 			</c:forEach>
 			
-			<a href="${ cp }/dm/delete?chatroomNumber=${chat_no}"><div id="delid">삭제하기</div></a>
+			<a href="${ cp }/dm/delete?chatroomNumber=${chat_no}&yourmember_no=${ yourMember_no }">
+				<div id="delid">삭제하기</div>
+			</a>
 			
 		<textarea id="chatarea" cols="30" rows="10" readonly="readonly"></textarea>
 		<br>

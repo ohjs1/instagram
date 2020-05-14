@@ -216,41 +216,70 @@ public class DirectMessageDao {
 		}
 	}
 	
+	//채팅방 유저수 검사
+	public int searchRoomUserCnt(int chat_no, int rmember_no) {
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con =ConnectionPool.getCon();
+			String sql ="select count(*) cnt from chatcontent where chat_no= ? and rmember_no=?";
+			pstmt =con.prepareStatement(sql);
+			
+			pstmt.setInt(1, chat_no);
+			pstmt.setInt(2, rmember_no);
+			rs =pstmt.executeQuery();
+			
+			int cnt =0;
+			if(rs.next()) {
+				cnt =rs.getInt("cnt");
+			}
+			
+			return cnt;
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return -1;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	//DM삭제 하는 기능
-	public int delDirectMessageRoomNumber(int chat_no) {
+	public int delDirectMessageRoomNumber(int chat_no, int rmember_no) { //채팅방번호, 상대방번호
 		Connection con =null;
 		PreparedStatement pstmt1 =null;
 		PreparedStatement pstmt2 =null;
 		
 		try {
 			con =ConnectionPool.getCon();
-			con.setAutoCommit(false);
-			//트렌젝션 시작
-			String sql2 ="delete chatcontent where chat_no= ?";
+			//채팅내용 삭제
+			String sql2 ="delete from chatcontent where chat_no=? and rmember_no=?";
 			pstmt2 =con.prepareStatement(sql2);
 			pstmt2.setInt(1, chat_no);
+			pstmt2.setInt(2, rmember_no);
 			int r =pstmt2.executeUpdate();
 			
-			String sql1 ="delete from chatroom where chatroom_no =?";
-			pstmt1 =con.prepareStatement(sql1);
-			pstmt1.setInt(1, chat_no);
-			pstmt1.executeUpdate();
+			
+			//채팅방에 생성된 유저수가 1명인지 검사
+			int cnt =searchRoomUserCnt(chat_no, rmember_no);
+
+			if(cnt<1) { //유저수가 1명일경우
+				//채팅방 삭제
+				String sql1 ="delete from chatroom where chatroom_no =?";
+				pstmt1 =con.prepareStatement(sql1);
+				pstmt1.setInt(1, chat_no);
+				pstmt1.executeUpdate();
+			}
 			
 			
-			con.commit(); //커밋
 			System.out.println("DM 채팅방 삭제완료!");
 			return r;
 			
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
-			try {
-				System.out.println("DM 삭제 트렌젝션 롤백됨!");
-				con.rollback(); //롤백
-				return -1;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return -1;
-			}
+			return -1;
+			
 		} finally {
 			ConnectionPool.close(pstmt1);
 			ConnectionPool.close(pstmt2);
