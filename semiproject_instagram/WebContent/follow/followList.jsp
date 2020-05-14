@@ -16,7 +16,7 @@
 				<td>${vo.getId() }</td>
 				<td>${vo.getNickname() }</td>
 				<td><a href="${cp }/follow/delete?youmember_no=${vo.getMember_no() }">삭제</a></td>			
-				</tr><tr>
+				</tr><tr>7
 			</c:forEach>
 		</c:if>
 		<c:if test="${bl==false}">
