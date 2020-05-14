@@ -110,6 +110,7 @@ public class MemberDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	//아이디 중복체크
 	public boolean check(String id) {
 		Connection con=null;
 		PreparedStatement pstmt=null;

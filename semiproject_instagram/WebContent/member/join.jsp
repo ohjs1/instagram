@@ -14,13 +14,14 @@
 	<input type="text" name="name" placeholder="성명"><br>
 	<input type="text" name="nickname" placeholder="닉네임"><br>
 	<input type="password" name="pwd" placeholder="비밀번호"><br>
-	<input type="submit" value="가입" disabled="disabled"><br>
+	<input type="submit" value="가입" disabled="disabled" id="btn"><br>
 </form>
 <a href="${cp }/member/findPwd.jsp">비밀번호를 잊으셨나요?</a><br>
 계정이 있으신가요? <a href="${cp }/member/login.jsp">로그인</a>
 <script type="text/javascript">
 	var xhr=null;
 	var span=document.getElementsByTagName("span")[0];
+	var btn=document.getElementById("btn");
 	function idcheck() {
 		var id=document.getElementById("id").value;
 		xhr=new XMLHttpRequest();
@@ -32,8 +33,10 @@
 		if(xhr.readyState==4 && xhr.status==200){
 			var data=xhr.responseText;
 			var json=JSON.parse(data);
-			alert(json.idcheck);
 			span.innerHTML=json.idcheck;
+			if(json.idcheck=="사용가능"){
+				btn.disabled=false;
+			}
 		}
 	}
 	function test() {
