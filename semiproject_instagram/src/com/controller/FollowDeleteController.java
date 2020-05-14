@@ -13,13 +13,16 @@ import com.dao.FollowDao;
 public class FollowDeleteController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int following_no = Integer.parseInt(req.getParameter("following_no"));
+		int youmember_no = Integer.parseInt(req.getParameter("youmember_no"));
+		int mymember_no = (int)req.getSession().getAttribute("member_no");
 		FollowDao dao = new FollowDao();
 		try {
-			int n = dao.delete(following_no);
-			resp.sendRedirect(req.getContentType()+"/follow/select");
+			int n = dao.delete(mymember_no, youmember_no);
+			if(n>0) {
+				resp.sendRedirect("/follow/select?mymember_no="+mymember_no);
+			}
 		}catch(Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("팔로우딜리트컨트롤러 예외발생");
 			req.setAttribute("msg", "fail");
 			req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 		}
