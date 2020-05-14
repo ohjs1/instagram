@@ -10,8 +10,17 @@
 
 	function getFile(event){
 		var output=document.getElementById("output");
-		output.src=URL.createObjectURL(event.target.files[0]);
+		outputI.src=URL.createObjectURL(event.target.files[0]);
+		/*
+		var filename=URL.createObjectURL(event.target.files[0]);
+		console.log(filename);
+		if(filename.contains(".png") || filename.contains(".jpg")){
+			outputI.src=URL.createObjectURL(event.target.files[0]);
+		}else if(filename.contains(".mp4")) {
+			outputV.src=URL.createObjectURL(event.target.files[0]);
+		}
 	
+	*/
 	}
 	
 	function fileChk(){
@@ -36,7 +45,8 @@
  
 <br>
 <div id="file" style="width:300px;height:500px;border:3px solid black;position:relative">
-	<img id="output" style="width:300px;height:500px">
+	<img id="outputI" style="width:300px;height:500px"> 
+	<!-- <video id="outputV" style="width:300px;height:500px"></video>  -->
 	<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;">
 		<textarea rows="8" cols="26" name="content" style="border:0;background-color: transparent;"></textarea>
 	</div>
