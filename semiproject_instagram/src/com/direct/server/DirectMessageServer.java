@@ -1,12 +1,9 @@
 package com.direct.server;
 
-import java.sql.Date;
-
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
-import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import com.dao.DirectMessageDao;

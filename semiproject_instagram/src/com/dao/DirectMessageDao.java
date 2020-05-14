@@ -215,4 +215,46 @@ public class DirectMessageDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	
+	//DM삭제 하는 기능
+	public int delDirectMessageRoomNumber(int chat_no) {
+		Connection con =null;
+		PreparedStatement pstmt1 =null;
+		PreparedStatement pstmt2 =null;
+		
+		try {
+			con =ConnectionPool.getCon();
+			con.setAutoCommit(false);
+			//트렌젝션 시작
+			String sql2 ="delete chatcontent where chat_no= ?";
+			pstmt2 =con.prepareStatement(sql2);
+			pstmt2.setInt(1, chat_no);
+			int r =pstmt2.executeUpdate();
+			
+			String sql1 ="delete from chatroom where chatroom_no =?";
+			pstmt1 =con.prepareStatement(sql1);
+			pstmt1.setInt(1, chat_no);
+			pstmt1.executeUpdate();
+			
+			
+			con.commit(); //커밋
+			System.out.println("DM 채팅방 삭제완료!");
+			return r;
+			
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			try {
+				System.out.println("DM 삭제 트렌젝션 롤백됨!");
+				con.rollback(); //롤백
+				return -1;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return -1;
+			}
+		} finally {
+			ConnectionPool.close(pstmt1);
+			ConnectionPool.close(pstmt2);
+			ConnectionPool.close(con);
+		}
+	}
 }

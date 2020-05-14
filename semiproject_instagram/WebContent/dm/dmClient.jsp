@@ -11,11 +11,15 @@
 	<form>
 		<input type="hidden" id="myuser_no" value="${ member_no }" />
 		<input type="hidden" id="your_member_no" value="${ yourMember_no }" />
+			
 			<c:forEach var="list" items="${ list }">
-			<c:if test="${ list.getChat_no()==chat_no }">
-				${ list.getContent() }<br>
-			</c:if>
+				<c:if test="${ list.getChat_no()==chat_no && list.getRmember_no() == yourMember_no}">
+					${ list.getContent() }<br>
+				</c:if>
 			</c:forEach>
+			
+			<a href="${ cp }/dm/delete?chatroomNumber=${chat_no}"><div id="delid">삭제하기</div></a>
+			
 		<textarea id="chatarea" cols="30" rows="10" readonly="readonly"></textarea>
 		<br>
 		<input type="text" id="msgtext"/>
