@@ -31,7 +31,7 @@
 
 <form method="post" action="${cp }/story/insert" onsubmit="return fileChk()" enctype="multipart/form-data">
 
-<label for="file1"><img src="../upload/plus.png"></label>
+<label for="file1"><img src="${ cp }/upload/plus.png"></label>
 <input type="file" name="file1" style="display:none" id="file1" onchange="getFile(event)" >
  
 <br>

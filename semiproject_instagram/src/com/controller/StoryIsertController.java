@@ -49,7 +49,7 @@ public class StoryIsertController extends HttpServlet{
 			req.getRequestDispatcher("/story/list").forward(req, resp);
 			
 		}else {
-			req.getRequestDispatcher("layout.jsp?file=/story/upload.jsp").forward(req, resp);
+			req.getRequestDispatcher("/layout.jsp?file=/story/upload.jsp").forward(req, resp);
 		}
 		
 		

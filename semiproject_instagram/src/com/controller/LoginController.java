@@ -30,7 +30,7 @@ public class LoginController extends HttpServlet{
 			session.setAttribute("id", id);
 			session.setAttribute("pwd", pwd);
 			session.setAttribute("member_no", n);
-			//resp.sendRedirect(req.getContextPath()+"/home");
+			//resp.sendRedirect(req.getContextPath()+"/layout.jsp");
 			resp.sendRedirect(req.getContextPath()+"/member/result.jsp");
 		}else {
 			req.setAttribute("errMsg", "아이디 또는 비밀번호가 맞지 않아요!");

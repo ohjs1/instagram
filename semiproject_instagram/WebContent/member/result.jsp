@@ -14,6 +14,6 @@
 <a href="${cp }/member/memberInfo">프로필 편집</a><br>
 <a href="${cp }/member/pwdupdate">비밀번호 변경</a><br>
 <a href="${cp }/member/logout">로그아웃</a><br>
-<a href="${ cp }/home">홈으로</a>
+<a href="${ cp }/layout.jsp">홈으로</a>
 </body>
 </html>

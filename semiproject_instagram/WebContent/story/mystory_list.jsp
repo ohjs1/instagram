@@ -40,6 +40,7 @@
 
 <c:forEach var="vo" items="${list }">
 <div id="file" style="width:300px;height:500px;position:relative;display:none" class="divs">
+<c:if test=""></c:if>
 	<img src='../upload/${vo.getFilepath()}' style="width:300px;height:500px;display:none" id="output" class="imgs">
 		<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
 			${vo.getContent() }

@@ -16,7 +16,7 @@
 %>
 <div id="warp">
 	<div id="header">
-		<a href="layout.jsp?file=/story/story.jsp">스토리</a>
+		<a href="${ cp }/layout.jsp?file=/story/story.jsp">스토리</a>
 		<img src="${ cp }/images/logo.png" alt="logo" id="logo">
 		<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
 		<a href="${ cp }/home"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
