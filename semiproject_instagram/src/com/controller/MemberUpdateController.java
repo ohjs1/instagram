@@ -19,6 +19,7 @@ public class MemberUpdateController extends HttpServlet{
 		String id=(String)session.getAttribute("id");
 		String name=req.getParameter("name");
 		String nickname=req.getParameter("nickname");
+		
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.memberUpdate(id,name,nickname);
 		if(n>0) {

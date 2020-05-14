@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.db.ConnectionPool;
 import com.vo.MemberVo;
 
@@ -27,7 +30,7 @@ public class MemberDao {
 			pstmt.setString(2, vo.getPwd());
 			pstmt.setString(3, vo.getName());
 			pstmt.setString(4, vo.getNickname());
-			pstmt.setString(5, vo.getProfile());
+			pstmt.setString(5, "profile.jpg");
 			return pstmt.executeUpdate();
 		}catch (SQLException se) {
 			se.getStackTrace();
@@ -103,6 +106,27 @@ public class MemberDao {
 		}catch (SQLException se) {
 			se.getStackTrace();
 			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	public boolean check(String id) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select * from member where id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			return false;
+		}catch (SQLException se) {
+			se.getStackTrace();
+			return false;
 		}finally {
 			ConnectionPool.close(con, pstmt, rs);
 		}
