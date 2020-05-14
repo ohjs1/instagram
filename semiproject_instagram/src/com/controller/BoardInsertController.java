@@ -29,11 +29,25 @@ import com.vo.BoardVo;
 @WebServlet("/board/insert")
 public class BoardInsertController extends HttpServlet{
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.sendRedirect(req.getContextPath()+"/board/insert.jsp");
-	}
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//게시글부분
+        HttpSession session=req.getSession();
+        int member_no=(int)session.getAttribute("member_no");
+        System.out.println(member_no);
+        String snum=req.getParameter("num");
+        String content="";
+		int num=0;
+		int ref=0;
+		int lev=0;
+		int step=0;
+		if(snum!=null && !snum.equals("")) {
+			num=Integer.parseInt(snum);
+			ref=Integer.parseInt(req.getParameter("ref"));
+			lev=Integer.parseInt(req.getParameter("lev"));
+			step=Integer.parseInt(req.getParameter("step"));
+		}
+		
+		
 		//Apache commons FileUpload구현
 		resp.setContentType("text/html; charset=UTF-8");
         req.setCharacterEncoding("utf-8");
@@ -54,22 +68,19 @@ public class BoardInsertController extends HttpServlet{
         	List<FileItem> items=fileUpload.parseRequest(req); //전송된 req에서 매개변수를 List로 가져옴
         	for(int i=0; i<items.size(); i++) {
         		FileItem fileItem=(FileItem) items.get(i); //파일 업로드창에서 업로드된 항목들을 하나씩 가져옴
-        		
         		//isFormField()메소드는 파일데이터인지, 그외에 폼데이터인지 true,false로 반환 ex) 파일데이터인경우 false반환
-        		if(fileItem.isFormField()) { //파일이 아닌 폼필드이면 전송된 매개변수 값 출력
+        		if(fileItem.isFormField()) {
+        			String fieldName=fileItem.getFieldName();
+        			if(fieldName.equals("content")) {
+        				content=fileItem.getString("utf-8");
+        			}
         			System.out.println(fileItem.getFieldName()+"="+fileItem.getString("utf-8"));
-        		}else { //파일이면 파라미터명,파일명,파일크기 및 파일 업로드
+        		}else{	//파일이면 파라미터명,파일명,파일크기 및 파일 업로드
         			System.out.println("파라미터명:"+fileItem.getFieldName());
         			System.out.println("파일명:"+fileItem.getName());
         			System.out.println("파일크기:"+fileItem.getSize()+"bytes");
         			
         			if(fileItem.getSize()>0) { //업로드할 파일이 존재하면
-//        				System.out.println("zz"+fileItem.getName());
-//        				int idx=fileItem.getName().lastIndexOf("\\"); //C:\\temp\\test1.jpg 일경우 마지막 인덱스번호를 가져옴
-//        				if(idx==-1) {
-//        					idx=fileItem.getName().lastIndexOf("/");
-//        				}
-//        				fileName=fileItem.getName().substring(idx+1);
         				fileName=fileItem.getName();
         				File uploadFile=new File(currentDirPath,fileName);
         				if(uploadFile.exists()) { //올리려는 파일과 같은 이름이 존재하면 중복파일 처리
@@ -87,12 +98,20 @@ public class BoardInsertController extends HttpServlet{
         			}
         		}
         	}
+        	BoardVo boardvo=new BoardVo(num,member_no,content,ref,lev,step,null);
+        	BoardDao boarddao=new BoardDao();
+			boolean n=boarddao.insert(boardvo,fileList,member_no);
+			if(n) {
+				System.out.println("성공");
+			}else {
+				System.out.println("실패");
+			}
         }catch(Exception e) {
         	System.out.println(e.getMessage());
         }
 		
         req.setAttribute("fileList", fileList);
-		
+		req.getRequestDispatcher("/layout.jsp?file=/board/insert.jsp").forward(req, resp);
 		//MultipartRequest부분
 //		req.setCharacterEncoding("utf-8");
 //		HttpSession session=req.getSession();

@@ -82,6 +82,11 @@
 </head>
 <body>
 <form method="post" action="<c:url value='/board/insert'/>" onsubmit="return fileChk()" enctype="multipart/form-data">
+	<input type="hidden" name="num" value="${param.num }">
+	<input type="hidden" name="ref" value="${param.ref }">
+	<input type="hidden" name="lev" value="${param.lev }">
+	<input type="hidden" name="step" value="${param.step }">
+	
 	<input type="button" onclick="previousImg()" value="이전">
 	<span id="imgList"></span>
 	<input type="button" onclick="nextImg()" value="다음">
@@ -91,7 +96,5 @@
 	<input type="submit" value="확인">
 </form>
 <c:set var="file1" value="${fileList[0] }"/>
-
-<img src="upload/${file1 } }">
 </body>
 </html>
