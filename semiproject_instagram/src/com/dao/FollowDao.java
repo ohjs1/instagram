@@ -69,4 +69,20 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	public int delete(int following_no) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "delete from follow where following_no=?";
+			pstmt = con.prepareStatement(sql);
+			int n = pstmt.executeUpdate();
+			return n;
+		}catch(SQLException se) {
+			se.printStackTrace();
+			return -1;
+		}finally {
+			ConnectionPool.close(con, pstmt, null);
+		}
+	}
 }
