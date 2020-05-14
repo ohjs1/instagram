@@ -11,6 +11,25 @@ import com.db.ConnectionPool;
 import com.vo.StoryVo;
 
 public class StoryDao {
+	
+	public int delete(int story_no) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		StoryVo vo=new StoryVo();
+		try {
+			con=ConnectionPool.getCon();
+			String sql="delete from story where=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, vo.getStory_no());
+			int n = pstmt.executeUpdate();
+			return n;
+		}catch(SQLException se) {
+			se.printStackTrace();
+			return -1;
+		}finally {
+			ConnectionPool.close(con, pstmt, null);
+		}
+	}
 	public ArrayList<StoryVo> mem_list(int member_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
