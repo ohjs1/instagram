@@ -4,6 +4,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import com.dao.DirectMessageDao;
@@ -13,8 +14,9 @@ import com.vo.ChatContentVo;
 public class DirectMessageServer {
 	
 	@OnOpen
-	public void joinUser() {
+	public void joinUser(Session session) {
 		System.out.println("클라이언트 접속됨...");
+		
 	}
 	
 	@OnMessage
