@@ -2,6 +2,7 @@ package com.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -10,15 +11,54 @@ import javax.servlet.http.HttpSession;
 
 import com.db.ConnectionPool;
 import com.vo.BoardVo;
+import com.vo.ImageVo;
 
 public class BoardDao {
+	//이미지vo 얻어오기
+	public ArrayList<ImageVo> selectImg(int member_no){
+		System.out.println(member_no+"이것");
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		ArrayList<ImageVo> list=new ArrayList<ImageVo>();
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select i.* " + 
+					"from (" + 
+					"    select * " + 
+					"    from board " + 
+					"    where member_no=?" + 
+					")b,image i " + 
+					"where b.board_no=i.board_no";
+			
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				do {
+					int image_no=rs.getInt("image_no");
+					int board_no=rs.getInt("board_no");
+					String imagepath=rs.getString("imagepath");
+					list.add(new ImageVo(image_no,board_no,imagepath));
+				}while(rs.next()); 
+				return list;
+			}else {
+				return null;
+			}
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	//게시글 추가
 	public boolean insert(BoardVo vo, ArrayList<String> fileList, int member_no) {
 		Connection con=null;
 		PreparedStatement pstmt1=null; //게시글추가용
 		PreparedStatement pstmt=null;
 		boolean transactionChk=true;
-		System.out.println(vo.getBoard_no());
 		try {
 			con=ConnectionPool.getCon();
 			con.setAutoCommit(false);
