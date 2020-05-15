@@ -21,8 +21,15 @@ import com.vo.StoryVo;
 
 @WebServlet("/story/insert")
 public class StoryIsertController extends HttpServlet{
+	
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setAttribute("main", "/story/story.jsp");
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ServletContext application=req.getServletContext();
 		String upload=application.getRealPath("/upload");
 		
@@ -49,7 +56,8 @@ public class StoryIsertController extends HttpServlet{
 			req.getRequestDispatcher("/story/list").forward(req, resp);
 			
 		}else {
-			req.getRequestDispatcher("/layout.jsp?file=/story/upload.jsp").forward(req, resp);
+			req.setAttribute("main", "story/storyfail.jsp");
+			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		}
 		
 		

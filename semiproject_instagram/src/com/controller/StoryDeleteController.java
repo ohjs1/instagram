@@ -16,13 +16,14 @@ public class StoryDeleteController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int story_no=Integer.parseInt(req.getParameter("story_no"));
+		System.out.println("삭제할 스토리번호: " + story_no);
 		StoryDao dao=new StoryDao();
 		int n=dao.delete(story_no);
 		
 		if(n>0) {
 			resp.sendRedirect(req.getContextPath() + "mystories.jsp");
 		}else {
-			resp.sendRedirect(req.getContextPath() + "/story/upload.jsp");
+			resp.sendRedirect(req.getContextPath() + "/story/storyfail.jsp");
 		}
 	}
 }

@@ -7,7 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-		<a href="${ cp }/story/story.jsp">스토리</a>
+		<a href="${ cp }/story/insert">스토리올리기</a>
+		<a href="${ cp }/story/list">내 스토리</a>
 		<img src="${ cp }/images/logo.png" alt="logo" id="logo">
 		<a href="${ cp }/board/insert">
 			<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기"/>

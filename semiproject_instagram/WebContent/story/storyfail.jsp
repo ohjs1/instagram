@@ -9,6 +9,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>insert fail</h1>
+<h1>DB.. fail</h1>
 </body>
 </html>

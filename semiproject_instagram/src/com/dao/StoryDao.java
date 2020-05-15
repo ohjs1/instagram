@@ -18,7 +18,7 @@ public class StoryDao {
 		StoryVo vo=new StoryVo();
 		try {
 			con=ConnectionPool.getCon();
-			String sql="delete from story where=?";
+			String sql="delete from story where story_no=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, vo.getStory_no());
 			int n = pstmt.executeUpdate();
