@@ -176,6 +176,42 @@ public class DirectMessageDao {
 		}
 	}
 	
+	//팔로우, 팔로잉 유저 검색
+	public MemberVo getUserList(int myMember_no){
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con =ConnectionPool.getCon();
+			String sql ="select * from member where member_no = ?";
+			pstmt =con.prepareStatement(sql);
+			pstmt.setInt(1, myMember_no);
+			rs =pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+				//int member_no, String id, String pwd, String name, String nickname, Date regdate, String profile
+				int member_no =rs.getInt("member_no");
+				String id =rs.getString("id");
+				String name =rs.getString("name");
+				String nickname =rs.getString("nickname");
+				String profile =rs.getString("profile");
+				System.out.println("myMember_no : " + myMember_no);
+				
+				MemberVo vo =new MemberVo(member_no, id, null, name, nickname, null, profile);
+				return vo;
+			} else {
+				return null;
+			}
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	//유저의 채팅내용을 불러와 보여주는 메소드
 	public ArrayList<ChatContentVo> getChatShow(int chat_no){
 		Connection con =null;
