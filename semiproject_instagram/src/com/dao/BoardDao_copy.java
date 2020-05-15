@@ -6,13 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.db.ConnectionPool;
 import com.vo.BoardVo;
 import com.vo.ImageVo;
 
-public class BoardDao {
+public class BoardDao_copy {
 	//이미지vo 얻어오기
 	public ArrayList<ImageVo> selectImg(int member_no){
+		System.out.println(member_no+"이것");
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
@@ -55,7 +59,6 @@ public class BoardDao {
 		PreparedStatement pstmt1=null; //게시글추가용
 		PreparedStatement pstmt=null;
 		boolean transactionChk=true;
-		PreparedStatement pstmtTag=null; //태그추가용(성진)
 		try {
 			con=ConnectionPool.getCon();
 			con.setAutoCommit(false);
@@ -79,32 +82,10 @@ public class BoardDao {
 					transactionChk=false;
 				}
 			}
-			
-			//태그추가(성진)
-			String content=vo.getContent();
-			String[] str=content.split("\\s");
-			ArrayList<String> list=new ArrayList<String>();
-			for(String s:str) {
-				if(s.contains("#")) {
-					list.add(s);
-				}
-			}
-			for(String tag:list) {
-				System.out.println(tag+"태그");
-				String sql3="insert into tag values(tag_seq.nextval,?)";
-				pstmtTag=con.prepareStatement(sql3);
-				pstmt.setString(1, tag);
-				pstmt.executeUpdate();
-			}
 			con.commit();
 			return transactionChk;
 		}catch(SQLException se) {
 			System.out.println(se.getMessage());
-			try {
-				con.rollback();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			return false;
 		}finally {
 			for(int i=0; i<fileList.size(); i++) {
@@ -116,7 +97,6 @@ public class BoardDao {
 					se.printStackTrace();
 				}
 			}
-			ConnectionPool.close(con, pstmtTag, null);
 		}
 	}
 }
