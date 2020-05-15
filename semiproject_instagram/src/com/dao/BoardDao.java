@@ -93,8 +93,8 @@ public class BoardDao {
 				System.out.println(tag+"еб╠в");
 				String sql3="insert into tag values(tag_seq.nextval,?)";
 				pstmtTag=con.prepareStatement(sql3);
-				pstmt.setString(1, tag);
-				pstmt.executeUpdate();
+				pstmtTag.setString(1, tag);
+				pstmtTag.executeUpdate();
 			}
 			con.commit();
 			return transactionChk;
