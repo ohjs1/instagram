@@ -15,12 +15,12 @@ public class StoryDao {
 	public int delete(int story_no) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
-		StoryVo vo=new StoryVo();
+		;
 		try {
 			con=ConnectionPool.getCon();
 			String sql="delete from story where story_no=?";
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, vo.getStory_no());
+			pstmt.setInt(1, story_no);
 			int n = pstmt.executeUpdate();
 			return n;
 		}catch(SQLException se) {

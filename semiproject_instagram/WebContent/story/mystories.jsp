@@ -20,10 +20,10 @@ div{margin:auto;}
 <label><img src="${cp }/upload/profile.png"></label>
 <input type="button" value="이전" onclick="previousImg()">
 <input type="button" value="다음" onclick="nextImg()">
-<form method="post" action="${cp }/story/delete">
+
 
 <c:forEach var="vo" items="${list }">
-
+<form method="post" action="${cp }/story/delete">
 <c:set var="file2" value="${vo.getFilepath()}"/>
 
 
@@ -47,11 +47,11 @@ div{margin:auto;}
 		</div>
 		
 	</div>
-
+</form>
 </c:forEach>
 
 
-</form>
+
 
 </body>
 <script type="text/javascript">
