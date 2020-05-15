@@ -11,6 +11,8 @@
 <style type="text/css">
 	#board{width: 200px; height: 200px;}
 	th{width:200px;height:200px;}
+	
+	
 </style>
 </head>
 <body>
@@ -38,9 +40,16 @@
 			}
 %>
 		<th>
-			<a href="">
-				<img src="../upload/<%=vo.getImagepath() %>" id="board">
-			</a>
+			<div class="modal">
+				<div class="modal_overlay">
+					<a href="">
+						<img src="../upload/<%=vo.getImagepath() %>" id="board">
+					</a>
+				</div>
+				<div class="modal_content">
+					
+				</div>
+			</div>
 		</th>
 <%
 		}
