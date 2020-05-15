@@ -55,7 +55,11 @@ public class BoardDao {
 		PreparedStatement pstmt1=null; //게시글추가용
 		PreparedStatement pstmt=null;
 		boolean transactionChk=true;
-		PreparedStatement pstmtTag=null; //태그추가용(성진)
+		PreparedStatement pstmtTag=null; //태그추가용
+		PreparedStatement pstmtTag2=null; //태그중복검사
+		PreparedStatement pstmtLink=null; //링크추가용
+		PreparedStatement pstmtLink2=null; //링크추가용
+		ResultSet rs=null;
 		try {
 			con=ConnectionPool.getCon();
 			con.setAutoCommit(false);
@@ -79,8 +83,7 @@ public class BoardDao {
 					transactionChk=false;
 				}
 			}
-			
-			//태그추가(성진)
+			//태그추가↓
 			String content=vo.getContent();
 			String[] str=content.split("\\s");
 			ArrayList<String> list=new ArrayList<String>();
@@ -89,13 +92,47 @@ public class BoardDao {
 					list.add(s);
 				}
 			}
+			
 			for(String tag:list) {
-				System.out.println(tag+"태그");
-				String sql3="insert into tag values(tag_seq.nextval,?)";
-				pstmtTag=con.prepareStatement(sql3);
-				pstmtTag.setString(1, tag);
-				pstmtTag.executeUpdate();
+				//태그중복검사
+				pstmtTag2=con.prepareStatement("select search from tag where search=?");
+				pstmtTag2.setString(1, tag);
+				rs=pstmtTag2.executeQuery();
+				if(rs.next()) {
+					String search=rs.getString("search");
+				}else {
+					//중복된 태그가 없으면 추가
+					String sql3="insert into tag values(tag_seq.nextval,?)";
+					pstmtTag=con.prepareStatement(sql3);
+					pstmtTag.setString(1, tag);
+					pstmtTag.executeUpdate();
+				}
 			}
+			//링크추가↓
+			//글번호 꺼내기
+			pstmtLink=con.prepareStatement("select board_seq.currval from dual");
+			rs=pstmtLink.executeQuery();
+			int board_no=0;
+			if(rs.next()) {
+				board_no=rs.getInt(1);
+			}
+			//태그번호 꺼내기
+			for(String tag:list) {
+				String sql4="select tag_no from tag where search=?";
+				pstmtTag=con.prepareStatement(sql4);
+				pstmtTag.setString(1, tag);
+				rs=pstmtTag.executeQuery();
+				if(rs.next()) {
+					int tag_no=rs.getInt(1);
+					String sql5="insert into link values(link_seq.nextval,?,null,?)";
+					pstmtLink2=con.prepareStatement(sql5);
+					pstmtLink2.setInt(1, board_no);
+					pstmtLink2.setInt(2, tag_no);
+					pstmtLink2.executeUpdate();
+				}
+			}
+			
+			
 			con.commit();
 			return transactionChk;
 		}catch(SQLException se) {
@@ -116,7 +153,10 @@ public class BoardDao {
 					se.printStackTrace();
 				}
 			}
-			ConnectionPool.close(con, pstmtTag, null);
+			ConnectionPool.close(pstmtLink2);
+			ConnectionPool.close(pstmtLink);
+			ConnectionPool.close(pstmtTag2);
+			ConnectionPool.close(con, pstmtTag, rs);
 		}
 	}
 }

@@ -20,7 +20,6 @@ public class HomeController extends HttpServlet {
 		session.setAttribute("header", "/header.jsp");
 		req.setAttribute("main", "/homefeed.jsp");
 		
-		
 		req.getRequestDispatcher("/member/login").forward(req, resp);
 		
 	} 

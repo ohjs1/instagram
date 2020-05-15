@@ -27,6 +27,7 @@
 		width: 49%;
 		height: 100%;
 		float: right;
+		margin-top: 40px;
 	}
 	#form_r2{
 		width: 100%;
