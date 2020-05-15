@@ -159,7 +159,7 @@ public class DirectMessageDao {
 				String name =rs.getString("name");
 				String nickname =rs.getString("nickname");
 				String profile =rs.getString("profile");
-				System.out.println("myMember_no : " + myMember_no);
+//				System.out.println("myMember_no : " + myMember_no);
 				
 				if(myMember_no != member_no) {
 					list.add(new MemberVo(member_no, id, null, name, nickname, null, profile));

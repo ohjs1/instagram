@@ -18,16 +18,16 @@ public class DirectMessageInboxController extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int user_no = Integer.parseInt( req.getParameter("member_no") );
 		
-		System.out.println(user_no);
 		
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 		MemberVo vo = dao.getUserList(user_no);
 		
 		HttpSession session = req.getSession();
-		
 		session.setAttribute("memberVo", vo);
 		
-		resp.sendRedirect(req.getContextPath() + "/dm/dmInbox.jsp");
+		req.setAttribute("main", "/dm/directMain.jsp"); 
+		
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }
   

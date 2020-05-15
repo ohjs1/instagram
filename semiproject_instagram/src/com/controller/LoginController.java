@@ -16,6 +16,7 @@ public class LoginController extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getServletContext().setAttribute("cp", req.getContextPath());
 //		req.getRequestDispatcher("/member/login.jsp").forward(req, resp);
+		
 		resp.sendRedirect(req.getContextPath()+"/member/login.jsp");
 	}
 	@Override
@@ -31,7 +32,7 @@ public class LoginController extends HttpServlet{
 			session.setAttribute("pwd", pwd);
 			session.setAttribute("member_no", n);
 			
-			req.setAttribute("main", "/homefeed.jsp");
+			req.setAttribute("main", "/homefeed.jsp"); 
 			
 			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 //			resp.sendRedirect(req.getContextPath()+"/member/result.jsp");

@@ -1,3 +1,4 @@
+<%@page import="com.vo.MemberVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,11 +8,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<h1>로그인 유저</h1>
-
-<c:if test="">
-	<h2><div id="login">${ memberVo.getName() }</div></h2>
-</c:if>
+<%
+	MemberVo vo = (MemberVo)session.getAttribute("memberVo");
+%>
+<h2>로그인 유저 Number : ${ member_no }</h2>
+<c:set target="vo" var="vo"/>
+<h3>유저 이름 : <%=vo.getName() %></h3>
 <br />
 <body>
 	<input type="text" id="search" onkeyup="searchUser()" />
