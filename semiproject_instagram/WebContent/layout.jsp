@@ -9,7 +9,10 @@
 <%
 	String header = (String)session.getAttribute("header");
 	String main = (String)request.getAttribute("main");
-
+	
+	if(main == null){
+		main = "/homefeed.jsp";
+	}
 %>
 </head>
 <body>
