@@ -14,7 +14,7 @@
 		</a>
 		<a href="${ cp }/homefeed.jsp"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
 		<a href="${ cp }/dm/directMain.jsp"><img src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지"/></a>
-		<a href="${ cp }/feed/myfeed.jsp">
+		<a href="${ cp }/feed/myfeed">
 			<img src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)"/>
 		</a>
 		<img src="${ cp }/images/icon/likes.jpg" alt="좋아요"/>

@@ -9,7 +9,8 @@
 <meta charset="UTF-8">
 <title>내 피드</title>
 <style type="text/css">
-	#id{width: 100px; height: 100px;}
+	#board{width: 200px; height: 200px;}
+	th{width:200px;height:200px;}
 </style>
 </head>
 <body>
@@ -21,18 +22,31 @@
 	int member_no=(int)session.getAttribute("member_no");
 	BoardDao dao=new BoardDao();
 	ArrayList<ImageVo> list=dao.selectImg(member_no);
-	System.out.println(list);
 %>
 <h1>게시물</h1>
+<table border="1" width="600px">
+	<tr>
 <%
-	for(int i=0; i<list.size(); i++){
-		ImageVo vo=list.get(i);
-		if(i!=0 && i%3==0){
+	if(list!=null){
+		for(int i=0; i<list.size(); i++){
+			ImageVo vo=list.get(i);
+			if(i!=0 && i%3==0){
 %>
-			<img src="upload/<%=vo.getImagepath() %>" id="board">
+	</tr>
+	<tr>
+<%
+			}
+%>
+		<th>
+			<a href="">
+				<img src="../upload/<%=vo.getImagepath() %>" id="board">
+			</a>
+		</th>
 <%
 		}
 	}
 %>
+	</tr>
+</table>
 </body>
 </html>

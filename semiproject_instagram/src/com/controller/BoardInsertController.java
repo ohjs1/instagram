@@ -29,7 +29,12 @@ import com.vo.BoardVo;
 @WebServlet("/board/insert")
 public class BoardInsertController extends HttpServlet{
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setAttribute("main", "/board/insert.jsp");
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//게시글부분
         HttpSession session=req.getSession();
         int member_no=(int)session.getAttribute("member_no");
@@ -111,9 +116,6 @@ public class BoardInsertController extends HttpServlet{
         }
 		
         req.setAttribute("fileList", fileList);
-        
-		
-		
 		req.setAttribute("main", "/board/insert.jsp");
         
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);

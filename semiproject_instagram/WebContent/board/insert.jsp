@@ -80,7 +80,7 @@
 	}
 </script>
 </head>
-<body>
+<body> 
 <form method="post" action="<c:url value='/board/insert'/>" onsubmit="return fileChk()" enctype="multipart/form-data">
 	<input type="hidden" name="num" value="${param.num }">
 	<input type="hidden" name="ref" value="${param.ref }">

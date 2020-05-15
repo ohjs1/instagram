@@ -16,7 +16,6 @@ import com.vo.ImageVo;
 public class BoardDao {
 	//이미지vo 얻어오기
 	public ArrayList<ImageVo> selectImg(int member_no){
-		System.out.println(member_no+"이것");
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
