@@ -21,7 +21,7 @@
 		<a href="${ cp }/layout.jsp?file=/board/insert.jsp">
 			<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기"/>
 		</a>
-		<a href="${ cp }/home"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
+		<a href="${ cp }/layout.jsp?file=/homefeed.jsp"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
 		<a href="${ cp }/dm/inbox"><img src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지"/></a>
 		<a href="${ cp }/layout.jsp?file=/feed/myfeed.jsp">
 			<img src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)"/>
