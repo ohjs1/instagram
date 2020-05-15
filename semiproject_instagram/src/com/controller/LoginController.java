@@ -33,7 +33,7 @@ public class LoginController extends HttpServlet{
 			
 			req.setAttribute("main", "/homefeed.jsp");
 			
-			resp.sendRedirect(req.getContextPath()+"/layout.jsp");
+			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 //			resp.sendRedirect(req.getContextPath()+"/member/result.jsp");
 		}else {
 			req.setAttribute("errMsg", "아이디 또는 비밀번호가 맞지 않아요!");

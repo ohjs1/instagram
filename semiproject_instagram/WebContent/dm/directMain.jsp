@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1></h1>
+	<h1>다이렉트 메시지</h1>
+	<a href=""><h2>보낼 유저 검색</h2></a>
 </body>
 </html>
