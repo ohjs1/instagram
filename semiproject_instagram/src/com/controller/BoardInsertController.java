@@ -111,7 +111,12 @@ public class BoardInsertController extends HttpServlet{
         }
 		
         req.setAttribute("fileList", fileList);
-		req.getRequestDispatcher("/layout.jsp?file=/board/insert.jsp").forward(req, resp);
+        
+		
+		
+		req.setAttribute("main", "/board/insert.jsp");
+        
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		//MultipartRequestºÎºÐ
 //		req.setCharacterEncoding("utf-8");
 //		HttpSession session=req.getSession();

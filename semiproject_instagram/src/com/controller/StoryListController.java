@@ -25,6 +25,7 @@ public class StoryListController extends HttpServlet{
 		ArrayList<StoryVo> list= dao.mem_list(member_no);
 
 		req.setAttribute("list", list);
+		
 		req.getRequestDispatcher("/story/mystories.jsp").forward(req, resp);
 	}
 
