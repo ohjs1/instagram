@@ -13,6 +13,7 @@
 		<a href="${ cp }/board/insert">
 			<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기"/>
 		</a>
+		<input type="text" placeholder="검색" name="search" id="search" onkeyup="enterkey()">
 		<a href="${ cp }/layout.jsp"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
 		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지"/></a>
 		<a href="${ cp }/feed/myfeed.jsp">
@@ -20,4 +21,12 @@
 		</a>
 		<img src="${ cp }/images/icon/likes.jpg" alt="좋아요"/>
 </body>
+<script type="text/javascript">
+	function enterkey() {
+		var search = document.getElementById("search").value;
+		if(window.event.keyCode == 13){
+			alert(search);
+		}
+	}
+</script>
 </html> 
