@@ -13,7 +13,9 @@
 		<a href="${ cp }/board/insert">
 			<img src="${ cp }/images/icon/writer.jpg" alt="글쓰기"/>
 		</a>
-		<input type="text" placeholder="검색" name="search" id="search" onkeyup="enterkey()">
+		<form action="${ cp }/tag/list">
+			<input type="text" placeholder="검색" name="search" id="search" onkeyup="enterkey()">
+		</form>
 		<a href="${ cp }/layout.jsp"><img src="${ cp }/images/icon/home.jpg" alt="홈"/></a>
 		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지"/></a>
 		<a href="${ cp }/feed/myfeed.jsp">
@@ -26,6 +28,7 @@
 		var search = document.getElementById("search").value;
 		if(window.event.keyCode == 13){
 			alert(search);
+			//form.submit();
 		}
 	}
 </script>
