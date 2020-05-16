@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 public class TagListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("태그리스트 컨트롤러");
+		String search=req.getParameter("search");
+		req.setAttribute("search", search);
 		req.setAttribute("main", "/tag/list.jsp");
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}

@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>검색 목록</h1>
+${search }
 </body>
 </html>
