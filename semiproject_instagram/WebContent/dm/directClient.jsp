@@ -85,13 +85,5 @@ function OnDmMsg(){
 		content.value ="";
 	}
 }
-
-
-var delxhr =null;
-function delchat(){
-	delxhr =new XMLHttpRequest();
-	delxhr.open('get', '${cp}/dm/delete?chatroomNumber=' + chat_no.value + "&yourmember_no=" + yourMember_no.value, true);
-	delxhr.send();
-}
 </script>
 </html>

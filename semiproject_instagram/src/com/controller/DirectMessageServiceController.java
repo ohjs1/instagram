@@ -26,6 +26,10 @@ public class DirectMessageServiceController extends HttpServlet {
 		int chat_no =dao.getChattingRoomNumber(myMember_no);
 		session.setAttribute("chat_no", chat_no);
 		
-		resp.sendRedirect(req.getContextPath() + "/dm/directClient.jsp");
+		//유저 닉네임 request에 담기
+		String nickname = dao.getUserNickName(yourMember_no);
+		req.setAttribute("nickname", nickname);
+		req.getRequestDispatcher("/dm/inbox").forward(req, resp);
+//		resp.sendRedirect(req.getContextPath() + "/dm/inbox");
 	}
 }

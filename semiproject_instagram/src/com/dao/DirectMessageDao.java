@@ -82,18 +82,20 @@ public class DirectMessageDao {
 		
 		try {
 			con =ConnectionPool.getCon();
-			String sql ="select chatroom_no from chatroom where mymember_no=? or youmember_no=?";
+			String sql ="select count(*) cnt from chatroom where mymember_no=? or youmember_no=?";
 			pstmt =con.prepareStatement(sql);
 			pstmt.setInt(1, mymember_no);
 			pstmt.setInt(2, mymember_no);
 			rs =pstmt.executeQuery();
 			
 			if(rs.next()) {
-				System.out.println("이미 존재하는 채팅룸 입니다." + rs.getInt("chatroom_no"));
-				return 0;
-			} else {
-				return 1;
+				int cnt = rs.getInt("cnt");
+				
+				if(cnt > 0) {
+					return cnt;
+				}
 			}
+			return -1;
 			
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
@@ -197,7 +199,7 @@ public class DirectMessageDao {
 				String name =rs.getString("name");
 				String nickname =rs.getString("nickname");
 				String profile =rs.getString("profile");
-				System.out.println("myMember_no : " + myMember_no);
+//				System.out.println("myMember_no : " + myMember_no);
 				
 				MemberVo vo =new MemberVo(member_no, id, null, name, nickname, null, profile);
 				return vo;
@@ -211,6 +213,35 @@ public class DirectMessageDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	
+	//유저 닉네임 가져옴
+	public String getUserNickName(int yourMember_no){
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con =ConnectionPool.getCon();
+			String sql ="SELECT nickname FROM member WHERE member_no = ?";
+			pstmt =con.prepareStatement(sql);
+			pstmt.setInt(1, yourMember_no);
+			rs =pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+				String nickname =rs.getString("nickname");
+				return nickname;
+			} else {
+				return null;
+			}
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	
 	//유저의 채팅내용을 불러와 보여주는 메소드
 	public ArrayList<ChatContentVo> getChatShow(int chat_no){
@@ -244,6 +275,50 @@ public class DirectMessageDao {
 			}
 			return list;
 			
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
+	//유저간 DM 메시지 불러오기
+	public ArrayList<ChatContentVo> getDmmsgAll(int memberId, int chat_no){
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "SELECT chct.* FROM(" + 
+					"    SELECT * FROM chatcontent WHERE smember_no=? or rmember_no=? ORDER BY chatcontent_no ASC\r\n" + 
+					"    )chct\r\n" + 
+					"WHERE chat_no=?";
+
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, memberId);
+			pstmt.setInt(2, memberId);
+			pstmt.setInt(3, chat_no);
+			/*
+			 * int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,
+			boolean status, Date senddate
+			 */
+			rs = pstmt.executeQuery();
+			ArrayList<ChatContentVo> list = new ArrayList<ChatContentVo>();
+			while( rs.next() ) {
+				ChatContentVo vo = new ChatContentVo(
+						rs.getInt("chatcontent_no"),
+						rs.getInt("chat_no"),
+						rs.getInt("smember_no"),
+						rs.getInt("rmember_no"),
+						rs.getString("content"),
+						rs.getBoolean("status"),
+						rs.getDate("senddate"));
+				
+				list.add(vo);
+			}
+			return list;
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
 			return null;
