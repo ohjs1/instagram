@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,9 +9,86 @@ import java.util.ArrayList;
 
 import com.db.ConnectionPool;
 import com.vo.BoardVo;
+import com.vo.Board_MemberVo;
 import com.vo.ImageVo;
 
 public class BoardDao {
+	//member테이블의 회원아이디,닉네임,프로필사진과 board내용 전부 가져오기(join)
+	public ArrayList<Board_MemberVo> selectMemberBoard(int member_no){
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		ArrayList<Board_MemberVo> list=new ArrayList<Board_MemberVo>();
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
+					"from board b, member m " + 
+					"where m.member_no=b.member_no and b.member_no=? " + 
+					"order by b.regdate desc";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				do {
+					String id=rs.getString("id");
+					String pwd=rs.getString("pwd");
+					String name=rs.getString("name");
+					String nickname=rs.getString("nickname");
+					String profile=rs.getString("profile");
+					int board_no=rs.getInt("board_no");
+					String content=rs.getString("content");
+					int ref=rs.getInt("ref");
+					int lev=rs.getInt("lev");
+					int step=rs.getInt("step");
+					Date regdate=rs.getDate("regdate");
+					Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
+					list.add(vo);
+				}while(rs.next());
+				return list;
+			}else {
+				return null;
+			}
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	//로그인된 회원의 게시글 얻어오기
+	public ArrayList<BoardVo> selectBoard(int member_no){
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		ArrayList<BoardVo> list=new ArrayList<BoardVo>();
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select * from board where member_no=? order by regdate desc";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				do {
+					int board_no=rs.getInt("board_no");
+					String content=rs.getString("content");
+					int ref=rs.getInt("ref");
+					int lev=rs.getInt("lev");
+					int step=rs.getInt("step");
+					Date regdate=rs.getDate("regdate");
+					BoardVo vo=new BoardVo(board_no,member_no,content,ref,lev,step,regdate);
+					list.add(vo);
+				}while(rs.next());
+				return list;
+			}else {
+				return null;
+			}
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
 	//이미지vo 얻어오기
 	public ArrayList<ImageVo> selectImg(int member_no){
 		Connection con=null;
@@ -37,10 +115,10 @@ public class BoardDao {
 					String imagepath=rs.getString("imagepath");
 					list.add(new ImageVo(image_no,board_no,imagepath));
 				}while(rs.next()); 
-				return list;
 			}else {
 				return null;
 			}
+			return list;
 		}catch(SQLException se) {
 			System.out.println(se.getMessage());
 			return null;
