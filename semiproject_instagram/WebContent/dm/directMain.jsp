@@ -211,6 +211,9 @@
 		
 		//DB내용 가져와 텍스트박스에 보여주기
 		dshowBox();
+		
+		//자동새로고침 시작
+		startRefresh();
 	}
 	
 	//채팅 받기 기능 구현 ajax
@@ -226,7 +229,7 @@
 				
 				//초기화
 				mText.innerHTML = "";
-				console.log("myMember_no>>" + myMember_no);
+				//console.log("myMember_no>>" + myMember_no);
 				for(var i=0; i<json.length; i++){
 					if(myMember_no == json[i].smember_no){
 						mText.innerHTML += "<div class='tbox_dm' style='text-align:right; padding: 15px; background-color: white;'>" + json[i].content + "</div>";
@@ -269,6 +272,20 @@
 			showTextf[0].value = "";
 		}
 	}
-
+	
+	
+	//자동 새로고침으로 내용 업데이트
+	var timeId = null;
+	function startRefresh(){
+		dshowBox();
+		timeId = setInterval(dshowBox, 1000);
+	}
+	
+	//새로고침 중지
+	function stopRefresh(){
+		if(timeId != null){
+			clearInterval(timeId);
+		}
+	}
 </script>
 </html>
