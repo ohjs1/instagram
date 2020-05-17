@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -27,17 +28,20 @@ public class BoardMyFeedController extends HttpServlet{
 		BoardDao boardDao=new BoardDao();
 		ImageDao imageDao=new ImageDao();
 		//ArrayList<ImageVo> imagelist=dao.selectImg(member_no);
-		ArrayList<Board_MemberVo> board_memberList=boardDao.selectMemberBoard(member_no);
-		ArrayList<ArrayList<ImageVo>> boardImgList=new ArrayList<ArrayList<ImageVo>>();
-		if(board_memberList!=null){
-			for(int i=0; i<board_memberList.size(); i++){
-				Board_MemberVo board_memberVo=board_memberList.get(i);
-				ArrayList<ImageVo> imageList=imageDao.selectBoardImg(board_memberVo.getBoard_no());
-				boardImgList.add(imageList);
-			}
-		}
-		req.setAttribute("board_memberList", board_memberList);
-		req.setAttribute("boardImgList", boardImgList);
+//		ArrayList<Board_MemberVo> board_memberList=boardDao.selectMemberBoard(member_no);
+//		List<List<ImageVo>> boardImgList=new ArrayList<List<ImageVo>>();
+//		if(board_memberList!=null){
+//			for(int i=0; i<board_memberList.size(); i++){
+//				Board_MemberVo board_memberVo=board_memberList.get(i);
+//				List<ImageVo> imageList=imageDao.selectBoardImg(board_memberVo.getBoard_no());
+//				boardImgList.add(imageList);
+//			}
+//		}
+		//게시물당 1개씩 메인이미지가 담긴 ImageVo를 ArrayList에 담음
+		ArrayList<ImageVo> mainImgList=imageDao.selectMainImg();
+		req.setAttribute("mainImgList", mainImgList);
+//		req.setAttribute("board_memberList", board_memberList);
+//		req.setAttribute("boardImgList", boardImgList);
 		req.setAttribute("main", "/feed/myfeed.jsp");
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}

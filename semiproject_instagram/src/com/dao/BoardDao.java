@@ -13,8 +13,8 @@ import com.vo.Board_MemberVo;
 import com.vo.ImageVo;
 
 public class BoardDao {
-	//member테이블의 회원아이디,닉네임,프로필사진과 board내용 전부 가져오기(join)
-	public ArrayList<Board_MemberVo> selectMemberBoard(int member_no){
+	//선택한 게시물의 member테이블에 회원아이디,닉네임,프로필사진과 board테이블 내용 전부 가져오기(join)
+	public ArrayList<Board_MemberVo> selectMemberBoard(int board_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
@@ -23,10 +23,10 @@ public class BoardDao {
 			con=ConnectionPool.getCon();
 			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
 					"from board b, member m " + 
-					"where m.member_no=b.member_no and b.member_no=? " + 
+					"where m.member_no=b.member_no and b.board_no=? " + 
 					"order by b.regdate desc";
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, member_no);
+			pstmt.setInt(1, board_no);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
 				do {
@@ -35,7 +35,7 @@ public class BoardDao {
 					String name=rs.getString("name");
 					String nickname=rs.getString("nickname");
 					String profile=rs.getString("profile");
-					int board_no=rs.getInt("board_no");
+					int member_no=rs.getInt("member_no");
 					String content=rs.getString("content");
 					int ref=rs.getInt("ref");
 					int lev=rs.getInt("lev");

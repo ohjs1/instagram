@@ -82,7 +82,7 @@
 </head>
 <body> 
 <form method="post" action="<c:url value='/board/insert'/>" onsubmit="return fileChk()" enctype="multipart/form-data">
-	<input type="hidden" name="num" value="${param.num }">
+	<input type="hidden" name="board_no" value="${param.board_no }">
 	<input type="hidden" name="ref" value="${param.ref }">
 	<input type="hidden" name="lev" value="${param.lev }">
 	<input type="hidden" name="step" value="${param.step }">

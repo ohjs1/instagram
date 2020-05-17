@@ -39,14 +39,14 @@ public class BoardInsertController extends HttpServlet{
         HttpSession session=req.getSession();
         int member_no=(int)session.getAttribute("member_no");
         System.out.println(member_no);
-        String snum=req.getParameter("num");
+        String sboard_no=req.getParameter("board_no");
         String content="";
-		int num=0;
+		int board_no=0;
 		int ref=0;
 		int lev=0;
 		int step=0;
-		if(snum!=null && !snum.equals("")) {
-			num=Integer.parseInt(snum);
+		if(sboard_no!=null && !sboard_no.equals("")) {
+			board_no=Integer.parseInt(sboard_no);
 			ref=Integer.parseInt(req.getParameter("ref"));
 			lev=Integer.parseInt(req.getParameter("lev"));
 			step=Integer.parseInt(req.getParameter("step"));
@@ -103,7 +103,7 @@ public class BoardInsertController extends HttpServlet{
         			}
         		}
         	}
-        	BoardVo boardvo=new BoardVo(num,member_no,content,ref,lev,step,null);
+        	BoardVo boardvo=new BoardVo(board_no,member_no,content,ref,lev,step,null);
         	BoardDao boarddao=new BoardDao();
 			boolean n=boarddao.insert(boardvo,fileList,member_no);
 			if(n) {
