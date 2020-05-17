@@ -33,20 +33,14 @@ public class DirectMessageController extends HttpServlet {
 		
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 		//채팅방 존재여부 검사
-		int cnt = dao.isChattingRoom(myMember_no);
+		int cnt = dao.isChattingRoom(myMember_no, yourMember_no);
 		int result = createChatRoom(myMember_no, yourMember_no, cnt);
 		
 		if(result>0) {
 			System.out.println("채팅방 생성 성공!");
 		}
-		
-		/*
-		 * int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,
-			boolean status, Date senddate
-		 */
-		
 		//채팅방 번호 조회
-		int chat_num = dao.getChattingRoomNumber(myMember_no);
+		int chat_num = dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		
 		//채팅내용 DB에 넣기
 		ChatContentVo vo = new ChatContentVo(0, chat_num, myMember_no, yourMember_no, content, false, null);
@@ -63,7 +57,7 @@ public class DirectMessageController extends HttpServlet {
 		if(cnt == -1) { //존재하지않으면 채팅방 생성
 			try {
 				con = ConnectionPool.getCon();
-				String sql_cr = "INSERT INTO chatroom(chatroom_seq.NEXTVAL, mymember_no = ?, youmember_no = ?)";
+				String sql_cr = "INSERT INTO chatroom VALUES(chatroom_seq.NEXTVAL, ?, ?, sysdate)";
 				pstmt_createRoom = con.prepareStatement(sql_cr);
 				pstmt_createRoom.setInt(1, myMember_no);
 				pstmt_createRoom.setInt(2, yourMember_no);

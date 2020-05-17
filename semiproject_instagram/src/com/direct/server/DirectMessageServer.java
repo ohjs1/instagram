@@ -35,7 +35,7 @@ public class DirectMessageServer {
 		System.out.println(arr[2]);
 		
 		//채팅방 존재여부 검사
-		int checkCroom =dao.isChattingRoom(Integer.parseInt(myuser_no));
+		int checkCroom =dao.isChattingRoom(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
 		if(checkCroom==1) {
 			//채팅방 생성
 			int result =dao.createChattingRoom(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
@@ -46,7 +46,7 @@ public class DirectMessageServer {
 			}
 			
 			//채팅방 번호 조회
-			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no));
+			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
 			System.out.println("채팅방 번호 : " + cNum);
 			//채팅내용 DB에 저장
 			ChatContentVo vo =new ChatContentVo(
@@ -63,7 +63,7 @@ public class DirectMessageServer {
 			return arr[0]; //채팅내용 되돌려줌
 		} else {
 			//채팅방 번호 조회
-			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no));
+			int cNum =dao.getChattingRoomNumber(Integer.parseInt(myuser_no), Integer.parseInt(youruser_no));
 			System.out.println("채팅방 번호 : " + cNum);
 			//채팅내용 DB에 저장
 			ChatContentVo vo =new ChatContentVo(

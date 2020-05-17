@@ -46,18 +46,19 @@ public class DirectMessageDao {
 	}
 	
 	//채팅방 번호 조회
-	public int getChattingRoomNumber(int mymember_no) {
+	public int getChattingRoomNumber(int mymember_no, int youmember_no) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		
 		try {
 			con =ConnectionPool.getCon();
-			String sql ="select chatroom_no from chatroom where mymember_no=? or youmember_no=?";
+			String sql ="select chatroom_no from chatroom where (mymember_no=? and youmember_no=?) or (mymember_no=? and youmember_no=?)";
 			pstmt =con.prepareStatement(sql);
 			pstmt.setInt(1, mymember_no);
-			pstmt.setInt(2, mymember_no);
-			
+			pstmt.setInt(2, youmember_no);
+			pstmt.setInt(3, youmember_no);
+			pstmt.setInt(4, mymember_no);
 			
 			rs =pstmt.executeQuery();
 			
@@ -75,17 +76,19 @@ public class DirectMessageDao {
 	}
 	
 	//채팅방이 존재하는지 확인하기
-	public int isChattingRoom(int mymember_no) {
+	public int isChattingRoom(int mymember_no, int youmember_no) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		
 		try {
 			con =ConnectionPool.getCon();
-			String sql ="select count(*) cnt from chatroom where mymember_no=? or youmember_no=?";
+			String sql ="select count(*) cnt from chatroom where (mymember_no=? and youmember_no=?) or (mymember_no=? and youmember_no=?)";
 			pstmt =con.prepareStatement(sql);
 			pstmt.setInt(1, mymember_no);
-			pstmt.setInt(2, mymember_no);
+			pstmt.setInt(2, youmember_no);
+			pstmt.setInt(3, youmember_no);
+			pstmt.setInt(4, mymember_no);
 			rs =pstmt.executeQuery();
 			
 			if(rs.next()) {
@@ -284,22 +287,24 @@ public class DirectMessageDao {
 	}
 	
 	//유저간 DM 메시지 불러오기
-	public ArrayList<ChatContentVo> getDmmsgAll(int memberId, int chat_no){
+	public ArrayList<ChatContentVo> getDmmsgAll(int mymemberId, int youmemberId, int chat_no){
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		
 		try {
 			con = ConnectionPool.getCon();
-			String sql = "SELECT chct.* FROM(" + 
-					"    SELECT * FROM chatcontent WHERE smember_no=? or rmember_no=? ORDER BY chatcontent_no ASC\r\n" + 
-					"    )chct\r\n" + 
-					"WHERE chat_no=?";
+			String sql = "SELECT chct.* FROM( \r\n" + 
+					"        SELECT * FROM chatcontent WHERE (smember_no=? and rmember_no=?) or (smember_no=? and rmember_no=?) ORDER BY chatcontent_no ASC \r\n" + 
+					"     )chct\r\n" + 
+					"    WHERE chat_no=?";
 
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, memberId);
-			pstmt.setInt(2, memberId);
-			pstmt.setInt(3, chat_no);
+			pstmt.setInt(1, mymemberId);
+			pstmt.setInt(2, youmemberId);
+			pstmt.setInt(3, youmemberId);
+			pstmt.setInt(4, mymemberId);
+			pstmt.setInt(5, chat_no);
 			/*
 			 * int chatcontent_no, int chat_no, int smember_no, int rmember_no, String content,
 			boolean status, Date senddate

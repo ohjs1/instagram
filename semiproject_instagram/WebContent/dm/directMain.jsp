@@ -78,6 +78,7 @@
 		border: 2px solid white;
 		height: 450px;
 		margin: auto;
+		overflow: auto; 
 	}
 	
 	#showMsg {
@@ -115,8 +116,8 @@
 			<td rowspan='5'>
 				DM 보낼 유저목록
 				<ul>
-				<c:if test="${ sessionScope.yourMember_no != null }">
-					<a href="javascript:showMsgBox();"><li>${ requestScope.nickname }</li></a>
+				<c:if test="${ yourMember_no != null }">
+					<a href="javascript:showMsgBox();"><li>${ nickname }</li></a>
 				</c:if>
 				</ul>
 			</td>
@@ -142,6 +143,8 @@
 	var span = document.getElementsByClassName("close")[0];
 	var myMember_no = '${member_no}';
 	var yourMember_no = '${yourMember_no}';
+	var checkAuto = false; //자동새로고침 인터발
+	var msgTextBox = document.getElementById("msgTextBox"); //DM윈도우 DOM
 	
 	//유저검색버튼 액션 생성
 	btn.onclick = function(){
@@ -213,7 +216,9 @@
 		dshowBox();
 		
 		//자동새로고침 시작
-		startRefresh();
+		if(!checkAuto){
+			startRefresh();
+		}
 	}
 	
 	//채팅 받기 기능 구현 ajax
@@ -237,6 +242,9 @@
 						mText.innerHTML += "<div class='tbox_dm' style='text-align:left; padding: 15px; background-color: white;'>" + json[i].content + "</div>";
 					}
 				}
+				
+				//스크롤바 제일아래로
+				msgTextBox.scrollTop = msgTextBox.scrollHeight;
 			}			
 		}
 		
@@ -270,6 +278,9 @@
 		if(window.event.keyCode == 13){
 			dchatBox();
 			showTextf[0].value = "";
+			
+			//스크롤바 제일아래로
+			msgTextBox.scrollTop = msgTextBox.scrollHeight;
 		}
 	}
 	
@@ -279,6 +290,7 @@
 	function startRefresh(){
 		dshowBox();
 		timeId = setInterval(dshowBox, 1000);
+		checkAuto = true;
 	}
 	
 	//새로고침 중지

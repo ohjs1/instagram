@@ -23,7 +23,7 @@ public class DirectMessageServiceController extends HttpServlet {
 		session.setAttribute("yourMember_no", yourMember_no);
 		
 		DirectMessageDao dao =DirectMessageDao.getInstance();
-		int chat_no =dao.getChattingRoomNumber(myMember_no);
+		int chat_no =dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		session.setAttribute("chat_no", chat_no);
 		
 		//유저 닉네임 request에 담기

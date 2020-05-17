@@ -26,10 +26,10 @@ public class DirectChatReceiveController extends HttpServlet {
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 		
 		//채팅창 번호 조회
-		int chat_no = dao.getChattingRoomNumber(myMember_no);
+		int chat_no = dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		if(chat_no != -1) { //채팅방번호 조회됨
 			//유저 채팅 내용 읽기
-			ArrayList<ChatContentVo> list = dao.getDmmsgAll(myMember_no, chat_no);
+			ArrayList<ChatContentVo> list = dao.getDmmsgAll(myMember_no, yourMember_no, chat_no);
 			
 			if(list != null) {
 				//채팅내용 JSON배열에 담기
