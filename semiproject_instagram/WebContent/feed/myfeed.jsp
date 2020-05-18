@@ -199,11 +199,6 @@
 	const modal=document.querySelector(".modal");
 	const overlay=modal.querySelector(".modal_overlay");
 	const closeBtn=modal.querySelector("button");
-	var json=null;
-	//댓글작성
-	function insertComment(json){
-		alert(json);
-	}
 	
 	//게시글 modal
 	var boardList=null;
@@ -215,10 +210,11 @@
 		boardList.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		boardList.send('board_no='+board_no);
 	}
+	
 	function getBoardListOk(){
 		if(boardList.readyState==4 && boardList.status==200){
 			var data=boardList.responseText;
-			json=JSON.parse(data);
+			var json=JSON.parse(data);
 			var modal1=document.getElementById("modal1");
 			for(var i=0;i<json.length;i++){
 				var id=json[i].id;
@@ -259,8 +255,8 @@
 										"</div>"+
 										"<div class='comments-wrap'></div>"+//작성된 댓글
 										"<div class='comments-wrap'>"+//댓글작성하기
-											"<input type='text' placeholder='댓글 달기...'>"+
-											"<input id='aa' type='button' value='전송'>"+
+											"<input type='text' placeholder='댓글 달기...' id='comment'>"+
+											"<input type='button' id='sendComment' value='전송'>"+
 										"</div>"+
 									"</div>"+
 								"</div>"+
@@ -272,9 +268,31 @@
 				modal1.appendChild(div);
 				getImgList(board_no);
 			}
+			//전송버튼 클릭시 댓글생성 ajax함수 호출
+			var sendComment=document.getElementById("sendComment");
+			sendComment.addEventListener('click',function(){
+				insertComment(json[0]);
+			});
 		}
 	}
-	document.getElementById("aa").onclick
+	
+	//댓글생성 ajax
+	/* var commInsert=null;
+	function insertComment(json){
+		var comment=document.getElementById("comment").value;
+		commInsert=new XMLHttpRequest();
+		commInsert.onreadystatechange=commInsertOk;
+		commInsert.open('post','../board/insert',true);
+		commInsert.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		commInsert.send('board_no='+json.board_no+'&member_no='+json.member_no+'&comment='comment+'&ref='+json.ref+'&lev='+json.lev+'&step='+json.step+'&regdate='+json.regdate);
+	}
+	function commInsertOk(){
+		if(commInsert.readyState==4 && commInsert.status==200){
+			
+		}
+	} */
+	
+	
 	//게시물클릭시 이미지 가져오기
 	var imgList=null;
 	function getImgList(board_no){
