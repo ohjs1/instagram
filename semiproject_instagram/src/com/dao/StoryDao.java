@@ -11,7 +11,34 @@ import com.db.ConnectionPool;
 import com.vo.StoryVo;
 
 public class StoryDao {
-	
+	public ArrayList<StoryVo> storymembers() {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		ArrayList<StoryVo> list=new ArrayList<StoryVo>();
+		
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select distinct member_no from story";
+			pstmt=con.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			while(rs.next()) {
+				StoryVo vo=new StoryVo();
+				int member_no=rs.getInt("member_no");
+				
+				vo.setMember_no(member_no);
+				
+				list.add(vo);
+			}
+			
+			return list;
+		}catch(SQLException se) {
+			se.printStackTrace();
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
 	public int delete(int story_no) {
 		Connection con=null;
 		PreparedStatement pstmt=null;

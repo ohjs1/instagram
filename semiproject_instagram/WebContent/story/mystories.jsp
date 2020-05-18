@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>MyStoriess</title>
 <style>
 *{padding:0px;margin:0px}
 body{background-color: black;}
@@ -20,10 +20,12 @@ div{margin:auto;}
 <label><img src="${cp }/upload/profile.png"></label>
 <input type="button" value="이전" onclick="previousImg()">
 <input type="button" value="다음" onclick="nextImg()">
+<input type="button" value="정지" onclick="stopImg()">
+<input type="button" value="재생" onclick="showImg()">
 
 
 <c:forEach var="vo" items="${list }">
-<form method="post" action="${cp }/story/delete">
+
 <c:set var="file2" value="${vo.getFilepath()}"/>
 
 
@@ -42,12 +44,13 @@ div{margin:auto;}
 			<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
 				${vo.getContent() }
 				${vo.getStory_no() }
-				<input type="hidden" name="story_no" value="${vo.getStory_no() }">
-				<input type="submit" value="삭제">
+				내 스토리 읽은 사람 : ${sessionScope.id }
+				<input type="hidden" id="story_no" name="story_no" value="${vo.getStory_no() }">
+				<input type="button" value="삭제" onclick="deleteStory()">
 		</div>
 		
 	</div>
-</form>
+
 </c:forEach>
 
 
@@ -55,6 +58,8 @@ div{margin:auto;}
 
 </body>
 <script type="text/javascript">
+
+
 	var index=0;
 	var timeout=null;
 	function showStory(){	
@@ -77,12 +82,20 @@ div{margin:auto;}
 		}
 				
 		index++;	
-		if (index > imgs.length-1) {location.href="../layout.jsp";}   
-		timeout=setTimeout(showStory,2000);
+		timeout=setTimeout(showStory,3000);
+		if (index > imgs.length-1) {
+			setTimeout(closeStory,3000);
+			
+			}   
+		
+	}
+	
+	function closeStory(){
+		location.href="../layout.jsp";
 	}
 	
 	function previousImg(){
-
+		clearTimeout(timeout);
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
 		const imgs=document.getElementsByClassName("imgs");	
@@ -96,7 +109,7 @@ div{margin:auto;}
 	}
 	
 	function nextImg(){
-	
+		clearTimeout(timeout);
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
 		const imgs=document.getElementsByClassName("imgs");	
@@ -109,17 +122,46 @@ div{margin:auto;}
 		showStory();
 	}
 	
+	function stopImg(){
+		clearTimeout(timeout);
+	}
+	
+	function showImg(){
+		timeout=setTimeout(showStory,3000);
+	}
 	
 	
 	const imgs=document.getElementsByClassName("imgs");
 	imgs.addEventListener('onmousedown',function(){
-		timeout=clearTimeout(showStory)
+		clearTimeout(timeout)
 	});
 	
 	
 	imgs.addEventListener('onmouseup',function(){
-		timeout=setTimeout(showStory,2000);
+		timeout=setTimeout(showStory,3000);
 	});
+	
+	
+	function deleteStory(){
+		var xhr=new XMLHttpRequest();
+		var story_no=document.getElementById("story_no").value;
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				
+				var data=xhr.responseText;
+				var json=JSON.parse(data);
+					if(json.bl){
+						showStory();
+					}else{
+						alert('삭제실패!');
+					}
+				}
+			}
+		xhr.open('post','${cp}/story/delete',true);
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		xhr.send('story_no='+story_no);
+		
+	}
 	
 </script>
 </html>

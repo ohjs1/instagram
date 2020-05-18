@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 public class StoryAfterDeleteListController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+		int story_no=Integer.parseInt(req.getParameter("story_no"));
+		
 		
 		
 	}
