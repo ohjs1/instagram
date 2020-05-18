@@ -17,6 +17,7 @@
 	<a href="${ cp }/story/list"><img id="myprofile"
 		style="width: 50px; height: 50px;border-radius: 50%;"></a>
 	<a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png"></a>
+	
 	<div id="storys"></div>
 
 </body>

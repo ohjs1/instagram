@@ -29,7 +29,6 @@ public class StoryOpponentListController extends HttpServlet{
 
 		StoryDao dao=new StoryDao();
 		ArrayList<StoryMemberVo> list= dao.mem_list(member_no);
-
 		req.setAttribute("list", list);
 		
 		req.getRequestDispatcher("/story/opponentstories.jsp").forward(req, resp);
@@ -46,6 +45,8 @@ public class StoryOpponentListController extends HttpServlet{
 			JSONObject json=new JSONObject();
 			json.put("member_no", vo.getMember_no());
 			json.put("profile", vo.getProfile());
+			json.put("nickname", vo.getNickname());
+
 			System.out.println("¸â¹ö:"+vo.getMember_no()+ " / ÇÁ·ÎÇÊ : " +vo.getProfile());
 			jarr.put(json);
 		}

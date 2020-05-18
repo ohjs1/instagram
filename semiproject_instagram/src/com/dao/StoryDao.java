@@ -13,7 +13,7 @@ import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
 
 public class StoryDao {
-
+	
 	//스토리 올린 회원들 멤버번호 중복없이 가져오기(storydate 내림차순)
 	public ArrayList<StoryMemberVo> storymembers() {
 		Connection con=null;
@@ -22,7 +22,7 @@ public class StoryDao {
 		ArrayList<StoryMemberVo> list=new ArrayList<StoryMemberVo>();		
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select m.member_no, maxdate, profile\r\n" + 
+			String sql="select m.member_no, maxdate, profile, nickname\r\n" + 
 					"from (select member_no,max(storydate) maxdate \r\n" + 
 					"from story \r\n" + 
 					"group by member_no \r\n" + 
@@ -34,8 +34,10 @@ public class StoryDao {
 				StoryMemberVo vo=new StoryMemberVo();
 				int member_no=rs.getInt("member_no");
 				String profile=rs.getString("profile");
+				String nickname=rs.getString("nickname");
 				vo.setMember_no(member_no);
 				vo.setProfile(profile);
+				vo.setNickname(nickname);
 				
 				list.add(vo);
 			}

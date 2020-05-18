@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import com.dao.MemberDao;
 import com.vo.MemberVo;
 @WebServlet("/member/memberInfo")
-public class MemberProfileController extends HttpServlet{
+public class MemberMemberInfoController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();

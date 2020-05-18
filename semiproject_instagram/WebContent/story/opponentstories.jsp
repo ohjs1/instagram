@@ -10,14 +10,21 @@
 <style>
 *{padding:0px;margin:0px}
 body{background-color: black;}
-div{margin:auto;}
+#wrap {
+
+width: 400px;
+height: 850px;
+margin:auto;
+margin-top: 100px;
+border:1px solid white;
+}
 
 </style>
 
 </head>
 <body onload="showStory()">
-
-<label><img src="${cp }/upload/profile.png"></label>
+<div id="wrap">
+<div id="oppprofile"></div>
 <input type="button" value="이전" onclick="previousImg()">
 <input type="button" value="다음" onclick="nextImg()">
 <input type="button" value="정지" onclick="stopImg()">
@@ -25,6 +32,7 @@ div{margin:auto;}
 
 
 <c:forEach var="vo" items="${list }">
+
 
 <c:set var="file2" value="${vo.getFilepath()}"/>
 
@@ -41,14 +49,15 @@ div{margin:auto;}
 			</c:otherwise>
 		</c:choose>
 		
-			<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
+			<div id="content" style="width:280px;height:200px;position:absolute;top:350px;left:10px;display:none" class="cdivs">
 				${vo.getContent() }
 				<br>
 				저장될 읽은사람(현재로그인한 나) ${id } <br>
-				?? 의 현재 스토리 번호 : ${vo.getStory_no() }
+				${vo.getNickname()} 의 현재 스토리 번호 : ${vo.getStory_no() }
 				
 				<input type="hidden" id="readuser" name="readuser" value="${member_no }">
 				<input type="hidden" id="readstory" name="readstory" value="${vo.getStory_no()}">
+				<input type="hidden" id="oppnickname" name="oppnickname" value="${vo.getNickname()}">
 			
 		</div>
 		
@@ -57,15 +66,52 @@ div{margin:auto;}
 </c:forEach>
 
 
-
+</div>
 
 </body>
 <script type="text/javascript">
-
+	function getProfile() {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var opp = document.getElementById("oppprofile");
+				var oppnickname = document.getElementById("oppnickname").value;
+				console.log("oppnickname:"+oppnickname);
+				var data = xhr.responseText;
+				var json = JSON.parse(data);
+				for(var i=0;i<json.length;i++){
+					var nick=json[i].nickname;
+					console.log("nick:"+nick);
+					if(oppnickname==nick){
+						if(opp.firstChild!=null){
+							opp.removeChild(opp.firstChild);
+						}
+						var div = document.createElement("div");
+						div.innerHTML = "<img src='${cp}/upload/"+json[i].profile+
+						"' style='width: 50px; height: 50px;border-radius: 50%;'><br><label style='color:white'>"+nick+"</label>";
+						div.style.display = "inline";
+						div.className = "opp"
+						
+						opp.appendChild(div);
+						
+					}
+				
+				}
+			
+			}
+			
+	
+		}
+		xhr.open('post', '${cp}/story/opponentlist', true);
+		xhr.setRequestHeader('Content-Type',
+				'application/x-www-form-urlencoded');
+		xhr.send();
+	}
 
 	var index=0;
 	var timeout=null;
 	function showStory(){	
+		getProfile();
 		insertReadUser();
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
@@ -125,6 +171,21 @@ div{margin:auto;}
 		showStory();
 	}
 	
+	const imgs=document.getElementsByClassName("imgs");
+	for(var i=0;i<imgs.length;i++){
+	console.log("imgs:"+imgs);
+	imgs[i].addEventListener('mousedown',function(){
+		console.log("imgs/////down");
+		clearTimeout(timeout)
+	});
+	
+	
+	imgs[i].addEventListener('mouseup',function(){
+		console.log("imgs/////up");
+		timeout=setTimeout(showStory,3000);
+	});
+	}
+	
 	function stopImg(){
 		clearTimeout(timeout);
 	}
@@ -132,17 +193,6 @@ div{margin:auto;}
 	function showImg(){
 		timeout=setTimeout(showStory,3000);
 	}
-	
-	
-	const imgs=document.getElementsByClassName("imgs");
-	imgs.addEventListener('onmousedown',function(){
-		clearTimeout(timeout)
-	});
-	
-	
-	imgs.addEventListener('onmouseup',function(){
-		timeout=setTimeout(showStory,3000);
-	});
 	
 	function insertReadUser(){
 		var xhr=new XMLHttpRequest();
@@ -162,6 +212,7 @@ div{margin:auto;}
 		xhr.send('member_no='+readuser+"&story_no="+readstory);
 	}
 	}
+	
 	
 </script>
 </html>

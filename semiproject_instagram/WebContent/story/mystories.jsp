@@ -31,8 +31,6 @@ border:1px solid white;
 
 <input type="button" value="이전" onclick="previousImg()">
 <input type="button" value="다음" onclick="nextImg()">
-<input type="button" value="정지" onclick="stopImg()">
-<input type="button" value="재생" onclick="showImg()">
 
 
 <c:forEach var="vo" items="${list }">
@@ -71,25 +69,25 @@ border:1px solid white;
 <script type="text/javascript">
 
 
-function getProfile() {
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var myprofile = document.getElementById("myprofile");
-			var data = xhr.responseText;
-			var json = JSON.parse(data);
-
-			myprofile.src = "${cp}/upload/" + json.profile;
+	function getProfile() {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var myprofile = document.getElementById("myprofile");
+				var data = xhr.responseText;
+				var json = JSON.parse(data);
+	
+				myprofile.src = "${cp}/upload/" + json.profile;
+				
+			}
 			
+	
 		}
-		
-
+		xhr.open('post', '${cp}/member/memberInfo', true);
+		xhr.setRequestHeader('Content-Type',
+				'application/x-www-form-urlencoded');
+		xhr.send();
 	}
-	xhr.open('post', '${cp}/member/memberInfo', true);
-	xhr.setRequestHeader('Content-Type',
-			'application/x-www-form-urlencoded');
-	xhr.send();
-}
 
 	var index=0;
 	var timeout=null;
@@ -165,15 +163,19 @@ function getProfile() {
 	
 	
 	const imgs=document.getElementsByClassName("imgs");
-	imgs.addEventListener('onmousedown',function(){
+	for(var i=0;i<imgs.length;i++){
+	console.log("imgs:"+imgs);
+	imgs[i].addEventListener('mousedown',function(){
+		console.log("imgs/////down");
 		clearTimeout(timeout)
 	});
 	
 	
-	imgs.addEventListener('onmouseup',function(){
+	imgs[i].addEventListener('mouseup',function(){
+		console.log("imgs/////up");
 		timeout=setTimeout(showStory,3000);
 	});
-	
+	}
 	
 	function deleteStory(){
 		var xhr=new XMLHttpRequest();
