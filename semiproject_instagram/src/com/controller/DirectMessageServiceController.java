@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dao.DirectMessageDao;
+import com.vo.ChatUserlistVo;
 
 @WebServlet("/dm/connectClient")
 public class DirectMessageServiceController extends HttpServlet {
@@ -25,10 +27,8 @@ public class DirectMessageServiceController extends HttpServlet {
 		DirectMessageDao dao =DirectMessageDao.getInstance();
 		int chat_no =dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		session.setAttribute("chat_no", chat_no);
+
 		
-		//유저 닉네임 request에 담기
-		String nickname = dao.getUserNickName(yourMember_no);
-		req.setAttribute("nickname", nickname);
 		req.getRequestDispatcher("/dm/inbox").forward(req, resp);
 //		resp.sendRedirect(req.getContextPath() + "/dm/inbox");
 	}

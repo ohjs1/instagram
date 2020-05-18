@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -114,10 +115,14 @@
 		<tr>
 			<div id="userlist">
 			<td rowspan='5'>
+				로그인된 아이디 번호 : ${ member_no }<br>
+			
 				DM 보낼 유저목록
 				<ul>
-				<c:if test="${ yourMember_no != null }">
-					<a href="javascript:showMsgBox();"><li>${ nickname }</li></a>
+				<c:if test="${ dmlist != null }">
+					<c:forEach var="n" items="${ dmlist }">
+						<div id="dmuserlist"><a href="#"><li>${ n.getNickname() }</li></a><br></div>
+					</c:forEach>
 				</c:if>
 				</ul>
 			</td>
@@ -196,8 +201,9 @@
 			for(var i=0; i<json.length; i++){
 				result.innerHTML += "맴버번호 : " + json[i].yourMember_no + 
 				" 아이디:" + json[i].id + " 이름: <a href='${cp}/dm/connectClient?yourMember_no=" + json[i].yourMember_no 
-						+ "&myMember_no=" + json[0].myMember_no + "'>" + json[i].name + "</a>" + " 닉네임:" + json[i].nickname 
+						+ "&myMember_no=" + json[i].myMember_no + "'>" + json[i].name + "</a>" + " 닉네임:" + json[i].nickname 
 				+ " 프로필사진:" + json[i].profile +"<br>";
+				
 			}
 		}
 	}
@@ -234,8 +240,12 @@
 				
 				//초기화
 				mText.innerHTML = "";
-				//console.log("myMember_no>>" + myMember_no);
+				
 				for(var i=0; i<json.length; i++){
+				console.log("myMember_no>>" + myMember_no);
+				console.log("json[i].smember_no>>" + json[i].smember_no);
+				console.log("json[i].rmember_no>>" + json[i].rmember_no);
+				
 					if(myMember_no == json[i].smember_no){
 						mText.innerHTML += "<div class='tbox_dm' style='text-align:right; padding: 15px; background-color: white;'>" + json[i].content + "</div>";
 					} else if(myMember_no == json[i].rmember_no){

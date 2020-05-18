@@ -25,6 +25,8 @@ public class DirectMessageSearchController extends HttpServlet {
 		String keyword =req.getParameter("keyword");
 		int myMember_no =Integer.parseInt(req.getParameter("myMember_no"));
 		
+//		System.out.println("³Ñ¾î¿Â myMember_no >>" + myMember_no);
+		
 		DirectMessageDao dao =DirectMessageDao.getInstance();
 		ArrayList<MemberVo> list =dao.getUserList(keyword, myMember_no);
 		

@@ -1,7 +1,6 @@
 package com.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 
 import com.db.ConnectionPool;
 import com.vo.ChatContentVo;
+import com.vo.ChatUserlistVo;
 import com.vo.MemberVo;
 
 public class DirectMessageDao {
@@ -107,6 +107,47 @@ public class DirectMessageDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
+	
+	//DM유저목록 가져오기
+	public ArrayList<ChatUserlistVo> getDMUserList(int mymember_no){
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "select * from member where member_no in (select youmember_no from chatroom where mymember_no=?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, mymember_no);
+			rs = pstmt.executeQuery();
+			/*
+			 * int member_no, String id, String pwd, String name, String nickname, Date regdate,
+			String profile
+			 */
+			ArrayList<ChatUserlistVo> list = new ArrayList<ChatUserlistVo>();
+			
+			while(rs.next()) {
+				ChatUserlistVo vo = new ChatUserlistVo(
+						rs.getInt("member_no"),
+						rs.getString("id"),
+						rs.getString("pwd"),
+						rs.getString("name"),
+						rs.getString("nickname"),
+						rs.getDate("regdate"),
+						rs.getString("profile"));
+				
+				list.add(vo);
+			}
+			return list;
+			
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	
 	//채팅방 내용을 DB에 저장
 	public int saveChatDatabase(ChatContentVo vo) {
