@@ -5,14 +5,23 @@
 <head>
 <meta charset="UTF-8">
 <title>instagram header</title>
+<style>
+	#tag{
+		display: inline-block;
+	    overflow: auto;
+	    width: 171px;
+	    height: 90px;
+	    margin: auto;
+	    margin-right: 57px;
+	}
+</style>
 </head>
 <body>
-
+<div>
 	<img src="${ cp }/images/logo.png" alt="logo" id="logo">
 	
 	<input type="text" placeholder="검색" name="search" id="search"
 		onkeyup="search()">
-	<div id="tag" style="display:inline-block;"></div>
 	<a href="${ cp }/board/insert"> <img
 		src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
 	</a>
@@ -24,6 +33,10 @@
 		src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
 	</a>
 	<img src="${ cp }/images/icon/likes.jpg" alt="좋아요" />
+</div>
+
+<div id="tag"></div>
+
 </body>
 <script type="text/javascript">
 	var xhr =null;
@@ -39,6 +52,7 @@
 			xhr.send();
 		} else {
 			div.innerHTML="";
+			div.style.border="";
 		}
 	}
 	function searchTag(){
@@ -50,6 +64,7 @@
 				var keyword=json[i].keyword.replace("#", "");
 				div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ keyword +"</a><br>";
 			}
+			div.style.border="1px solid gray";
 		}
 	}
 </script>

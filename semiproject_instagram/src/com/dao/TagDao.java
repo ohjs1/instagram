@@ -38,9 +38,6 @@ public class TagDao {
 	}
 
 	public ArrayList<ImageVo> list(String keyword) {
-		
-		System.out.println("#"+keyword+"--Å°¿öµå");
-		
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;

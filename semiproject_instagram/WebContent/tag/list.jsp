@@ -8,11 +8,27 @@
 	th{
 		padding: 10px;
 	}
-	#imgTable{
+	#imglist{
 		text-align: center;
+		clear: both;
 	}
-	#tag{
-		width: 
+	#headerTag{
+		width:940px;
+		margin:auto;
+	}
+	#headerTag img{
+		padding: 30px;
+		margin-right: 30px;
+		border-radius: 70%;
+		float: left;
+		width: 152px;
+		height: 152px;
+	}
+	#dd{
+		padding-top: 50px;
+	}
+	strong{
+		font-size: 2.0em;
 	}
 </style>
 <!DOCTYPE html>
@@ -22,10 +38,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-<div id="tag">
+<div id="headerTag">
+	<img src="${cp }/upload/${vo[0].imagepath}" id="test">
+	<div id="dd"><strong>#${keyword }</strong></div>
+	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
 </div>
-<div id="imgTable">
-	# ${keyword }<br>
+<div id="imglist">
 	<c:set var="i" value="0" />
 	<c:set var="j" value="3" />
 	<table>
