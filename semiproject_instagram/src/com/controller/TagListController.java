@@ -7,14 +7,26 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 @WebServlet("/tag/list")
 public class TagListController extends HttpServlet{
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String search=req.getParameter("search");
-		req.setAttribute("search", search);
+		System.out.println(search + "태그리스트");
 		req.setAttribute("main", "/tag/list.jsp");
+		req.setAttribute("search", search);
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
