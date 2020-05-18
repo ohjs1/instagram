@@ -8,25 +8,34 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.db.ConnectionPool;
+import com.vo.MemberVo;
+import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
 
 public class StoryDao {
-	public ArrayList<StoryVo> storymembers() {
+
+	//스토리 올린 회원들 멤버번호 중복없이 가져오기(storydate 내림차순)
+	public ArrayList<StoryMemberVo> storymembers() {
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		ArrayList<StoryVo> list=new ArrayList<StoryVo>();
-		
+		ArrayList<StoryMemberVo> list=new ArrayList<StoryMemberVo>();		
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select member_no,max(storydate) maxdate from story group by member_no order by maxdate desc";
+			String sql="select m.member_no, maxdate, profile\r\n" + 
+					"from (select member_no,max(storydate) maxdate \r\n" + 
+					"from story \r\n" + 
+					"group by member_no \r\n" + 
+					"order by maxdate desc)s, member m\r\n" + 
+					"where s.member_no=m.member_no";
 			pstmt=con.prepareStatement(sql);
 			rs=pstmt.executeQuery();
 			while(rs.next()) {
-				StoryVo vo=new StoryVo();
+				StoryMemberVo vo=new StoryMemberVo();
 				int member_no=rs.getInt("member_no");
-				
+				String profile=rs.getString("profile");
 				vo.setMember_no(member_no);
+				vo.setProfile(profile);
 				
 				list.add(vo);
 			}
@@ -39,6 +48,8 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	
+	// 해당 스토리번호 삭제
 	public int delete(int story_no) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -57,14 +68,18 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	public ArrayList<StoryVo> mem_list(int member_no){
+	
+	//해당 멤버의 모든 스토리 정보 가져오기
+	public ArrayList<StoryMemberVo> mem_list(int member_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		ArrayList<StoryVo> list=new ArrayList<StoryVo>();
+		ArrayList<StoryMemberVo> list=new ArrayList<StoryMemberVo>();
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select * from story where member_no=? order by story_no asc";
+			String sql="select s.*, m.nickname from story s, member m\r\n" + 
+					"where s.member_no=? and m.member_no=s.member_no\r\n" + 
+					"order by story_no asc";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, member_no);
 			rs=pstmt.executeQuery();
@@ -73,7 +88,8 @@ public class StoryDao {
 				String content=rs.getString("content");
 				String filepath=rs.getString("filepath");
 				Date storydate=rs.getDate("storydate");
-				StoryVo vo=new StoryVo(story_no, member_no, content, filepath, storydate);
+				String nickname=rs.getString("nickname");
+				StoryMemberVo vo=new StoryMemberVo(story_no, member_no, content, filepath, storydate, nickname);
 				list.add(vo);
 			}
 			
@@ -85,6 +101,8 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	
+	//세션아이디의 멤버번호 가져오기..
 	public int getMemberNo(String id) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -108,6 +126,8 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+
+	//스토리 업로드
 	public int insert(StoryVo vo) {
 		Connection con=null;
 		PreparedStatement pstmt=null;

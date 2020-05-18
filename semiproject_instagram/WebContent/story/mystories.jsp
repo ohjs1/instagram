@@ -10,14 +10,25 @@
 <style>
 *{padding:0px;margin:0px}
 body{background-color: black;}
-div{margin:auto;}
+#wrap {
+
+width: 400px;
+height: 850px;
+margin:auto;
+margin-top: 100px;
+border:1px solid white;
+}
 
 </style>
 
 </head>
 <body onload="showStory()">
 
-<label><img src="${cp }/upload/profile.png"></label>
+<div id="wrap">
+<img id="myprofile" style="width: 50px; height: 50px;border-radius: 50%;">
+
+<label style="color:white">${nickname}</label>
+
 <input type="button" value="이전" onclick="previousImg()">
 <input type="button" value="다음" onclick="nextImg()">
 <input type="button" value="정지" onclick="stopImg()">
@@ -55,14 +66,36 @@ div{margin:auto;}
 
 
 
-
+</div>
 </body>
 <script type="text/javascript">
 
 
+function getProfile() {
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var myprofile = document.getElementById("myprofile");
+			var data = xhr.responseText;
+			var json = JSON.parse(data);
+
+			myprofile.src = "${cp}/upload/" + json.profile;
+			
+		}
+		
+
+	}
+	xhr.open('post', '${cp}/member/memberInfo', true);
+	xhr.setRequestHeader('Content-Type',
+			'application/x-www-form-urlencoded');
+	xhr.send();
+}
+
 	var index=0;
 	var timeout=null;
 	function showStory(){	
+		
+		getProfile();
 		
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
@@ -162,6 +195,7 @@ div{margin:auto;}
 		xhr.send('story_no='+story_no);
 		
 	}
+	
 	
 </script>
 </html>

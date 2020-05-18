@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dao.MemberDao;
+import com.vo.MemberVo;
 @WebServlet("/member/login")
 public class LoginController extends HttpServlet{
 	@Override
@@ -26,11 +27,13 @@ public class LoginController extends HttpServlet{
 		String pwd=req.getParameter("pwd");
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.isMember(id,pwd);
+		MemberVo vo= dao.memberInfo(id);
 		if(n>0) {
 			HttpSession session=req.getSession();
 			session.setAttribute("id", id);
 			session.setAttribute("pwd", pwd);
 			session.setAttribute("member_no", n);
+			session.setAttribute("nickname", vo.getNickname());
 			
 			req.setAttribute("main", "/homefeed.jsp"); 
 			

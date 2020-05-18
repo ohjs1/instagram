@@ -44,9 +44,9 @@ div{margin:auto;}
 			<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
 				${vo.getContent() }
 				<br>
-				저장될 읽은사람(현재로그인한 나) ${member_no } <br>
+				저장될 읽은사람(현재로그인한 나) ${id } <br>
 				?? 의 현재 스토리 번호 : ${vo.getStory_no() }
-				<input type="button" value="읽은사람저장" onclick="insertReadUser()">
+				
 				<input type="hidden" id="readuser" name="readuser" value="${member_no }">
 				<input type="hidden" id="readstory" name="readstory" value="${vo.getStory_no()}">
 			
@@ -66,7 +66,7 @@ div{margin:auto;}
 	var index=0;
 	var timeout=null;
 	function showStory(){	
-		
+		insertReadUser();
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
 		const imgs=document.getElementsByClassName("imgs");	
@@ -105,7 +105,7 @@ div{margin:auto;}
 		
 		index--;
 		if(index<0){
-			index=imgs.length-1;
+			index=0;
 		}
 		
 		showStory();
@@ -119,7 +119,7 @@ div{margin:auto;}
 		
 		index++;
 		if(index>imgs.length-1){
-			index=0;
+			closeStory();
 		}
 		
 		showStory();

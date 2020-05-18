@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.dao.StoryDao;
+import com.vo.MemberVo;
+import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
 
 
@@ -26,7 +28,7 @@ public class StoryOpponentListController extends HttpServlet{
 		int member_no=Integer.parseInt(req.getParameter("member_no"));
 
 		StoryDao dao=new StoryDao();
-		ArrayList<StoryVo> list= dao.mem_list(member_no);
+		ArrayList<StoryMemberVo> list= dao.mem_list(member_no);
 
 		req.setAttribute("list", list);
 		
@@ -37,14 +39,18 @@ public class StoryOpponentListController extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		StoryDao dao=new StoryDao();
-		ArrayList<StoryVo> list= dao.storymembers();
+		ArrayList<StoryMemberVo> list= dao.storymembers();
+
 		JSONArray jarr=new JSONArray();
-		for(StoryVo vo:list) {
+		for(StoryMemberVo vo:list) {
 			JSONObject json=new JSONObject();
 			json.put("member_no", vo.getMember_no());
-			System.out.println("dopost opponentlist story올린 member_no: "+vo.getMember_no());
+			json.put("profile", vo.getProfile());
+			System.out.println("멤버:"+vo.getMember_no()+ " / 프로필 : " +vo.getProfile());
 			jarr.put(json);
 		}
+		
+	
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();
 		pw.print(jarr);

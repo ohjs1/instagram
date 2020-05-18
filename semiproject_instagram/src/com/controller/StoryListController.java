@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dao.StoryDao;
+import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
 
 
@@ -22,7 +23,7 @@ public class StoryListController extends HttpServlet{
 		HttpSession session=req.getSession();
 		int member_no=(int)session.getAttribute("member_no");
 		StoryDao dao=new StoryDao();
-		ArrayList<StoryVo> list= dao.mem_list(member_no);
+		ArrayList<StoryMemberVo> list= dao.mem_list(member_no);
 
 		req.setAttribute("list", list);
 		
@@ -34,7 +35,7 @@ public class StoryListController extends HttpServlet{
 		String filepath=(String)req.getAttribute("filepath");
 		System.out.println("방금업로드한 파일명:"+filepath);
 		StoryDao dao=new StoryDao();
-		ArrayList<StoryVo> list= dao.mem_list(member_no);
+		ArrayList<StoryMemberVo> list= dao.mem_list(member_no);
 
 		req.setAttribute("list", list);
 		
