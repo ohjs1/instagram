@@ -15,7 +15,7 @@ public class FollowInsertController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int youmember_no = Integer.parseInt(req.getParameter("youmember_no"));
-		String smymember_no = (String)req.getSession().getAttribute("member_no");
+		String smymember_no = String.valueOf(req.getSession().getAttribute("member_no"));
 		int mymember_no=0;
 		if(smymember_no==null || smymember_no.equals("")) {
 			resp.sendRedirect("/member/login");
