@@ -8,15 +8,26 @@
 </head>
 <body onload="addStorys()">
 <h1>홈피드입니다</h1>
-
+계정설정 : <a href="${ cp }/member/memberInfo">프로필 수정</a><br>
 	
 	<a href="${ cp }/story/insert">스토리올리기</a>
-	<a href="${ cp }/story/list">내 스토리</a>
+	<a href="${ cp }/story/list"><img id="myprofile" style="width:30px;height:30px">내 스토리</a>
 	<div id="storys"></div>
 	
 </body>
 <script>
-
+	function getProfile(){
+		var xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				var myprofile=document.getElementById("myprofile");
+				json
+				myprofile.src=""
+			}
+		xhr.open('get','/member/memberInfo?id='+${id},true);
+		xhr.send();
+		
+	}
 
 function addStorys(){
 	var xhr=new XMLHttpRequest();

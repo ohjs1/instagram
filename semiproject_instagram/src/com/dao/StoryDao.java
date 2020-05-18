@@ -19,7 +19,7 @@ public class StoryDao {
 		
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select distinct member_no from story";
+			String sql="select member_no,max(storydate) maxdate from story group by member_no order by maxdate desc";
 			pstmt=con.prepareStatement(sql);
 			rs=pstmt.executeQuery();
 			while(rs.next()) {

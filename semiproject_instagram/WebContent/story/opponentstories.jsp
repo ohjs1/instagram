@@ -44,7 +44,8 @@ div{margin:auto;}
 			<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;display:none" class="cdivs">
 				${vo.getContent() }
 				<br>
-				멤버 ${member_no } 의 현재 스토리 번호 : ${vo.getStory_no() }
+				저장될 읽은사람(현재로그인한 나) ${member_no } <br>
+				?? 의 현재 스토리 번호 : ${vo.getStory_no() }
 				<input type="button" value="읽은사람저장" onclick="insertReadUser()">
 				<input type="hidden" id="readuser" name="readuser" value="${member_no }">
 				<input type="hidden" id="readstory" name="readstory" value="${vo.getStory_no()}">

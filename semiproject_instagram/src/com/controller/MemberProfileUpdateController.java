@@ -45,7 +45,7 @@ public class MemberProfileUpdateController extends HttpServlet{
 			req.setAttribute("profile", profile);
 			req.setAttribute("name", name);
 			req.setAttribute("nickname", nickname);
-			req.getRequestDispatcher(req.getContextPath()+"/member/profile_update.jsp").forward(req, resp);
+			req.getRequestDispatcher("/member/profile_update.jsp").forward(req, resp);
 		}
 	}
 }

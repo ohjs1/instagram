@@ -14,7 +14,7 @@ import com.vo.MemberVo;
 @WebServlet("/member/memberInfo")
 public class MemberProfileController extends HttpServlet{
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		String id=(String)session.getAttribute("id");
 		MemberDao dao=MemberDao.getInstance();
@@ -23,6 +23,11 @@ public class MemberProfileController extends HttpServlet{
 		req.setAttribute("profile", vo.getProfile());
 		req.setAttribute("name", vo.getName());
 		req.setAttribute("nickname", vo.getNickname());
-		req.getRequestDispatcher(req.getContextPath()+"/member/profile_update.jsp").forward(req, resp);
+		req.getRequestDispatcher("/member/profile_update.jsp").forward(req, resp);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("memberinfo doPost¿‘¥œ¥Ÿ...");
 	}
 }
