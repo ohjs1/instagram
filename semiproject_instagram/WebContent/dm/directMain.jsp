@@ -121,7 +121,12 @@
 				<ul>
 				<c:if test="${ dmlist != null }">
 					<c:forEach var="n" items="${ dmlist }">
-						<div id="dmuserlist"><a href="#"><li>${ n.getNickname() }</li></a><br></div>
+						<div id="dmuserlist">
+							<a href="${ cp }/dm/inbox?member_no=${member_no}">
+								<li>${ n.getNickname() }</li>
+							</a>
+						<br>
+						</div>
 					</c:forEach>
 				</c:if>
 				</ul>

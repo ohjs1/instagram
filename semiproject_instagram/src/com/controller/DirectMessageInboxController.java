@@ -17,12 +17,14 @@ import com.vo.ChatUserlistVo;
 public class DirectMessageInboxController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String member_no = req.getParameter("member_no");
+		int member_no = Integer.parseInt( req.getParameter("member_no") );
+		
+		
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 
 		//유저목록 리스트받아오기
 		HttpSession session =req.getSession();
-		ArrayList<ChatUserlistVo> list = dao.getDMUserList(Integer.parseInt( member_no ));
+		ArrayList<ChatUserlistVo> list = dao.getDMUserList(member_no);
 		session.setAttribute("dmlist", list);
 		
 		req.setAttribute("main", "/dm/directMain.jsp"); 

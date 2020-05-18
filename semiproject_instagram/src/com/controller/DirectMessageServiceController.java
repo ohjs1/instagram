@@ -20,6 +20,10 @@ public class DirectMessageServiceController extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		int myMember_no =Integer.parseInt(req.getParameter("myMember_no"));
 		int yourMember_no =Integer.parseInt(req.getParameter("yourMember_no"));
+		
+		System.out.println("myMember_no>>" + myMember_no);
+		System.out.println("yourMember_no>>" + yourMember_no);
+		
 		HttpSession session =req.getSession();
 		session.setAttribute("myMember_no", myMember_no);
 		session.setAttribute("yourMember_no", yourMember_no);
@@ -28,8 +32,8 @@ public class DirectMessageServiceController extends HttpServlet {
 		int chat_no =dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		session.setAttribute("chat_no", chat_no);
 
-		
-		req.getRequestDispatcher("/dm/inbox").forward(req, resp);
+		req.setAttribute("main", "/dm/directMain.jsp"); 
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 //		resp.sendRedirect(req.getContextPath() + "/dm/inbox");
 	}
 }
