@@ -18,6 +18,7 @@ import com.vo.Board_MemberVo;
 
 @WebServlet("/board/list")
 public class Board_MemberListController extends HttpServlet{
+	//멤버정보 및 게시글정보 얻어오기
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int board_no=Integer.parseInt(req.getParameter("board_no"));

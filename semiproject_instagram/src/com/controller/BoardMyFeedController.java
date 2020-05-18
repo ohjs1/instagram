@@ -25,6 +25,10 @@ public class BoardMyFeedController extends HttpServlet{
 		String upload=application.getRealPath("upload");
 		HttpSession session=req.getSession();
 		int member_no=(int)session.getAttribute("member_no");
+		String smember_no=(String)req.getAttribute("member_no");
+		if(smember_no!=null && !smember_no.equals("")) {
+			member_no=Integer.parseInt(smember_no);
+		}
 		BoardDao boardDao=new BoardDao();
 		ImageDao imageDao=new ImageDao();
 		//ArrayList<ImageVo> imagelist=dao.selectImg(member_no);
@@ -38,7 +42,7 @@ public class BoardMyFeedController extends HttpServlet{
 //			}
 //		}
 		//게시물당 1개씩 메인이미지가 담긴 ImageVo를 ArrayList에 담음
-		ArrayList<ImageVo> mainImgList=imageDao.selectMainImg();
+		ArrayList<ImageVo> mainImgList=imageDao.selectMainImg(member_no);
 		req.setAttribute("mainImgList", mainImgList);
 //		req.setAttribute("board_memberList", board_memberList);
 //		req.setAttribute("boardImgList", boardImgList);

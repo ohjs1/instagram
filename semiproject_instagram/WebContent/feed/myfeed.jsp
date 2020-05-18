@@ -199,11 +199,11 @@
 	const modal=document.querySelector(".modal");
 	const overlay=modal.querySelector(".modal_overlay");
 	const closeBtn=modal.querySelector("button");
+	var json=null;
 	//댓글작성
 	function insertComment(json){
-		
+		alert(json);
 	}
-	
 	
 	//게시글 modal
 	var boardList=null;
@@ -218,7 +218,7 @@
 	function getBoardListOk(){
 		if(boardList.readyState==4 && boardList.status==200){
 			var data=boardList.responseText;
-			var json=JSON.parse(data);
+			json=JSON.parse(data);
 			var modal1=document.getElementById("modal1");
 			for(var i=0;i<json.length;i++){
 				var id=json[i].id;
@@ -233,7 +233,6 @@
 				var lev=json[i].lev;
 				var step=json[i].step;
 				var regdate=json[i].regdate;
-				
 				var div=document.createElement("div");
 				div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
 									"<div class='modal_content'>"+
@@ -245,7 +244,7 @@
 										"<div class='meta-wrap'>"+
 											"<div class='meta'>"+//프로필사진,닉네임이 들어갈 div
 												"<div>"+
-													"<img src='../upload/'+"+profile+">"+//프로필사진
+													"<img src='../upload/"+profile+"'>"+//프로필사진
 												"</div>"+
 												"<div>"+
 													"<p class='handle'>"+nickname+"</p>"+//닉네임
@@ -261,7 +260,7 @@
 										"<div class='comments-wrap'></div>"+//작성된 댓글
 										"<div class='comments-wrap'>"+//댓글작성하기
 											"<input type='text' placeholder='댓글 달기...'>"+
-											"<input type='button' value='전송' onclick='insertComment("+json+")'>"+
+											"<input id='aa' type='button' value='전송'>"+
 										"</div>"+
 									"</div>"+
 								"</div>"+
@@ -275,6 +274,7 @@
 			}
 		}
 	}
+	document.getElementById("aa").onclick
 	//게시물클릭시 이미지 가져오기
 	var imgList=null;
 	function getImgList(board_no){

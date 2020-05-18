@@ -11,23 +11,28 @@ import com.vo.ImageVo;
 
 public class ImageDao {
 	//대표이미지ArrayList 얻어오기
-	public ArrayList<ImageVo> selectMainImg() {
+	public ArrayList<ImageVo> selectMainImg(int member_no) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		ArrayList<ImageVo> list=new ArrayList<ImageVo>();
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select i.board_no,i.image_no,i2.imagepath from " + 
-					"( " + 
-					"    select board_no,min(image_no) image_no " + 
-					"    from image " + 
-					"    group by board_no " + 
-					"    order by board_no " + 
-					")i, image i2 " + 
-					"where i.image_no=i2.image_no " + 
-					"order by board_no desc";
+			String sql="select i3.*,b.member_no from" + 
+					"(" + 
+					"    select i.board_no,i.image_no,i2.imagepath from " + 
+					"    (" + 
+					"        select board_no,min(image_no) image_no " + 
+					"        from image " + 
+					"        group by board_no " + 
+					"        order by board_no " + 
+					"    )i, image i2 " + 
+					"    where i.image_no=i2.image_no " + 
+					"    order by board_no desc " + 
+					")i3, board b " + 
+					"where i3.board_no=b.board_no and member_no=?";
 			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
 				do {
