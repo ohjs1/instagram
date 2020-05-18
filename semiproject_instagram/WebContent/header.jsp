@@ -12,7 +12,7 @@
 	
 	<input type="text" placeholder="검색" name="search" id="search"
 		onkeyup="search()">
-	<div id="tag" style="display:inline"></div>
+	<div id="tag" style="display:inline-block;"></div>
 	<a href="${ cp }/board/insert"> <img
 		src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
 	</a>
@@ -26,31 +26,29 @@
 	<img src="${ cp }/images/icon/likes.jpg" alt="좋아요" />
 </body>
 <script type="text/javascript">
-
-
-	
-	var xhr = null;
-	var div = document.getElementById("tag");
+	var xhr =null;
+	var div=document.getElementById("tag");
 	function search() {
-		var search = document.getElementById("search").value;
-		console.log(search);
-		xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = searchTag;
-		if (!search == "") {
-			xhr.open('get', '${cp}/tag/search?search=' + search, true);
+		var search=document.getElementById("search").value;
+		var keyword=search.replace("#", "%23");//#을 못씀
+		console.log("keyword---"+keyword);
+		xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=searchTag;
+		if(!search==""){
+			xhr.open('get','${cp}/tag/search?search='+keyword, true);
 			xhr.send();
 		} else {
-			div.innerHTML = "";
+			div.innerHTML="";
 		}
 	}
-	function searchTag() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var data = xhr.responseText;
-			var json = JSON.parse(data);
-			div.innerHTML = "";
-			for (var i = 0; i < json.length; i++) {
-				div.innerHTML += "<a href='${cp}/tag/list?search="
-						+ json[i].keyword + "'>" + json[i].keyword + "</a><br>";
+	function searchTag(){
+		if(xhr.readyState==4 && xhr.status==200){
+			var data=xhr.responseText;
+			var json=JSON.parse(data);
+			div.innerHTML="";
+			for(var i=0; i<json.length; i++){
+				var keyword=json[i].keyword.replace("#", "");
+				div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ keyword +"</a><br>";
 			}
 		}
 	}

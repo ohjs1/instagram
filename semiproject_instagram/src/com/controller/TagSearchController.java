@@ -20,8 +20,6 @@ public class TagSearchController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String search=req.getParameter("search");
-		System.out.println(search);
-		System.out.println("---------------");
 		TagDao dao=new TagDao();
 		ArrayList<String> list=dao.tagSearch(search);
 		
