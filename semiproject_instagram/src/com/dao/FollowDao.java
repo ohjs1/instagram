@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.db.ConnectionPool;
-import com.vo.FollowVo;
 import com.vo.MemberVo;
 
 public class FollowDao {

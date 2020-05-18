@@ -13,17 +13,15 @@
 		<c:if test="${bl==true}">
 		<h1>팔로워</h1>
 			<c:forEach var="vo" items='${list }'>
-				<td>${vo.getId() }</td>
-				<td>${vo.getNickname() }</td>
+				<td><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<td><a href="${cp }/follow/delete?youmember_no=${vo.getMember_no() }">삭제</a></td>			
-				</tr><tr>7
+				</tr><tr>
 			</c:forEach>
 		</c:if>
 		<c:if test="${bl==false}">
 		<h1>팔로잉</h1>
 			<c:forEach var="vo" items='${list }'>
-				<td>${vo.getId() }</td>
-				<td>${vo.getNickname() }</td>
+				<td><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<td><a href="${cp }/follow/insert?youmember_no=${vo.getMember_no() }">팔로우</a></td>			
 				</tr><tr>
 			</c:forEach>

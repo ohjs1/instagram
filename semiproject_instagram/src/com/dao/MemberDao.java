@@ -18,6 +18,35 @@ public class MemberDao {
 	public static MemberDao getInstance() {
 		return instance;
 	}
+	//pk를 넣었을때 모든 값을 돌려주는 메소드
+	public MemberVo memberInfo(int member_no) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select * from member where member_no=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				String id=rs.getString("id");
+				String pwd=rs.getString("pwd");
+				String name=rs.getString("name");
+				String nickname=rs.getString("nickname");
+				Date regdate=rs.getDate("regdate");
+				String profile=rs.getString("profile");
+				MemberVo vo=new MemberVo(member_no, id, pwd, name, nickname, regdate, profile);
+				return vo;
+			}
+			return null;
+		}catch (SQLException se) {
+			se.getStackTrace();
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
 	//회원가입
 	public int insert(MemberVo vo) {
 		Connection con=null;
