@@ -20,7 +20,7 @@ public class BoardCommentInsert extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 		int board_no=Integer.parseInt(req.getParameter("board_no"));
-		int member_no=Integer.parseInt(req.getParameter("member_no"));
+		int member_no=(int)req.getSession().getAttribute("member_no");
 		String comment=req.getParameter("comment");
 		int ref=Integer.parseInt(req.getParameter("ref"));
 		int lev=Integer.parseInt(req.getParameter("lev"));
