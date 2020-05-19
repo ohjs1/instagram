@@ -24,12 +24,14 @@
 		height: 35px;
 	}
 </style>
+<!-- Bootstrap -->
+    <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div>
 	<img src="${ cp }/images/logo.png" alt="logo" id="logo">
 	
-	<input type="text" placeholder="검색" name="search" id="search"
+	<input type="text" placeholder="검색" name="search" id="search" class='input-medium search-query'
 		onkeyup="search()">
 	<a href="${ cp }/board/insert"> <img
 		src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
@@ -47,6 +49,8 @@
 	</a>
 </div>
 <div id="tag"></div>
+	<script src="https://code.jquery.com/jquery.js"></script>
+    <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
 	var myAccount=document.getElementById("myAccount");

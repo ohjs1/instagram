@@ -37,7 +37,7 @@
 		display: block;
 	}
 	
-	.modal {
+	.modal2 {
 		display: none; /* Hidden by default */
 		position: fixed; /* Stay in place */
 		z-index: 1; /* Sit on top */
@@ -103,8 +103,12 @@
 		width: 20em;
 	}
 	
+	#searchUser {
+		width: 15%;
+	}
 </style>
-
+<!-- Bootstrap -->
+    <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div id="maxSize">
@@ -137,12 +141,14 @@
 				[ ${ nickname } ]
 				<br>
 					<c:forEach var="n" items="${ dmlist }">
+				<li>
 						<div id="dmuserlist">
 							<a href="${cp}/dm/connectClient?yourMember_no=${n.getMember_no()}&myMember_no=${member_no}">
-								<li>${ n.getNickname() }</li>
+								${ n.getNickname() }
 							</a>
 						<br>
 						</div>
+				</li>
 					</c:forEach>
 				</c:if>
 				</ul>
@@ -150,18 +156,20 @@
 			</div>
 		</tr>
 	</table>
-	<div id="myModal" class="modal">
+	<div id="myModal" class="modal2">
 		 <!-- Modal content -->
 		 <div class="modal-content">
 		   <span class="close">&times;</span>
 			<p>
 				보낼 유저 : 
-				<input type="text" id="searchUser" onkeyup="searchUser()" />
+				<input type="text" id="searchUser" class="input-medium search-query" onkeyup="searchUser()" />
 				<hr />
 				<div id="result"></div>
 			</p>
 	</div>
 </div>
+	<script src="https://code.jquery.com/jquery.js"></script>
+    <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
 	var btn = document.getElementById("btn");
