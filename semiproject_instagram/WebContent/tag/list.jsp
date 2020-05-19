@@ -37,9 +37,9 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body onload="stroyTagImg()">
 <div id="headerTag">
-	<img src="${cp }/upload/${vo[0].imagepath}" id="test">
+	<img src="${cp }/upload/${vo[0].imagepath}" id="storyTagImg"><!-- 스토리 ajax로 보여지기 -->
 	<div id="dd"><strong>#${keyword }</strong></div>
 	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
 </div>
@@ -61,6 +61,38 @@
 		</c:forEach>
 	</table>
 </div>
-
 </body>
+<script type="text/javascript">
+	var storyTagImg=document.getElementById("storyTagImg");
+	var xhr=null;
+	function stroyTagImg(){
+		xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=showTagImg;
+		xhr.open('get','/tag/showStroy?keyword=${keyword }',true);
+		xhr.send();
+	}
+	function showTagImg() {
+		if(xhr.readyState==4 && xhr.status==200){
+			var data=xhr.responseText;
+			var json=JSON.parse(data);
+			if(json[0].filepath!="" & json[0].filepath!=null){
+				storyTagImg.src="${cp}/upload/"+json[0].filepath;
+			}else{
+				storyTagImg.src="${cp }/upload/${vo[0].imagepath}";
+			}
+		}
+	}
+</script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
