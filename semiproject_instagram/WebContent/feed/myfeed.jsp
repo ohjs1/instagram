@@ -88,12 +88,17 @@
   border-bottom: 1px solid $offWhite;
 }
 
-.meta-comments img{
+.comments{
+	display: flex;    
+	align-items: center;
+}
+.comments-wrap img{
 	align-self: center;
     max-width: 40px;
     border-radius: 50%;
     margin-right: 12px;
 }
+
 
 .meta-info {
   display: grid;
@@ -240,6 +245,7 @@
 			var lev=json.lev;
 			var step=json.step;
 			var regdate=json.regdate;
+			
 			var div=document.createElement("div");
 			div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
 								"<div class='modal_content'>"+
@@ -270,7 +276,7 @@
 										"</div>"+
 									"</div>"+
 									"<div class='comments-wrap'></div>"+//작성된 댓글
-									"<div class='comments'>"+//댓글작성하기
+									"<div class='commwrite'>"+//댓글작성하기
 										"<input type='text' placeholder='댓글 달기...' id='comment'>"+
 										"<input type='button' id='sendComment' value='전송'>"+
 									"</div>"+
@@ -283,6 +289,7 @@
 			div.setAttribute("id","modal");
 			modal1.appendChild(div);
 			getImgList(board_no);
+			commentList(board_no);
 				
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
 			var sendComment=document.getElementById("sendComment");
@@ -304,30 +311,61 @@
 		var lev=json.lev;
 		var step=json.step;
 		commInsert=new XMLHttpRequest();
-		commInsert.onreadystatechange=commInsertOk;
+		commInsert.onreadystatechange=function(){ //board_no받아서 commentList(board_no)으로 보내주기
+			if(commInsert.readyState==4 && commInsert.status==200){
+				var data=commInsert.responseText;
+				var json=JSON.parse(data);
+				if(json.chk>0){
+					commentList(board_no);
+				}else{
+					alert("댓글작성 실패!");
+				}
+			}
+		}
 		commInsert.open('post','../board/commentInsert',true);
 		commInsert.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		commInsert.send('board_no='+board_no+'&member_no=${member_no}&comment='+comment+'&ref='+ref+'&lev='+lev+'&step='+step);
 	}
-	function commInsertOk(){ //board_no받아서 commentList(board_no)으로 보내주기
-		if(commInsert.readyState==4 && commInsert.status==200){
-			var data=commInsert.responseText;
-			var json=JSON.parse(data);
-			if(json.chk>0){
-				commentList();
-				alert("댓글작성 성공!");
-				//댓글리스트 ajax호출
-			}else{
-				alert("댓글작성 실패!");
+	
+	//댓글 리스트 가져오기
+	var commList=null;
+	function commentList(board_no){
+		commList=new XMLHttpRequest();
+		commList.onreadystatechange=function(){
+			if(commList.readyState==4 && commList.status==200){
+				var comments_wrap=document.getElementsByClassName("comments-wrap")[0];
+				comments_wrap.innerHTML="";
+				var data=commList.responseText;
+				var json=JSON.parse(data);
+				for(let i=0; i<json.length; i++){
+					var id=json[i].id;
+					var pwd=json[i].pwd;
+					var name=json[i].name;
+					var nickname=json[i].nickname;
+					var profile=json[i].profile;
+					var board_no=json[i].board_no;
+					var member_no=json[i].member_no;
+					var content=json[i].content;
+					var ref=json[i].ref;
+					var lev=json[i].lev;
+					var step=json[i].step;
+					var regdate=json[i].regdate;
+					comments_wrap.innerHTML+="<div class='comments'>"+
+												"<div>"+
+													"<img src='../upload/"+profile+"'>"+//프로필사진
+												"</div>"+
+												"<div>"+
+													"<p>"+
+														"<span class='handle'>"+nickname+"</span> "+//닉네임
+														"<span>"+content+"</span>"+//글내용
+													"</p>"+
+												"</div>"+
+											"</div>";
+				}
 			}
 		}
-	}
-	
-	var commList=null;
-	function commentList(){
-		commList=new XMLHttpRequest();
-		commList.onreadystatechange=commentListOk;
-		commList.open('get','../board/commentList?board_no=');
+		commList.open('get','../board/commentList?board_no='+board_no);
+		commList.send();
 	}
 	
 	//게시물클릭시 이미지 가져오기
