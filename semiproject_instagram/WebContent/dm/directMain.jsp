@@ -120,9 +120,11 @@
 				DM 보낼 유저목록
 				<ul>
 				<c:if test="${ dmlist != null }">
+				[ ${ nickname } ]
+				<br>
 					<c:forEach var="n" items="${ dmlist }">
 						<div id="dmuserlist">
-							<a href="${ cp }/dm/inbox?member_no=${member_no}">
+							<a href="${cp}/dm/connectClient?yourMember_no=${n.getMember_no()}&myMember_no=${member_no}">
 								<li>${ n.getNickname() }</li>
 							</a>
 						<br>
@@ -155,6 +157,7 @@
 	var yourMember_no = '${yourMember_no}';
 	var checkAuto = false; //자동새로고침 인터발
 	var msgTextBox = document.getElementById("msgTextBox"); //DM윈도우 DOM
+	var showboxCheck = '${showboxCheck}'; //showbox보여주게하는 체트변수 기본값 off;
 	
 	//유저검색버튼 액션 생성
 	btn.onclick = function(){
@@ -174,6 +177,13 @@
 	window.onclick = function(event){
 		if(event.target == modal){
 			modal.style.display = "none";
+		}
+	}
+	
+	//showbox 체크
+	window.onload = function(){
+		if(showboxCheck != null && showboxCheck == 'on'){
+			showMsgBox();
 		}
 	}
 	
@@ -206,7 +216,10 @@
 			for(var i=0; i<json.length; i++){
 				result.innerHTML += "맴버번호 : " + json[i].yourMember_no + 
 				" 아이디:" + json[i].id + " 이름: <a href='${cp}/dm/connectClient?yourMember_no=" + json[i].yourMember_no 
-						+ "&myMember_no=" + json[i].myMember_no + "'>" + json[i].name + "</a>" + " 닉네임:" + json[i].nickname 
+						+ "&myMember_no=" + json[i].myMember_no + "&nickname=" 
+						+ json[i].nickname + "&showboxCheck=" + showboxCheck + "'>"
+						+ json[i].name + "</a>"
+						+ " 닉네임:" + json[i].nickname 
 				+ " 프로필사진:" + json[i].profile +"<br>";
 				
 			}
@@ -284,7 +297,8 @@
 		}
 		dmsg_xhr.open('post', '${cp}/dm/dmmsg', true);
 		dmsg_xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		dmsg_xhr.send('content=' + showTextf[0].value + '&myMember_no=${sessionScope.myMember_no}' + '&yourMember_no=${sessionScope.yourMember_no}');
+		dmsg_xhr.send('content=' + showTextf[0].value + '&myMember_no=${sessionScope.myMember_no}' 
+				+ '&yourMember_no=${sessionScope.yourMember_no}');
 	}
 	
 	

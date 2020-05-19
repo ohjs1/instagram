@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.db.ConnectionPool;
 import com.vo.ChatContentVo;
-import com.vo.ChatUserlistVo;
 import com.vo.MemberVo;
 
 public class DirectMessageDao {
@@ -109,14 +108,14 @@ public class DirectMessageDao {
 	}
 	
 	//DM유저목록 가져오기
-	public ArrayList<ChatUserlistVo> getDMUserList(int mymember_no){
+	public ArrayList<MemberVo> getDMUserList(int mymember_no){
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		
 		try {
 			con = ConnectionPool.getCon();
-			String sql = "select * from member where member_no in (select youmember_no from chatroom where mymember_no=?)";
+			String sql = "select * from member where member_no in (select rmember_no from chatcontent where smember_no=?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, mymember_no);
 			rs = pstmt.executeQuery();
@@ -124,10 +123,10 @@ public class DirectMessageDao {
 			 * int member_no, String id, String pwd, String name, String nickname, Date regdate,
 			String profile
 			 */
-			ArrayList<ChatUserlistVo> list = new ArrayList<ChatUserlistVo>();
+			ArrayList<MemberVo> list = new ArrayList<MemberVo>();
 			
 			while(rs.next()) {
-				ChatUserlistVo vo = new ChatUserlistVo(
+				MemberVo vo = new MemberVo(
 						rs.getInt("member_no"),
 						rs.getString("id"),
 						rs.getString("pwd"),

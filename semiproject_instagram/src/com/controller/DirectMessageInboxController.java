@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dao.DirectMessageDao;
-import com.vo.ChatUserlistVo;
+import com.vo.MemberVo;
 
 @WebServlet("/dm/inbox")
 public class DirectMessageInboxController extends HttpServlet {
@@ -24,8 +24,11 @@ public class DirectMessageInboxController extends HttpServlet {
 
 		//유저목록 리스트받아오기
 		HttpSession session =req.getSession();
-		ArrayList<ChatUserlistVo> list = dao.getDMUserList(member_no);
+		ArrayList<MemberVo> list = dao.getDMUserList(member_no);
 		session.setAttribute("dmlist", list);
+		
+		//dm메뉴에서 클릭시 채팅창 감추기
+		session.setAttribute("showboxCheck", "off");
 		
 		req.setAttribute("main", "/dm/directMain.jsp"); 
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
