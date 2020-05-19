@@ -170,32 +170,19 @@ body {
 
 	function previousImg() {
 		clearTimeout(timeout);
-
-		index--;
+		index=index-2;
 		if (index < 0) {
 			index = 0;
 		}
-
 		showStory();
 	}
 
 	function nextImg() {
-		clearTimeout(timeout);
-
-		index++;
+		clearTimeout(timeout);	
 		if (index > imgs.length - 1) {
 			closeStory();
 		}
-
 		showStory();
-	}
-
-	function stopImg() {
-		clearTimeout(timeout);
-	}
-
-	function showImg() {
-		timeout = setTimeout(showStory, 3000);
 	}
 
 	const imgs = document.getElementsByClassName("imgs");

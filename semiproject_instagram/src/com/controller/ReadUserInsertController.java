@@ -1,12 +1,15 @@
 package com.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
 
 import com.dao.ReadUserDao;
 import com.vo.ReaduserVo;
@@ -17,15 +20,17 @@ public class ReadUserInsertController extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int member_no=Integer.parseInt(req.getParameter("member_no"));
 		int story_no=Integer.parseInt(req.getParameter("story_no"));
-		System.out.println("readuser/insert 입니다.."+story_no);
 		ReadUserDao dao=new ReadUserDao();
 		ReaduserVo vo=new ReaduserVo(0, member_no, story_no);
 		int n=dao.insert(vo);
-		
+		JSONObject json=new JSONObject();
+		boolean bl=false;
 		if(n>0) {
-			System.out.println("스토리읽은 사람 목록 저장 완료");
-		}else {
-			System.out.println("readuser insert fail");
+			bl=true;
 		}
+		json.put("bl", bl);
+		resp.setContentType("text/plain;charset=utf-8");
+		PrintWriter pw=resp.getWriter();
+		pw.print(json);
 	}
 }

@@ -21,7 +21,7 @@ public class ReadUserDao {
 			int n = pstmt.executeUpdate();
 			return n;
 		}catch(SQLException se) {
-			se.printStackTrace();
+			
 			return -1;
 		}finally {
 			ConnectionPool.close(con, pstmt, null);

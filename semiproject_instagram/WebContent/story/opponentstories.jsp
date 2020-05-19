@@ -79,7 +79,7 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var opp = document.getElementById("oppprofile");
 				var oppnickname = document.getElementById("oppnickname").value;
-				console.log("oppnickname:"+oppnickname);
+				
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
 				for(var i=0;i<json.length;i++){
@@ -99,11 +99,8 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 						
 					}
 				
-				}
-			
-			}
-			
-	
+				}			
+			}	
 		}
 		xhr.open('post', '${cp}/story/opponentlist', true);
 		xhr.setRequestHeader('Content-Type',
@@ -122,52 +119,42 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 		var readuser=document.getElementsByClassName("readuser");
 		var readstory=document.getElementsByClassName("readstory");
 		for(let i=0;i<imgs.length;i++){
-			if(i==index){
-				
+			if(i==index){			
 				insertReadUser(readuser[i].value,readstory[i].value);
 				divs[i].style.display="block";
 				imgs[i].style.display="block";
 				cdivs[i].style.display="block";
 			}else{
-
 				divs[i].style.display="none";
 				imgs[i].style.display="none";
 				cdivs[i].style.display="none";
 			}
-		}
-		
+		}		
 		index++;	
 		timeout=setTimeout(showStory,3000);
 		if (index > imgs.length-1) {
-			setTimeout(closeStory,3000);
-			
-			}   
-		
+			setTimeout(closeStory,3000);			
+			}   		
 	}
 	
 	function closeStory(){
 		location.href="../layout.jsp";
 	}
 	
-	function previousImg(){
-
-		index--;
-		if(index<0){
-			index=0;
+	function previousImg() {
+		clearTimeout(timeout);
+		index=index-2;
+		if (index < 0) {
+			index = 0;
 		}
-		
 		showStory();
 	}
-	
-	function nextImg(){
-	
 
-		
-		index++;
-		if(index>imgs.length-1){
+	function nextImg() {
+		clearTimeout(timeout);	
+		if (index > imgs.length - 1) {
 			closeStory();
 		}
-		
 		showStory();
 	}
 	
@@ -194,22 +181,27 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	}
 	
 	function insertReadUser(readuser, readstory){
-		var xhr=new XMLHttpRequest();
-		console.log(readuser +"/"+readstory);
-		xhr.onreadystatechange=function(){
-			if(xhr.readyState==4&&xhr.status==200){
+		console.log("dddddddddddddddddddd")
+		let xhr1=new XMLHttpRequest();
+		console.log(readuser +"///"+readstory);
+
+		xhr1.onreadystatechange=function(){
+			console.log("1111111111");
+			if(xhr1.readyState==4&&xhr1.status==200){
 				
-				var data=xhr.responseText;
+				var data=xhr1.responseText;
 				var json=JSON.parse(data);
 					if(json.bl){
-						showStory();
-				}
+						
+					}
 			}
-		xhr.open('post','${cp}/readuser/insert',true);
-		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		xhr.send('member_no='+readuser+"&story_no="+readstory);
 		}
-	}
+		xhr1.open('get','${cp}/readuser/insert?member_no='+readuser+"&story_no="+readstory,true);
+//		xhr1.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		console.log("2222222222222");
+		xhr1.send();
+		}
+	
 	
 	
 </script>
