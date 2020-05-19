@@ -57,7 +57,7 @@
 	  margin: auto;
 	  padding: 20px;
 	  border: 1px solid #888;
-	  width: 38%;
+	  width: 40%;
 	}
 	
 	
@@ -85,6 +85,7 @@
 	#showMsg {
 		display: none;
 		padding: 15px;
+		width: 85%;
 	}
 	
 	#mText {
@@ -103,6 +104,7 @@
 	}
 	
 </style>
+
 </head>
 <body>
 <div id="maxSize">

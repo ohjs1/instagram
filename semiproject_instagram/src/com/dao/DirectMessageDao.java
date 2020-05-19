@@ -415,10 +415,13 @@ public class DirectMessageDao {
 			con.setAutoCommit(false);//트랜젝션 시작
 			
 			//채팅방 번호 알아내기
-			String sql1 ="select chatroom_no from chatroom where mymember_no=? and youmember_no=?";
+			String sql1 ="select chatroom_no from chatroom where "
+					+ "(mymember_no=? and youmember_no=?) or (mymember_no=? and youmember_no=?)";
 			pstmt1 =con.prepareStatement(sql1);
 			pstmt1.setInt(1, myMember_no);
 			pstmt1.setInt(2, yourMember_no);
+			pstmt1.setInt(3, yourMember_no);
+			pstmt1.setInt(4, myMember_no);
 			rs = pstmt1.executeQuery();
 			
 			int chat_no = 0;

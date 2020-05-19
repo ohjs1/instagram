@@ -17,6 +17,10 @@ public class DirectMessageDeleteController extends HttpServlet {
 		DirectMessageDao dao =DirectMessageDao.getInstance();
 		int myMember_no = Integer.parseInt(req.getParameter("myMember_no"));
 		int yourMember_no =Integer.parseInt(req.getParameter("yourMember_no"));
+		
+		System.out.println(myMember_no + " : myMember_no");
+		System.out.println(yourMember_no + " : yourMember_no");
+		
 		int r =dao.delDirectMessage(myMember_no, yourMember_no);
 		
 		System.out.println("삭제된 DM 개수 : " + r);
@@ -25,3 +29,4 @@ public class DirectMessageDeleteController extends HttpServlet {
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }
+ 
