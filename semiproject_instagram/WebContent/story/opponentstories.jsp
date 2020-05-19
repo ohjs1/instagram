@@ -9,7 +9,7 @@
 <title>OpponentStories</title>
 <style>
 *{padding:0px;margin:0px}
-body{background-color: black;}
+body{background-color: #292929;}
 #wrap {
 
 width: 400px;
@@ -54,11 +54,11 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 			<div id="content" class="cdivs">
 				${vo.getContent() }
 				<br>
-				저장될 읽은사람(현재로그인한 나) ${id } <br>
+				저장될 읽은사람(현재로그인한 나) ${nickname } <br>
 				${vo.getNickname()} 의 현재 스토리 번호 : ${vo.getStory_no() }
-				
-				<input type="hidden" id="readuser" name="readuser" value="${member_no }">
-				<input type="hidden" id="readstory" name="readstory" value="${vo.getStory_no()}">
+				<c:set var="snolist">${vo.getStory_no() }</c:set>
+				<input type="hidden" class="readuser" name="readuser" value="${member_no }">
+				<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 				<input type="hidden" id="oppnickname" name="oppnickname" value="${vo.getNickname()}">
 			
 		</div>
@@ -72,6 +72,7 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
 </body>
 <script type="text/javascript">
+
 	function getProfile() {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -114,13 +115,16 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	var timeout=null;
 	function showStory(){	
 		getProfile();
-		insertReadUser();
+		
 		const divs=document.getElementsByClassName("divs");		
 		const cdivs=document.getElementsByClassName("cdivs");
 		const imgs=document.getElementsByClassName("imgs");	
+		var readuser=document.getElementsByClassName("readuser");
+		var readstory=document.getElementsByClassName("readstory");
 		for(let i=0;i<imgs.length;i++){
 			if(i==index){
-	
+				
+				insertReadUser(readuser[i].value,readstory[i].value);
 				divs[i].style.display="block";
 				imgs[i].style.display="block";
 				cdivs[i].style.display="block";
@@ -131,7 +135,7 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 				cdivs[i].style.display="none";
 			}
 		}
-				
+		
 		index++;	
 		timeout=setTimeout(showStory,3000);
 		if (index > imgs.length-1) {
@@ -169,7 +173,6 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	
 	const imgs=document.getElementsByClassName("imgs");
 	for(var i=0;i<imgs.length;i++){
-	console.log("imgs:"+imgs);
 	imgs[i].addEventListener('mousedown',function(){
 		console.log("imgs/////down");
 		clearTimeout(timeout)
@@ -190,10 +193,9 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 		timeout=setTimeout(showStory,3000);
 	}
 	
-	function insertReadUser(){
+	function insertReadUser(readuser, readstory){
 		var xhr=new XMLHttpRequest();
-		var readuser=document.getElementById("readuser").value;
-		var readstory=document.getElementById("readstory").value;
+		console.log(readuser +"/"+readstory);
 		xhr.onreadystatechange=function(){
 			if(xhr.readyState==4&&xhr.status==200){
 				
@@ -206,7 +208,7 @@ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 		xhr.open('post','${cp}/readuser/insert',true);
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		xhr.send('member_no='+readuser+"&story_no="+readstory);
-	}
+		}
 	}
 	
 	

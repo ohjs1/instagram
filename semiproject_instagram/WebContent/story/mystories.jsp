@@ -14,7 +14,7 @@
 }
 
 body {
-	background-color: black;
+	background-color: #292929;
 }
 
 #wrap {
@@ -217,7 +217,6 @@ body {
 		var story_no = document.getElementById("story_no").value;
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
-
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
 				if (json.bl) {

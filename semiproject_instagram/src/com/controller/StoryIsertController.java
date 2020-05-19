@@ -48,9 +48,9 @@ public class StoryIsertController extends HttpServlet{
 		String filepath=mr.getFilesystemName("file1");
 		int member_no=dao.getMemberNo(id);
 		StoryVo vo=new StoryVo(0, member_no, content, filepath, null);
-		int n= dao.insert(vo);
+		boolean chk= dao.insert(vo);
 		
-		if(n>0) {
+		if(chk) {
 			req.setAttribute("member_no", member_no);
 			req.setAttribute("filepath", filepath);
 			req.getRequestDispatcher("/story/list").forward(req, resp);
