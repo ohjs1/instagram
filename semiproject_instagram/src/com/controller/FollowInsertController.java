@@ -23,15 +23,16 @@ public class FollowInsertController extends HttpServlet{
 		if(mymember_no==youmember_no) {
 			System.out.println("불가");
 			req.setAttribute("msg", "팔로우불가");
-		}
-		FollowDao dao = new FollowDao();
-		int n = dao.insert(mymember_no, youmember_no);
-		if(n>0) {
-			System.out.println("팔로우완료");
-			req.setAttribute("msg", "팔로우성공");
 		}else {
-			System.out.println("오류");
-			req.setAttribute("msg", "팔로우실패");
+			FollowDao dao = new FollowDao();
+			int n = dao.insert(mymember_no, youmember_no);
+			if(n>0) {
+				System.out.println("팔로우완료");
+				req.setAttribute("msg", "팔로우성공");
+			}else {
+				System.out.println("오류");
+				req.setAttribute("msg", "팔로우실패");
+			}
 		}
 		req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 	}

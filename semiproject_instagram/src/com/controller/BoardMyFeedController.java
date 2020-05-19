@@ -20,15 +20,17 @@ import com.vo.ImageVo;
 @WebServlet("/feed/myfeed")
 public class BoardMyFeedController extends HttpServlet{
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ServletContext application=req.getServletContext(); //웹상의 절대경로를 구함
 		String upload=application.getRealPath("upload");
 		HttpSession session=req.getSession();
 		int member_no=(int)session.getAttribute("member_no");
-		String smember_no=(String)req.getAttribute("member_no");
+		String smember_no=req.getParameter("youmember_no");
+		System.out.println("smember_no="+smember_no);
 		if(smember_no!=null && !smember_no.equals("")) {
 			member_no=Integer.parseInt(smember_no);
 		}
+		System.out.println("member_no="+member_no);
 		BoardDao boardDao=new BoardDao();
 		ImageDao imageDao=new ImageDao();
 		//ArrayList<ImageVo> imagelist=dao.selectImg(member_no);
@@ -46,11 +48,8 @@ public class BoardMyFeedController extends HttpServlet{
 		req.setAttribute("mainImgList", mainImgList);
 //		req.setAttribute("board_memberList", board_memberList);
 //		req.setAttribute("boardImgList", boardImgList);
+		req.setAttribute("youmember_no", member_no);
 		req.setAttribute("main", "/feed/myfeed.jsp");
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
-	}
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 	}
 }

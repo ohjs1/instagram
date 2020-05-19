@@ -18,11 +18,14 @@ public class FollowMoveController extends HttpServlet{
 		int youmember_no=0;
 		if(syoumember_no!=null) {
 			youmember_no=Integer.parseInt(syoumember_no);
+			System.out.println(youmember_no);
 		}
 		MemberDao dao=MemberDao.getInstance();
 		MemberVo vo=dao.memberInfo(youmember_no);
 		req.setAttribute("member_no", vo.getMember_no());
 		req.setAttribute("id", vo.getId());
-		req.getRequestDispatcher("/feed/youfeed.jsp").forward(req, resp);
+		//req.setAttribute("youmember_no", youmember_no);
+		
+		req.getRequestDispatcher("../feed/myfeed?youmember_no="+youmember_no).forward(req, resp);
 	}
 }
