@@ -113,11 +113,13 @@ public class DirectMessageDao {
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		
+		
 		try {
 			con = ConnectionPool.getCon();
-			String sql = "select * from member where member_no in (select rmember_no from chatcontent where smember_no=?)";
+			String sql = "select * from chatroom where mymember_no=? or youmember_no=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, mymember_no);
+			pstmt.setInt(2, mymember_no);
 			rs = pstmt.executeQuery();
 			/*
 			 * int member_no, String id, String pwd, String name, String nickname, Date regdate,
@@ -126,6 +128,47 @@ public class DirectMessageDao {
 			ArrayList<MemberVo> list = new ArrayList<MemberVo>();
 			
 			while(rs.next()) {
+				//상대 번호 구하기
+				int m_num = rs.getInt("mymember_no");
+				int y_num = rs.getInt("youmember_no");
+				
+				
+				int member_no = 0;
+
+				if(m_num == mymember_no) {
+					member_no = y_num;
+				} else {
+					member_no = m_num;
+				}
+				
+				MemberVo vo = getYourMember(member_no);
+				
+				list.add(vo);
+			}
+			return list;
+			
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
+	//상대 번호 구하기
+	public MemberVo getYourMember(int member_no) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "select * from member where member_no=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, member_no);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
 				MemberVo vo = new MemberVo(
 						rs.getInt("member_no"),
 						rs.getString("id"),
@@ -134,11 +177,9 @@ public class DirectMessageDao {
 						rs.getString("nickname"),
 						rs.getDate("regdate"),
 						rs.getString("profile"));
-				
-				list.add(vo);
+				return vo;
 			}
-			return list;
-			
+			return null;
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
 			return null;
