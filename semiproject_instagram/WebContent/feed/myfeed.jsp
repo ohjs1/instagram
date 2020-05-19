@@ -179,6 +179,8 @@
 	<h1>${id }</h1>
 	<a href="${cp }/follow/select?mymember_no=${member_no}">팔로워</a>
 	<a href="${cp }/follow/select?youmember_no=${member_no}">팔로잉</a>
+	<a href="${cp }/member/memberInfo">프로필편집</a>
+	
 <h1>게시물</h1>
 <table border="1">
 <tr>

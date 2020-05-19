@@ -27,6 +27,7 @@
 			</c:forEach>
 		</c:if>
 		</tr>
-	</table>
+	</table><br>
+	<a href="javascript:history.back()">뒤로가기</a>
 </body>
 </html>

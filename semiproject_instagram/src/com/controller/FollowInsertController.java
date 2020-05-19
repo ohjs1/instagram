@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.dao.FollowDao;
 @WebServlet("/follow/insert")
@@ -21,14 +20,18 @@ public class FollowInsertController extends HttpServlet{
 			resp.sendRedirect("/member/login");
 		}
 		mymember_no=Integer.parseInt(smymember_no);
+		if(mymember_no==youmember_no) {
+			System.out.println("불가");
+			req.setAttribute("msg", "팔로우불가");
+		}
 		FollowDao dao = new FollowDao();
 		int n = dao.insert(mymember_no, youmember_no);
 		if(n>0) {
 			System.out.println("팔로우완료");
-			req.setAttribute("msg", "success");
+			req.setAttribute("msg", "팔로우성공");
 		}else {
 			System.out.println("오류");
-			req.setAttribute("msg", "fail");
+			req.setAttribute("msg", "팔로우실패");
 		}
 		req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 	}
