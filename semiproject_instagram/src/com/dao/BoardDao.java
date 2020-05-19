@@ -14,11 +14,10 @@ import com.vo.ImageVo;
 
 public class BoardDao {
 	//선택한 게시물의 member테이블에 회원아이디,닉네임,프로필사진과 board테이블 내용 전부 가져오기(join)
-	public ArrayList<Board_MemberVo> selectMemberBoard(int board_no){
+	public Board_MemberVo selectMemberBoard(int board_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		ArrayList<Board_MemberVo> list=new ArrayList<Board_MemberVo>();
 		try {
 			con=ConnectionPool.getCon();
 			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
@@ -29,22 +28,19 @@ public class BoardDao {
 			pstmt.setInt(1, board_no);
 			rs=pstmt.executeQuery();
 			if(rs.next()) {
-				do {
-					String id=rs.getString("id");
-					String pwd=rs.getString("pwd");
-					String name=rs.getString("name");
-					String nickname=rs.getString("nickname");
-					String profile=rs.getString("profile");
-					int member_no=rs.getInt("member_no");
-					String content=rs.getString("content");
-					int ref=rs.getInt("ref");
-					int lev=rs.getInt("lev");
-					int step=rs.getInt("step");
-					Date regdate=rs.getDate("regdate");
-					Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
-					list.add(vo);
-				}while(rs.next());
-				return list;
+				String id=rs.getString("id");
+				String pwd=rs.getString("pwd");
+				String name=rs.getString("name");
+				String nickname=rs.getString("nickname");
+				String profile=rs.getString("profile");
+				int member_no=rs.getInt("member_no");
+				String content=rs.getString("content");
+				int ref=rs.getInt("ref");
+				int lev=rs.getInt("lev");
+				int step=rs.getInt("step");
+				Date regdate=rs.getDate("regdate");
+				Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
+				return vo;
 			}else {
 				return null;
 			}
@@ -124,6 +120,78 @@ public class BoardDao {
 			return null;
 		}finally {
 			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	//해당 게시물의 댓글 리스트
+	public ArrayList<Board_MemberVo> selectComment(int board_no){
+		String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
+				"					from board b, member m " + 
+				"					where m.member_no=b.member_no and b.board_no!=? and ref=? " + 
+				"					order by b.regdate asc,step asc";
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1,board_no);
+			pstmt.setInt(2, board_no);
+			rs=pstmt.executeQuery();
+			ArrayList<Board_MemberVo> list=new ArrayList<Board_MemberVo>();
+			while(rs.next()) {
+				String id=rs.getString("id");
+				String pwd=rs.getString("pwd");
+				String name=rs.getString("name");
+				String nickname=rs.getString("nickname");
+				String profile=rs.getString("profile");
+				int member_no=rs.getInt("member_no");
+				String content=rs.getString("content");
+				int ref=rs.getInt("ref");
+				int lev=rs.getInt("lev");
+				int step=rs.getInt("step");
+				Date regdate=rs.getDate("regdate");
+				Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
+				list.add(vo);
+			}
+			return list;
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	//댓글 추가
+	public int insertComment(BoardVo vo) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		try {
+			con=ConnectionPool.getCon();
+			int board_no=vo.getBoard_no();
+			int member_no=vo.getMember_no();
+			String content=vo.getContent();
+			int ref=board_no;
+			int lev=vo.getLev();
+			int step=vo.getStep();
+			lev +=1;
+			step +=1;
+			
+			String sql="insert into board values(board_seq.nextval,?,?,?,?,?,sysdate)";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1,member_no);
+			pstmt.setString(2,content);
+			pstmt.setInt(3, ref);
+			pstmt.setInt(4, lev);
+			pstmt.setInt(5, step);
+			pstmt.executeUpdate();
+			return 1;
+			
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return -1;
+		}finally {
+			ConnectionPool.close(pstmt);
+			ConnectionPool.close(con);
 		}
 	}
 	

@@ -62,28 +62,37 @@
     border-radius: 50%;
     margin-right: 12px;
 }
+
+.meta p {
+    margin: 0;
+    color: $black;
+}
+.meta .handle {
+    text-decoration: lowercase;
+    font-weight: 600;
+}
+
+.meta .location {
+    font-size: 12px;
+    margin-top: 2px;
+}
+.meta.comments {
+    padding: 20px;
+    border-bottom: none;
+}
+
 .meta {
   display: flex;    
   align-items: center;
   padding-bottom: 20px;
   border-bottom: 1px solid $offWhite;
-  
-  p {
-    margin: 0;
-    color: $black;
-  }
-  .handle {
-    text-decoration: lowercase;
-    font-weight: 600;
-  }
-  .location {
-    font-size: 12px;
-    margin-top: 2px;
-  }
-  &.comments {
-    padding: 20px;
-    border-bottom: none;
-  }
+}
+
+.meta-comments img{
+	align-self: center;
+    max-width: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
 }
 
 .meta-info {
@@ -96,6 +105,7 @@
   margin: 0 20px 20px;
   height: 329px;
   margin-top: -10px;
+  overflow:scroll;
   input {
     border: none;
     width: 100%;
@@ -180,7 +190,6 @@
 	<a href="${cp }/follow/select?mymember_no=${member_no}">팔로워</a>
 	<a href="${cp }/follow/select?youmember_no=${member_no}">팔로잉</a>
 	<a href="${cp }/member/memberInfo">프로필편집</a>
-	
 <h1>게시물</h1>
 <table border="1">
 <tr>
@@ -216,64 +225,72 @@
 	function getBoardListOk(){
 		if(boardList.readyState==4 && boardList.status==200){
 			var data=boardList.responseText;
-			var json=JSON.parse(data);
+			var json=JSON.parse(data); //게시글에 대한 member정보,board정보를 가져옴
 			var modal1=document.getElementById("modal1");
-			for(var i=0;i<json.length;i++){
-				var id=json[i].id;
-				var pwd=json[i].pwd;
-				var name=json[i].name;
-				var nickname=json[i].nickname;
-				var profile=json[i].profile;
-				var board_no=json[i].board_no;
-				var member_no=json[i].member_no;
-				var content=json[i].content;
-				var ref=json[i].ref;
-				var lev=json[i].lev;
-				var step=json[i].step;
-				var regdate=json[i].regdate;
-				var div=document.createElement("div");
-				div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
-									"<div class='modal_content'>"+
-									"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
-										"<button class='prev' onclick='prevImg ()'>&#60;</button>"+
-									    "<button class='next' onclick='nextImg ()'>&#62;</button>"+
-									"</div>"+
-									"<div class='meta-info'>"+//modal 우측의 사용자,글내용,댓글,댓글달기를 감싸는 div
-										"<div class='meta-wrap'>"+
-											"<div class='meta'>"+//프로필사진,닉네임이 들어갈 div
-												"<div>"+
-													"<img src='../upload/"+profile+"'>"+//프로필사진
-												"</div>"+
-												"<div>"+
-													"<p class='handle'>"+nickname+"</p>"+//닉네임
-												"</div>"+
+			
+			var id=json.id;
+			var pwd=json.pwd;
+			var name=json.name;
+			var nickname=json.nickname;
+			var profile=json.profile;
+			var board_no=json.board_no;
+			var member_no=json.member_no;
+			var content=json.content;
+			var ref=json.ref;
+			var lev=json.lev;
+			var step=json.step;
+			var regdate=json.regdate;
+			var div=document.createElement("div");
+			div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
+								"<div class='modal_content'>"+
+								"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
+									"<button class='prev' onclick='prevImg ()'>&#60;</button>"+
+								    "<button class='next' onclick='nextImg ()'>&#62;</button>"+
+								"</div>"+
+								"<div class='meta-info'>"+//modal 우측의 사용자,글내용,댓글,댓글달기를 감싸는 div
+									"<div class='meta-wrap'>"+
+										"<div class='meta'>"+//프로필사진,닉네임이 들어갈 div
+											"<div>"+
+												"<img src='../upload/"+profile+"'>"+//프로필사진
+											"</div>"+
+											"<div>"+
+												"<p class='handle'>"+nickname+"</p>"+//닉네임
 											"</div>"+
 										"</div>"+
-										"<div class='meta-comments'>"+
+									"</div>"+
+									"<div class='meta comments'>"+
+										"<div>"+
+											"<img src='../upload/"+profile+"'>"+//프로필사진
+										"</div>"+
+										"<div>"+
 											"<p>"+
-												"<span class='handle'>"+nickname+"</span>"+//닉네임
+												"<span class='handle'>"+nickname+"</span> "+//닉네임
 												"<span>"+content+"</span>"+//글내용
 											"</p>"+
 										"</div>"+
-										"<div class='comments-wrap'></div>"+//작성된 댓글
-										"<div class='comments-wrap'>"+//댓글작성하기
-											"<input type='text' placeholder='댓글 달기...' id='comment'>"+
-											"<input type='button' id='sendComment' value='전송'>"+
-										"</div>"+
+									"</div>"+
+									"<div class='comments-wrap'></div>"+//작성된 댓글
+									"<div class='comments'>"+//댓글작성하기
+										"<input type='text' placeholder='댓글 달기...' id='comment'>"+
+										"<input type='button' id='sendComment' value='전송'>"+
 									"</div>"+
 								"</div>"+
-								"<div class='modal_close' onclick='closeBoard();'>"+
-									"<button>❌</button>"+
-								"</div>";
-				div.className="modal";
-				div.setAttribute("id","modal");
-				modal1.appendChild(div);
-				getImgList(board_no);
-			}
+							"</div>"+
+							"<div class='modal_close' onclick='closeBoard();'>"+
+								"<button>❌</button>"+
+							"</div>";
+			div.className="modal";
+			div.setAttribute("id","modal");
+			modal1.appendChild(div);
+			getImgList(board_no);
+				
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
 			var sendComment=document.getElementById("sendComment");
 			sendComment.addEventListener('click',function(){
-				insertComment(json[0]);
+				var comment=document.getElementById("comment").value;
+				if(comment!=null && comment!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
+					insertComment(json);
+				}
 			});
 		}
 	}
@@ -281,19 +298,37 @@
 	//댓글생성 ajax
 	var commInsert=null;
 	function insertComment(json){
+		var board_no=json.board_no;
 		var comment=document.getElementById("comment").value;
+		var ref=json.ref;
+		var lev=json.lev;
+		var step=json.step;
 		commInsert=new XMLHttpRequest();
 		commInsert.onreadystatechange=commInsertOk;
-		commInsert.open('post','../board/insert',true);
+		commInsert.open('post','../board/commentInsert',true);
 		commInsert.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		commInsert.send('board_no='+json.board_no+'&member_no='+json.member_no+'&comment='comment+'&ref='+json.ref+'&lev='+json.lev+'&step='+json.step+'&regdate='+json.regdate);
+		commInsert.send('board_no='+board_no+'&member_no=${member_no}&comment='+comment+'&ref='+ref+'&lev='+lev+'&step='+step);
 	}
-	function commInsertOk(){
+	function commInsertOk(){ //board_no받아서 commentList(board_no)으로 보내주기
 		if(commInsert.readyState==4 && commInsert.status==200){
-			
+			var data=commInsert.responseText;
+			var json=JSON.parse(data);
+			if(json.chk>0){
+				commentList();
+				alert("댓글작성 성공!");
+				//댓글리스트 ajax호출
+			}else{
+				alert("댓글작성 실패!");
+			}
 		}
 	}
 	
+	var commList=null;
+	function commentList(){
+		commList=new XMLHttpRequest();
+		commList.onreadystatechange=commentListOk;
+		commList.open('get','../board/commentList?board_no=');
+	}
 	
 	//게시물클릭시 이미지 가져오기
 	var imgList=null;
