@@ -15,14 +15,13 @@ public class DirectMessageDeleteController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		DirectMessageDao dao =DirectMessageDao.getInstance();
-		int chat_no =Integer.parseInt(req.getParameter("chatroomNumber"));
-		int yourmember_no =Integer.parseInt(req.getParameter("yourmember_no"));
-		int r =dao.delDirectMessageRoomNumber(chat_no, yourmember_no);
+		int myMember_no = Integer.parseInt(req.getParameter("myMember_no"));
+		int yourMember_no =Integer.parseInt(req.getParameter("yourMember_no"));
+		int r =dao.delDirectMessage(myMember_no, yourMember_no);
 		
-		if(r>0) {
-			System.out.println("채팅방 삭제가 잘되었습니다.");
-		} else {
-			System.out.println("채팅방 삭제 실패..");
-		}
+		System.out.println("삭제된 DM 개수 : " + r);
+		
+		
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }

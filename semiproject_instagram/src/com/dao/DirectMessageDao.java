@@ -402,35 +402,49 @@ public class DirectMessageDao {
 	}
 	
 	//DM삭제 하는 기능
-	public int delDirectMessageRoomNumber(int chat_no, int rmember_no) { //채팅방번호, 상대방번호
+	public int delDirectMessage(int myMember_no, int yourMember_no) { //내번호 상대번호로 DM삭제
 		Connection con =null;
 		PreparedStatement pstmt1 =null;
 		PreparedStatement pstmt2 =null;
+		PreparedStatement pstmt3 =null;
+		ResultSet rs = null;
 		
 		try {
 			con =ConnectionPool.getCon();
-			//채팅내용 삭제
-			String sql2 ="delete from chatcontent where chat_no=? and rmember_no=?";
-			pstmt2 =con.prepareStatement(sql2);
-			pstmt2.setInt(1, chat_no);
-			pstmt2.setInt(2, rmember_no);
-			int r =pstmt2.executeUpdate();
 			
+			con.setAutoCommit(false);//트랜젝션 시작
 			
-			//채팅방에 생성된 유저수가 1명인지 검사
-			int cnt =searchRoomUserCnt(chat_no, rmember_no);
-
-			if(cnt<1) { //유저수가 1명일경우
-				//채팅방 삭제
-				String sql1 ="delete from chatroom where chatroom_no =?";
-				pstmt1 =con.prepareStatement(sql1);
-				pstmt1.setInt(1, chat_no);
-				pstmt1.executeUpdate();
+			//채팅방 번호 알아내기
+			String sql1 ="select chatroom_no from chatroom where mymember_no=? and youmember_no=?";
+			pstmt1 =con.prepareStatement(sql1);
+			pstmt1.setInt(1, myMember_no);
+			pstmt1.setInt(2, yourMember_no);
+			rs = pstmt1.executeQuery();
+			
+			int chat_no = 0;
+			int n = 0;
+			if(rs.next()) {
+				chat_no = rs.getInt("chatroom_no");
+				
+				String sql2 = "delete from chatcontent where chat_no=?";
+				pstmt2 = con.prepareStatement(sql2);
+				pstmt2.setInt(1, chat_no);
+				
+				pstmt2.executeUpdate();
+				
+				String sql3 = "delete from chatroom where chatroom_no=?";
+				pstmt3 = con.prepareStatement(sql3);
+				pstmt3.setInt(1, chat_no);
+				n = pstmt3.executeUpdate();
+				
+				con.commit(); //커밋완료
+				System.out.println("DM삭제 완료함");
+				return n;
+			} else {
+				con.rollback(); //커밋실패 롤백
+				System.out.println("DM삭제 실패함");
+				return -1;
 			}
-			
-			
-			System.out.println("DM 채팅방 삭제완료!");
-			return r;
 			
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
@@ -439,6 +453,8 @@ public class DirectMessageDao {
 		} finally {
 			ConnectionPool.close(pstmt1);
 			ConnectionPool.close(pstmt2);
+			ConnectionPool.close(pstmt3);
+			ConnectionPool.close(rs);
 			ConnectionPool.close(con);
 		}
 	}

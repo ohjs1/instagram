@@ -34,4 +34,3 @@ public class DirectMessageInboxController extends HttpServlet {
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }
- 

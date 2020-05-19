@@ -91,6 +91,17 @@
 		width: 95%;
 		margin: auto;
 	}
+	
+	#msgboxdel {
+		text-align: right;
+	}
+	
+	.textb {
+		display: inline-block;
+		background-color: gray;
+		width: 20em;
+	}
+	
 </style>
 </head>
 <body>
@@ -105,6 +116,7 @@
 					<input type="button" value="메시지 보내기" id="btn"/>
 				</div>
 				<div id="showMsg">
+				<div id="msgboxdel"><a href="${ cp }/dm/delete?myMember_no=${member_no}&yourMember_no=${yourMember_no}">DM 삭제하기</a></div>
 					<div id="msgTextBox">
 						<div id="mText"></div>
 					</div>
