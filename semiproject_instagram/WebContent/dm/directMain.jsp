@@ -137,20 +137,20 @@
 			
 				DM 보낼 유저목록
 				<ul>
-				<c:if test="${ dmlist != null }">
+				
 				[ ${ nickname } ]
 				<br>
 					<c:forEach var="n" items="${ dmlist }">
 				<li>
 						<div id="dmuserlist">
 							<a href="${cp}/dm/connectClient?yourMember_no=${n.getMember_no()}&myMember_no=${member_no}">
-								${ n.getNickname() }
+								<img src="${ cp }/upload/${n.getProfile()}" alt="프로필사진" style="width:55px; height:55px; border-radius: 70%; margin-top:5px;" />${ n.getNickname() }
 							</a>
 						<br>
 						</div>
 				</li>
 					</c:forEach>
-				</c:if>
+			
 				</ul>
 			</td>
 			</div>
