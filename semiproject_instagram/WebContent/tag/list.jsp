@@ -50,16 +50,17 @@
 		<c:forEach var="vo" items="${vo}">
 			<c:if test="${i%j == 0 }">
 				<tr>
-					</c:if>
-						<th>
-							<img src="${cp }/upload/${vo.imagepath}" style='width: 293px;height: 293px'>
-						</th>
-					<c:if test="${i%j == j-1 }">
+			</c:if>
+				<th>
+					<img src="${cp }/upload/${vo.imagepath}" style='width: 293px;height: 293px'>
+				</th>
+			<c:if test="${i%j == j-1 }">
 				</tr>
 			</c:if>
 			<c:set var="i" value="${i+1 }" />
 		</c:forEach>
 	</table>
 </div>
+
 </body>
 </html>

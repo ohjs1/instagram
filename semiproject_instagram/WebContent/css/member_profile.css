@@ -1,0 +1,12 @@
+@charset "UTF-8";
+#img{width: 50px;height: 50px;padding: 10px;border-radius: 70%;}
+#form{border: 1px solid gray;width: 600px;height: 500px;float: left;}
+label{padding-left: 80px;width: 130px;text-align: right;display: inline-block;}
+.input{width: 300px;height: 30px;margin: 10px;}
+#btn{background-color: #0095f6;color: white;border-radius: 10%;width:110px;height: 30px;margin-left: 8px;}
+#menu{width: 230px;height: 500px;border: 1px solid gray;float:left;}
+ul{list-style: none;margin-top: 50px;}
+ul li{width: 100%;height: 50px; padding-left: 40px;}
+a{text-decoration: none;}
+#wrap{width: 100%;height: 800px;border: 2px solid;}
+#wrap2{width: 50%;height: 100%;margin: auto;margin-top: 45px;}

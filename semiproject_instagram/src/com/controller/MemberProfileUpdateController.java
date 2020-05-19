@@ -42,10 +42,11 @@ public class MemberProfileUpdateController extends HttpServlet{
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.memberProfileUpdate(id,profile);
 		if(n>0) {
-			req.setAttribute("profile", profile);
+			session.setAttribute("profile", profile);
 			req.setAttribute("name", name);
 			req.setAttribute("nickname", nickname);
-			req.getRequestDispatcher("/member/profile_update.jsp").forward(req, resp);
+			req.setAttribute("main", "/member/profile_update.jsp");
+			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		}
 	}
 }

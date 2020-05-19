@@ -7,31 +7,48 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-	#img{
-		width: 120px;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="${cp }/css/member_profile.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="${cp }/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<h1>프로필 편집</h1>
-<form name="fileForm" enctype="multipart/form-data" method="post" action="${cp }/member/profileUpdate">
-	<input type="file" name="profile" style="display: none"
-  	onchange="fileupdate(this.files[0].name)" id="profile"><br>
-	<label for="profile">
-	<img id="img">
-	</label><br>
-	<input type="text" name="name" value="${name }" id="name"><br>
-	<input type="text" name="nickname" value="${nickname }" id="nickname"><br>
-	<input type="button" value="제출" onclick="update()"><br>
-	<input type="hidden" value="${profile }" name="profile1" id="profile1">
-</form>
-	<input type="button" value="프로필 삭제" id="delProfile" onclick="delProfile()"><br>
-
-<a href="${cp }/member/memberInfo">프로필 편집</a><br>
-<a href="${cp }/member/pwdupdate">비밀번호 변경</a><br>
-<a href="${cp }/member/logout">로그아웃</a><br>
-
+<div id="wrap">
+	<div id="wrap2">
+		<div id="menu">
+			<ul>
+				<li><a href="${cp }/member/memberInfo">프로필 편집</a></li>
+				<li><a href="${cp }/member/pwdupdate">비밀번호 변경</a></li>
+				<li><a href="${cp }/member/logout">로그아웃</a></li>
+			</ul>
+		</div>
+		<div id="form">
+			<form name="fileForm" enctype="multipart/form-data" method="post" action="${cp }/member/profileUpdate">
+				<div>
+					<input type="file" name="profile" style="display: none"
+				  	onchange="fileupdate(this.files[0].name)" id="profile"><br>
+			  		<div id="div_imgs">
+						<label for="profile"><img id="img"></label>
+					</div>
+					<div id="div_nic">
+						<h1>${sessionScope.nickname }</h1>
+					</div>
+				</div>
+				<div>
+					<label for="name"><strong>이름</strong></label>
+					<input type="text" name="name" value="${name }" id="name" class="input"><br>
+					<label for="nickname"><strong>닉네임</strong></label>
+					<input type="text" name="nickname" value="${nickname }" id="nickname" class="input"><br>
+					<label></label>
+					<input type="button" value="제출" onclick="update()" id="btn"><br>
+					<input type="hidden" value="${sessionScope.profile }" name="profile1" id="profile1">
+				</div>
+			</form>
+				<input type="button" value="-" id="delProfile" onclick="delProfile()">
+		</div>
+	</div><!-- wrap2 -->
+</div>
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="${cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
 	var img=document.getElementById("img");

@@ -14,7 +14,8 @@ import com.dao.MemberDao;
 public class MemberPassWordUpdateController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.sendRedirect(req.getContextPath()+"/member/pw_update.jsp");
+		req.setAttribute("main", "/member/pw_update.jsp");
+		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

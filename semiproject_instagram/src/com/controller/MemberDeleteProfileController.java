@@ -23,6 +23,7 @@ public class MemberDeleteProfileController extends HttpServlet{
 		int n=dao.memberProfileUpdate(id,profile);
 		if(n>0) {
 			System.out.println("프로필 삭제 성공");
+			session.setAttribute("profile", "profile.jpg");
 		}
 	}
 }
