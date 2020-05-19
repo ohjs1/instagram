@@ -38,7 +38,9 @@ public class StoryOpponentListController extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		StoryDao dao=new StoryDao();
-		ArrayList<StoryMemberVo> list= dao.storymembers();
+		HttpSession session=req.getSession();
+		int login_no=(int)session.getAttribute("member_no");
+		ArrayList<StoryMemberVo> list= dao.storymembers(login_no);
 
 		JSONArray jarr=new JSONArray();
 		for(StoryMemberVo vo:list) {
@@ -47,7 +49,6 @@ public class StoryOpponentListController extends HttpServlet{
 			json.put("profile", vo.getProfile());
 			json.put("nickname", vo.getNickname());
 
-			System.out.println("¸â¹ö:"+vo.getMember_no()+ " / ÇÁ·ÎÇÊ : " +vo.getProfile());
 			jarr.put(json);
 		}
 		

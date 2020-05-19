@@ -5,18 +5,24 @@
 <head>
 <meta charset="UTF-8">
 <title>HomeFeed</title>
-
+<style>
+.sto {width:100px;height:50px;text-align: center;}
+#my {width:100px;height:100px; text-align: center;display:inline-block;position:relative;}
+#plus {width:50px;height:50px;position:absolute;top:1px;right:1px;}
+</style>
 </head>
 <body onload="addStorys()">
 	<h1>홈피드입니다</h1>
 	계정설정 :
 	<a href="${ cp }/member/memberInfo">프로필 수정</a>
+	<a href="${cp }/member/logout">로그아웃</a><br>
 	<br>
 	<br>
-	
+	<div id="my">
 	<a href="${ cp }/story/list"><img id="myprofile"
 		style="width: 50px; height: 50px;border-radius: 50%;"></a>
-	<a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png"></a>
+	${nickname }<div id="plus"><a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png"></a><br></div></div>
+	
 	
 	<div id="storys"></div>
 
@@ -52,13 +58,16 @@
 					for (var i = 0; i < json.length; i++) {
 
 						var div = document.createElement("div");
+						
 						div.innerHTML = "<a href='${ cp }/story/opponentlist?member_no="
 								+ json[i].member_no
 								+ "'><img src='${cp}/upload/"+json[i].profile+"' style='width: 50px; height: 50px;border-radius: 50%;'>"
-								+ "</a>  &nbsp;";
-						div.style.display = "inline";
-						div.className = "sto"
+								+ "</a><br><label style='color:black;'>"+json[i].nickname+"</label>&nbsp";
+						div.style.display = "inline-block";
+						div.style.margin = "auto";
+						div.className = "sto";
 						sto.appendChild(div);
+						
 					}
 					getProfile();
 				}
@@ -69,6 +78,8 @@
 			xhr.send();
 			
 		}
+		
+	
 
 	
 </script>

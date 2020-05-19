@@ -6,6 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>story_upload</title>
+<style>
+textarea{color:white;font-family: HY견고딕;font-size: 15px;
+text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;}
+</style>
 <script type="text/javascript">
 
 	function getFile(event){
@@ -48,7 +52,7 @@
 	<img id="outputI" style="width:300px;height:500px"> 
 	<!-- <video id="outputV" style="width:300px;height:500px"></video>  -->
 	<div id="content" style="width:280px;height:200px;position:absolute;top:250px;left:10px;">
-		<textarea rows="8" cols="26" name="content" style="border:0;background-color: transparent;"></textarea>
+		<textarea rows="8" cols="20" name="content" style="border:0;background-color: transparent;"></textarea>
 	</div>
 </div>
 

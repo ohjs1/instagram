@@ -33,10 +33,8 @@ public class MemberMemberInfoController extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("memberinfo doPost입니다...");
 		HttpSession session=req.getSession();
 		String id=(String)session.getAttribute("id");
-		System.out.println("아이디받았니?" +id);
 		MemberDao dao=MemberDao.getInstance();
 		MemberVo vo=dao.memberInfo(id);
 		

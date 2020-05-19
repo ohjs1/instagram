@@ -16,9 +16,11 @@ width: 400px;
 height: 850px;
 margin:auto;
 margin-top: 100px;
-border:1px solid white;
-}
 
+}
+#content{width:280px;height:200px;position:absolute;top:350px;left:10px;display:none;color:white;font-family: HY견고딕;font-size: 20px;
+text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 </style>
 
 </head>
@@ -49,7 +51,7 @@ border:1px solid white;
 			</c:otherwise>
 		</c:choose>
 		
-			<div id="content" style="width:280px;height:200px;position:absolute;top:350px;left:10px;display:none" class="cdivs">
+			<div id="content" class="cdivs">
 				${vo.getContent() }
 				<br>
 				저장될 읽은사람(현재로그인한 나) ${id } <br>
@@ -81,14 +83,14 @@ border:1px solid white;
 				var json = JSON.parse(data);
 				for(var i=0;i<json.length;i++){
 					var nick=json[i].nickname;
-					console.log("nick:"+nick);
+
 					if(oppnickname==nick){
 						if(opp.firstChild!=null){
 							opp.removeChild(opp.firstChild);
 						}
 						var div = document.createElement("div");
 						div.innerHTML = "<img src='${cp}/upload/"+json[i].profile+
-						"' style='width: 50px; height: 50px;border-radius: 50%;'><br><label style='color:white'>"+nick+"</label>";
+						"' style='width: 50px; height: 50px;border-radius: 50%;'><label style='color:white'>"+nick+"</label>";
 						div.style.display = "inline";
 						div.className = "opp"
 						
@@ -144,11 +146,7 @@ border:1px solid white;
 	}
 	
 	function previousImg(){
-		clearTimeout(timeout);
-		const divs=document.getElementsByClassName("divs");		
-		const cdivs=document.getElementsByClassName("cdivs");
-		const imgs=document.getElementsByClassName("imgs");	
-		
+
 		index--;
 		if(index<0){
 			index=0;
@@ -158,10 +156,8 @@ border:1px solid white;
 	}
 	
 	function nextImg(){
-		clearTimeout(timeout);
-		const divs=document.getElementsByClassName("divs");		
-		const cdivs=document.getElementsByClassName("cdivs");
-		const imgs=document.getElementsByClassName("imgs");	
+	
+
 		
 		index++;
 		if(index>imgs.length-1){
