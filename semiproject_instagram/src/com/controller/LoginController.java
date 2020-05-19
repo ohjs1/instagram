@@ -34,6 +34,7 @@ public class LoginController extends HttpServlet{
 			session.setAttribute("pwd", pwd);
 			session.setAttribute("member_no", n);
 			session.setAttribute("nickname", vo.getNickname());
+			session.setAttribute("profile", vo.getProfile());
 			
 			req.setAttribute("main", "/homefeed.jsp"); 
 			

@@ -6,6 +6,10 @@
 <meta charset="UTF-8">
 <title>instagram header</title>
 <style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
 	#tag{
 		display: inline-block;
 	    overflow: auto;
@@ -13,6 +17,11 @@
 	    height: 90px;
 	    margin: auto;
 	    margin-right: 57px;
+	}
+	#myAccount{
+		border-radius: 70%;
+		width: 35px;
+		height: 35px;
 	}
 </style>
 </head>
@@ -33,12 +42,15 @@
 		src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
 	</a>
 	<img src="${ cp }/images/icon/likes.jpg" alt="좋아요" />
+	<a href="${ cp }/feed/myfeed">
+	<img src="${cp}/upload/${sessionScope.profile}" alt="계정설정" id="myAccount">
+	</a>
 </div>
-
 <div id="tag"></div>
-
 </body>
 <script type="text/javascript">
+	var myAccount=document.getElementById("myAccount");
+	
 	var xhr =null;
 	var div=document.getElementById("tag");
 	function search() {
@@ -65,7 +77,10 @@
 				div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ keyword +"</a><br>";
 			}
 			div.style.border="1px solid gray";
+			div.style.fontSize="1.1em";
 		}
 	}
+	
+	
 </script>
 </html>
