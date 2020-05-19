@@ -91,7 +91,7 @@
 		width: 95%;
 		margin: auto;
 	}
-	
+	 
 	#msgboxdel {
 		text-align: right;
 	}
