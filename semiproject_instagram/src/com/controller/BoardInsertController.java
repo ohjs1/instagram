@@ -38,7 +38,6 @@ public class BoardInsertController extends HttpServlet{
 		//게시글부분
         HttpSession session=req.getSession();
         int member_no=(int)session.getAttribute("member_no");
-        System.out.println(member_no);
         String sboard_no=req.getParameter("board_no");
         String content="";
 		int board_no=0;

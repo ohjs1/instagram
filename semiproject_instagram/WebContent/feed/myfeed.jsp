@@ -277,7 +277,7 @@
 	}
 	
 	//댓글생성 ajax
-	/* var commInsert=null;
+	var commInsert=null;
 	function insertComment(json){
 		var comment=document.getElementById("comment").value;
 		commInsert=new XMLHttpRequest();
@@ -290,7 +290,7 @@
 		if(commInsert.readyState==4 && commInsert.status==200){
 			
 		}
-	} */
+	}
 	
 	
 	//게시물클릭시 이미지 가져오기
