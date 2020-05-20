@@ -11,25 +11,31 @@ import com.db.ConnectionPool;
 import com.vo.ImageVo;
 import com.vo.MemberVo;
 import com.vo.StoryVo;
+import com.vo.TagVo;
+import com.vo.Tag_linkVo;
 
 public class TagDao {
 	//해쉬태그(#) 제시어
-	public ArrayList<String> tagSearch(String search) {
+	public ArrayList<Tag_linkVo> tagSearch(String search) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		try {
 			con =ConnectionPool.getCon();
-			String sql ="select search from tag where search like ?";
+			String sql ="select count(search) cnt, search from link,tag\r\n" + 
+						"where link.tag_no=tag.tag_no\r\n" + 
+						"and search like ? \r\n" + 
+						"group by search";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, "#"+search + "%");
 			rs=pstmt.executeQuery();
 			
-			ArrayList<String> list=new ArrayList<String>();
+			ArrayList<Tag_linkVo> list=new ArrayList<Tag_linkVo>();
 			
 			while(rs.next()) {
 				String keyword=rs.getString("search");
-				list.add(keyword);
+				int board_cnt=rs.getInt("cnt");
+				list.add(new Tag_linkVo(keyword, board_cnt));
 			}
 			return list;
 		} catch(SQLException se) {
@@ -75,36 +81,54 @@ public class TagDao {
 	}
 	
 	//전체검색
-	public ArrayList<String> allSearch(String search) {
-		Connection con=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		try {
-			con =ConnectionPool.getCon();
-			String sql ="select keyword.* from (\r\n" + 
-					"select nickname keyword from member\r\n" + 
-					"union\r\n" + 
-					"select search from tag\r\n" + 
-					")keyword\r\n" + 
-					"where keyword like ?";
-			pstmt=con.prepareStatement(sql);
-			pstmt.setString(1, "%"+search + "%");
-			rs=pstmt.executeQuery();
-			
-			ArrayList<String> list=new ArrayList<String>();
-			
-			while(rs.next()) {
-				String keyword=rs.getString("keyword");
-				list.add(keyword);
-			}
-			return list;
-		} catch(SQLException se) {
-			se.getStackTrace();
-			return null;
-		} finally {
-			ConnectionPool.close(con, pstmt, rs);
-		}
-	}
+//	public ArrayList<> allSearch(String search) {
+//		Connection con=null;
+//		PreparedStatement pstmt=null;
+//		PreparedStatement pstmt2=null;
+//		ResultSet rs=null;
+//		ResultSet rs2=null;
+//		
+//		try {
+//			con =ConnectionPool.getCon();
+//			String sql ="select count(search) cnt, search from link,tag\r\n" + 
+//						"where link.tag_no=tag.tag_no\r\n" + 
+//						"and search like ? \r\n" + 
+//						"group by search";
+//			pstmt=con.prepareStatement(sql);
+//			pstmt.setString(1, "#"+search + "%");
+//			rs=pstmt.executeQuery();
+//			
+//			while(rs.next()) {
+//				
+//			}
+//			
+//			String sql2 ="select * from member where nickname like ? or name like ?";
+//			pstmt2=con.prepareStatement(sql2);
+//			pstmt2.setString(1, search + "%");
+//			pstmt2.setString(2, search + "%");
+//			rs2=pstmt2.executeQuery();
+//			
+//			
+//			
+//			
+//			
+//			ArrayList<> list=new ArrayList<>();
+//			
+//			while(rs.next()) {
+//				String keyword=rs.getString("search");
+//				int board_cnt=rs.getInt("cnt");
+//				list.add(new Tag_linkVo(keyword, board_cnt));
+//			}
+//			return list;
+//		} catch(SQLException se) {
+//			se.getStackTrace();
+//			return null;
+//		} finally {
+//			ConnectionPool.close(con, pstmt, rs);
+//		}
+//		
+//		
+//	}
 	
 	//검색한 게시물리스트
 	public ArrayList<ImageVo> list(String keyword) {

@@ -10,13 +10,20 @@
 		padding: 0;
 		margin: 0;
 	}
+	#wrap_search_list{
+		width: 100%;
+	}
+	#search_list{
+		width: 100%;
+		margin: auto;
+	}
 	#tag{
 		display: inline-block;
 	    overflow: auto;
-	    width: 171px;
-	    height: 90px;
-	    margin: auto;
-	    margin-right: 57px;
+	    width: 241px;
+	    height: 362px;
+	    margin:auto;
+    	background-color: white;
 	}
 	#myAccount{
 		border-radius: 70%;
@@ -38,6 +45,14 @@
 		width: 60%;
 	    margin: auto;
 	    margin-top: 10px;
+	}
+	.search_div{
+		border-bottom: 1px solid gray;
+	}
+	.search_img{
+		width:32px;
+		height:32px;
+		border-radius: 70%;
 	}
 </style>
 <!-- Bootstrap -->
@@ -69,25 +84,30 @@
 		</a>
 	</div>
 </div>
-<div id="tag"></div>
+<div id="wrap_search_list">
+	<div id="search_list">
+		<div id="tag"></div>
+	</div>
+</div>
 	<script src="https://code.jquery.com/jquery.js"></script>
     <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
 <script type="text/javascript">
 	var myAccount=document.getElementById("myAccount");
-	
 	var xhr =null;
 	var div=document.getElementById("tag");
+	div.style.display="none";
 	function search() {
 		var search=document.getElementById("search").value;
 		var keyword=search.replace("#", "%23");//#을 못씀
-		console.log(search);
 		xhr=new XMLHttpRequest();
 		xhr.onreadystatechange=searchTag;
 		if(!search==""){
+			div.style.display="block";
 			xhr.open('get','${cp}/tag/search?search='+keyword, true);
 			xhr.send();
 		} else {
+			div.style.display="none";
 			div.innerHTML="";
 			div.style.border="";
 		}
@@ -100,10 +120,29 @@
 		for(var i=0; i<json.length; i++){
 				if(json[i].keyword.substr(0,1)=="#"){
 				var keyword=json[i].keyword.replace("#", "%23");
-					div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ "#"+keyword.substr(3, keyword.length) +"</a><br>";
+					div.innerHTML+=
+					"<div class='search_div'>"+
+						"<div class='search_profile'>"+
+							"<img src='${cp}/upload/tag.PNG' class='search_img'>"+
+						"</div>"+
+						"<div class='search_link'>"+
+							"<a href='${cp}/tag/list?keyword="+ keyword +"'>"+
+							"#"+keyword.substr(3, keyword.length) +"</a><br>"+
+							"게시물"+json[i].board_cnt+
+						"</div>"+
+					"</div>";
 				}else {
-					console.log(json[i].keyword);
-					div.innerHTML+="<a href='${cp}/follow/move?youmember_no="+ json[i].member_no +"'>"+ "@"+json[i].keyword +"</a><br>";
+					div.innerHTML+=
+					"<div class='search_div'>"+
+						"<div class='search_profile'>"+
+							"<img src='${cp}/upload/"+json[i].profile+"' class='search_img'>"+
+						"</div>"+
+						"<div class='search_link'>"+
+							"<a href='${cp}/follow/move?youmember_no="+ json[i].member_no +"'>"+
+							"@"+json[i].keyword +"</a><br>"+
+							json[i].name+
+						"</div>"+
+					"</div>";
 				}
 			}
 		}

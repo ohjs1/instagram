@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import com.dao.TagDao;
 import com.vo.MemberVo;
+import com.vo.Tag_linkVo;
 
 @WebServlet("/tag/search")
 public class TagSearchController extends HttpServlet{
@@ -24,19 +25,20 @@ public class TagSearchController extends HttpServlet{
 		System.out.println(search);
 		
 		TagDao dao=new TagDao();
-		ArrayList<String> list=null;
-		ArrayList<MemberVo> Memberlist=null;
+		ArrayList<Tag_linkVo> tag_linklist=null;
+		ArrayList<MemberVo> memberlist=null;
 		
 		JSONArray jrr =new JSONArray();
 		
 		//#해쉬태그 검색일때
 		if(search.substring(0, 1).equals("#")) {
 			search=search.substring(1, search.length());
-			list=dao.tagSearch(search);
+			tag_linklist=dao.tagSearch(search);
 			
-			for(String l : list) {
+			for(Tag_linkVo l : tag_linklist) {
 				JSONObject json=new JSONObject();
-				json.put("keyword", l);
+				json.put("keyword", l.getSearch());
+				json.put("board_cnt", l.getBoard_cnt());
 				jrr.put(json);
 			}
 			
@@ -46,9 +48,9 @@ public class TagSearchController extends HttpServlet{
 		//@검색
 		}else if(search.substring(0, 1).equals("@")){
 			search=search.substring(1, search.length());
-			Memberlist=dao.memberSearch(search);
+			memberlist=dao.memberSearch(search);
 			
-			for(MemberVo l : Memberlist) {
+			for(MemberVo l : memberlist) {
 				JSONObject json=new JSONObject();
 				json.put("member_no", l.getMember_no());
 				json.put("name", l.getName());
@@ -62,10 +64,9 @@ public class TagSearchController extends HttpServlet{
 			pw.print(jrr);
 		//전체검색
 		}else {
-//			list=dao.allSearch(search);
+//			allList=dao.allSearch(search);
+			
+			
 		}
-		
-		
-		
 	}
 }
