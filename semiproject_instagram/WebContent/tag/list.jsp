@@ -40,7 +40,7 @@
 <body onload="stroyTagImg()">
 <div id="headerTag">
 	<img src="${cp }/upload/${vo[0].imagepath}" id="storyTagImg"><!-- 스토리 ajax로 보여지기 -->
-	<div id="dd"><strong>#${keyword }</strong></div>
+	<div id="dd"><strong>${keyword }</strong></div>
 	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
 </div>
 <div id="imglist">

@@ -16,6 +16,11 @@ public class TagListController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String keyword=req.getParameter("keyword");
+		if(keyword.substring(0, 3).equals("%23")) {
+			keyword="#"+keyword.substring(3,keyword.length());
+			System.out.println(keyword+"Å°¿öµå");
+		}
+		
 		TagDao dao=new TagDao();
 		ArrayList<ImageVo> vo=dao.list(keyword);
 		

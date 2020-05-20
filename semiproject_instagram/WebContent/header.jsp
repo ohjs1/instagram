@@ -23,30 +23,51 @@
 		width: 35px;
 		height: 35px;
 	}
+	#header_logo{
+		display: inline-block;
+    	float: left;
+	}
+	#header_menu{
+		display: inline-block;
+    	float: right;
+	}
+	#header_search{
+		display: inline-block;
+	}
+	#header_wrap{
+		width: 60%;
+	    margin: auto;
+	    margin-top: 10px;
+	}
 </style>
 <!-- Bootstrap -->
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div>
-	<img src="${ cp }/images/logo.png" alt="logo" id="logo">
-	
-	<input type="text" placeholder="검색" name="search" id="search" class='input-medium search-query'
+<div id="header_wrap">
+	<div id="header_logo">
+		<img src="${ cp }/images/logo.png" alt="logo" id="logo">
+	</div>
+	<div id="header_search">
+		<input type="text" placeholder="검색" name="search" id="search" class='input-medium search-query'
 		onkeyup="search()">
-	<a href="${ cp }/board/insert"> <img
-		src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
-	</a>
-	<a href="${ cp }/layout.jsp"><img
-		src="${ cp }/images/icon/home.jpg" alt="홈" /></a>
-	<a href="${ cp }/dm/inbox?member_no=${member_no}"><img
-		src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a>
-	<a href="${ cp }/feed/myfeed"> <img
-		src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
-	</a>
-	<img src="${ cp }/images/icon/likes.jpg" alt="좋아요" />
-	<a href="${ cp }/feed/myfeed">
-	<img src="${cp}/upload/${sessionScope.profile}" alt="계정설정" id="myAccount">
-	</a>
+	</div>
+	<div id="header_menu">
+		<a href="${ cp }/board/insert"> <img
+			src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
+		</a>
+		<a href="${ cp }/layout.jsp"><img
+			src="${ cp }/images/icon/home.jpg" alt="홈" /></a>
+		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img
+			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a>
+		<a href="${ cp }/feed/myfeed"> <img
+			src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
+		</a>
+		<img src="${ cp }/images/icon/likes.jpg" alt="좋아요" />
+		<a href="${ cp }/feed/myfeed">
+		<img src="${cp}/upload/${sessionScope.profile}" alt="계정설정" id="myAccount">
+		</a>
+	</div>
 </div>
 <div id="tag"></div>
 	<script src="https://code.jquery.com/jquery.js"></script>
@@ -60,7 +81,7 @@
 	function search() {
 		var search=document.getElementById("search").value;
 		var keyword=search.replace("#", "%23");//#을 못씀
-		console.log("keyword---"+keyword);
+		console.log(search);
 		xhr=new XMLHttpRequest();
 		xhr.onreadystatechange=searchTag;
 		if(!search==""){
@@ -76,13 +97,18 @@
 			var data=xhr.responseText;
 			var json=JSON.parse(data);
 			div.innerHTML="";
-			for(var i=0; i<json.length; i++){
-				var keyword=json[i].keyword.replace("#", "");
-				div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ keyword +"</a><br>";
+		for(var i=0; i<json.length; i++){
+				if(json[i].keyword.substr(0,1)=="#"){
+				var keyword=json[i].keyword.replace("#", "%23");
+					div.innerHTML+="<a href='${cp}/tag/list?keyword="+ keyword +"'>"+ "#"+keyword.substr(3, keyword.length) +"</a><br>";
+				}else {
+					console.log(json[i].keyword);
+					div.innerHTML+="<a href='${cp}/follow/move?youmember_no="+ json[i].member_no +"'>"+ "@"+json[i].keyword +"</a><br>";
+				}
 			}
-			div.style.border="1px solid gray";
-			div.style.fontSize="1.1em";
 		}
+		div.style.border="1px solid gray";
+		div.style.fontSize="1.1em";
 	}
 	
 	
