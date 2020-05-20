@@ -16,7 +16,7 @@
 	.board{width: 100%; height: 100%;}
 	td{width:200px;height:200px;}
 	
-	.modal {
+	.modal2 {
 		position: fixed;
 		top:0;
 		left:0;
@@ -36,7 +36,7 @@
 	
 	#img{
 		width: 100%;
-		height: auto%;
+		height: 638px;
 	}
 	
 	.modal_content{
@@ -44,10 +44,11 @@
 		grid-template-columns: 600px 335px;
 		background: white;
 		z-index:10000;
-		.image-wrap {
-			max-width: 600px;
-		}
 	}
+	.modal_content .image-wrap {
+			max-width: 600px;
+			max-height: 600px;
+		}
 	
 	.mata-wrap{
 		padding:20px;
@@ -77,7 +78,7 @@
     margin-top: 2px;
 }
 .meta.comments {
-    padding: 20px;
+	margin-top:20px;
     border-bottom: none;
 }
 
@@ -85,7 +86,7 @@
   display: flex;    
   align-items: center;
   padding-bottom: 20px;
-  border-bottom: 1px solid $offWhite;
+  border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
 }
 
 .comments{
@@ -98,19 +99,35 @@
     border-radius: 50%;
     margin-right: 12px;
 }
-
+.comments-wrap .comments{
+	padding-top:5px;
+	padding-bottom: 20px;
+    border-bottom: none;
+}
 
 .meta-info {
   display: grid;
-  grid-template-rows: 80px 80px 1fr 55px;
+  grid-template-rows: 80px 400px 1fr 55px;
   border-top: 1px solid $offWhite;
 }
-
+#commtext{
+	background: 0 0;
+    border: 0;
+    width: 80%;
+}
+/*댓글목록 css*/
+.scroll1{
+	margin: 0 20px 20px;
+	margin-top: -10px;
+	overflow:scroll;
+	-ms-overflow-style: none; /*스크롤바 기능은 하면서 보이지는 않게 하기*/
+}
+/*스크롤바 기능은 하면서 보이지는 않게 하기*/
+::-webkit-scrollbar {
+	display:none;
+}
 .comments-wrap {
-  margin: 0 20px 20px;
-  height: 329px;
-  margin-top: -10px;
-  overflow:scroll;
+
   input {
     border: none;
     width: 100%;
@@ -121,18 +138,23 @@
     font-weight: 600;
   }  
   &:last-child {
-    border-top: 1px solid $offWhite;
+    border-top: 1px solid rgba(var(--ce3,239,239,239),1);
     padding-top: 20px;
   }
 }
 
-	
-/* 	.image-wrap{
+/* 게시일 css */
+.regdate{
+	font-size: 10px;
+    letter-spacing: .2px;
+    color: gray;
+}
+ 	.image-wrap{
 		display:inline-block;
 		float:left;
-		width:50%;
-		height: auto;
-	} */
+		width:100%;
+		height: 100%;
+	}
 		
 	.modal_close{
 		position:fixed;
@@ -148,6 +170,22 @@
     text-decoration: lowercase;
     font-weight: 600;
   }
+/* .items */
+
+  .items{
+  	border-top: 1px solid rgba(var(--ce3,239,239,239),1);
+  	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+  }
+  .items .btn1{
+  	border:0;
+  	background: 0 0;
+  	padding: 8px;
+  }
+  .commwrite{
+  	margin-top: 8px;
+  }
+  
+  
 /* ------------------- 슬라이더 CSS ---------------------*/
 	img.showImage {
 	  display: inline-block;
@@ -274,20 +312,41 @@
 											"</div>"+
 										"</div>"+
 									"</div>"+
-									"<div class='meta comments'>"+
-										"<div>"+
-											"<img src='../upload/"+profile+"'>"+//프로필사진
+									"<div class='scroll1'>"+
+										"<div class='meta comments'>"+
+											"<div>"+
+												"<img src='../upload/"+profile+"'>"+//프로필사진
+											"</div>"+
+											"<div>"+
+												"<p>"+
+													"<span class='handle'>"+nickname+"</span> "+//닉네임
+													"<span>"+content+"</span>"+//글내용
+												"</p>"+
+											"</div>"+
 										"</div>"+
-										"<div>"+
-											"<p>"+
-												"<span class='handle'>"+nickname+"</span> "+//닉네임
-												"<span>"+content+"</span>"+//글내용
-											"</p>"+
+										"<div class='comments-wrap'></div>"+//작성된 댓글
+									"</div>"+
+									//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
+									"<div class='items'>"+
+										"<span class='like'>"+
+											"<button class='btn1' id='likeBtn'>"+
+												"<div id='likeImg'></div>"+
+											"</button>"+
+										"</span>"+
+										"<span class='comm'>"+
+											"<button class='btn1'>"+
+												"<img src='${cp}/upload/comm.PNG'>"+
+											"</button>"+
+										"</span>"+
+										"<div class='likeList'>"+
+											"<p>가장 먼저 좋아요를 눌러보세요.</p>"+
+										"</div>"+
+										"<div class='time'>"+
+											"<p><time class='regdate'datetime='2016-05-25'>2016년 5월 25일</time></p>"+
 										"</div>"+
 									"</div>"+
-									"<div class='comments-wrap'></div>"+//작성된 댓글
 									"<div class='commwrite'>"+//댓글작성하기
-										"<input type='text' placeholder='댓글 달기...' id='comment'>"+
+										"<input type='text' placeholder='댓글 달기...' id='commtext'>"+
 										"<input type='button' id='sendComment' value='전송'>"+
 									"</div>"+
 								"</div>"+
@@ -295,12 +354,18 @@
 							"<div class='modal_close' onclick='closeBoard();'>"+
 								"<button>❌</button>"+
 							"</div>";
-			div.className="modal";
-			div.setAttribute("id","modal");
+			div.className="modal2";
+			div.setAttribute("id","modal2");
 			modal1.appendChild(div);
-			getImgList(board_no);
-			commentList(board_no);
-				
+			getImgList(board_no); //이미지리스트
+			commentList(board_no); //댓글리스트 가져오기
+			
+			//좋아요버튼 클릭시 좋아요테이블에 추가or삭제 ajax함수 호출
+			var likeBtn=document.getElementById("likeBtn");
+			likeBtn.addEventListener('click',function(){
+				likeAction(board_no);
+			});
+			
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
 			var sendComment=document.getElementById("sendComment");
 			sendComment.addEventListener('click',function(){
@@ -311,7 +376,36 @@
 			});
 		}
 	}
-	
+	//좋아요 추가or삭제 ajax
+	var likeaction=null;
+	function likeAction(num){
+		likeaction=new XMLHttpRequest();
+		var board_no=num;
+		likeaction.onreadystatechange=function(){
+			if(likeaction.readyState==4 && likeaction.status==200){
+				var likeImg=document.getElementById("likeImg");
+				var data=likeaction.responseText;
+				var json=JSON.parse(data);
+				if(json.result==0){
+					likeImg.innerHTML="<img src='${cp}/upload/likenull.PNG'>";
+				}else if(json.result==1){
+					likeImg.innerHTML="<img src='${cp}/upload/like.PNG'>";
+				}
+			}
+		}
+		likeaction.open('get','${cp}/good/insertdelete?board_no='+board_no+'&member_no=${member_no}',true);
+		likeaction.send();
+	}
+	//게시글별 좋아요 리스트
+	var likeList=null;
+	function getLikeList(board_no){
+		likeList=new XMLHttpRequest();
+		likeList.onreadystatechange=function(){
+			
+		}
+		likeList.open();
+		likeList.send();
+	}
 	//댓글생성 ajax
 	var commInsert=null;
 	function insertComment(json){
