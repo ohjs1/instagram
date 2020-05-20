@@ -19,7 +19,7 @@ public class DirectMessageInboxController extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int member_no = Integer.parseInt( req.getParameter("member_no") );
 		
-		System.out.println(member_no + ">>>>>>>member_no");
+//		System.out.println(member_no + ">>>>>>>member_no");
 		
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 
@@ -35,3 +35,4 @@ public class DirectMessageInboxController extends HttpServlet {
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
 }
+ 

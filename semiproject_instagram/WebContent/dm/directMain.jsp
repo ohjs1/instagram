@@ -275,9 +275,9 @@
 	
 	//채팅 받기 기능 구현 ajax
 	var showMsg_xhr = null;
-	var schk = 0;
 	function dshowBox(){
 		showMsg_xhr = new XMLHttpRequest();
+		
 		showMsg_xhr.onreadystatechange = function(){
 			var data = showMsg_xhr.responseText;
 			var json = JSON.parse(data);
@@ -291,22 +291,16 @@
 				mtextff.innerHTML = "";
 				
 				for(var i=0; i<json.length; i++){
-				console.log("myMember_no>>" + myMember_no);
-				console.log("json[i].smember_no>>" + json[i].smember_no);
-				console.log("json[i].rmember_no>>" + json[i].rmember_no);
 				
 					if(myMember_no == json[i].smember_no){
-						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: gray; width:12em; margin-left:auto; border-radius:30%; margin-top:10px;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: white; border:1px solid gray; width:12em; margin-left:auto; border-radius:5%; margin-top:10px;'>" + json[i].content + "</div>";
 					} else if(myMember_no == json[i].rmember_no){
-						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: gray; width:12em; margin-right:auto; border-radius:30%; margin-top:10px;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: white; border:1px solid gray; width:12em; margin-right:auto; border-radius:5%; margin-top:10px;'>" + json[i].content + "</div>";
 					}
 				}
 				
-				//스크롤바 제일아래로(한번실행)
-				if(schk == 0){
-					msgTextBox.scrollTop = msgTextBox.scrollHeight;
-					schk++;
-				}
+				//스크롤바 제일아래로
+				msgTextBox.scrollTop = msgTextBox.scrollHeight;
 			}			
 		}
 		
@@ -326,7 +320,7 @@
 		
 		dmsg_xhr.onreadystatechange = function(){
 			if(dmsg_xhr.readyState==4 && dmsg_xhr.status==200){
-				
+				dshowBox();
 			}
 		}
 		dmsg_xhr.open('post', '${cp}/dm/dmmsg', true);
@@ -351,7 +345,6 @@
 	//자동 새로고침으로 내용 업데이트
 	var timeId = null;
 	function startRefresh(){
-		dshowBox();
 		timeId = setInterval(dshowBox, 1000);
 		checkAuto = true;
 	}
