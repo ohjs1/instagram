@@ -40,9 +40,12 @@ public class GoodDao {
 				return list;
 			}
 			return null;
+			
 		}catch(SQLException se) {
 			System.out.println(se.getMessage());
 			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
 	public int goodInsertDelete(int member_no,int board_no) {

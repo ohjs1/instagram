@@ -2,6 +2,8 @@ package com.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -37,7 +39,9 @@ public class Board_MemberListController extends HttpServlet{
 		json.put("ref",vo.getRef());
 		json.put("lev",vo.getLev());
 		json.put("step",vo.getStep());
-		json.put("regdate", vo.getRegdate());
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'"); //시간처리하기
+		
+		json.put("regdate", df.format(vo.getRegdate()));
 
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();

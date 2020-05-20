@@ -13,46 +13,47 @@
 <meta charset="UTF-8">
 <title>내 피드</title>
 <style type="text/css">
-	.board{width: 100%; height: 100%;}
-	td{width:200px;height:200px;}
-	
-	.modal2 {
-		position: fixed;
-		top:0;
-		left:0;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+
+.board{width: 100%; height: 100%;}
+td{width:200px;height:200px;}
+
+.modal2 {
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal_overlay {
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+#img{
+	width: 100%;
+	height: 638px;
+}
+
+.modal_content{
+	display: grid;
+	grid-template-columns: 600px 335px;
+	background: white;
+	z-index:10000;
+}
+.modal_content .image-wrap {
+		max-width: 600px;
+		max-height: 600px;
 	}
-	
-	.modal_overlay {
-		background-color: rgba(0,0,0,0.6);
-		width: 100%;
-		height: 100%;
-		position: absolute;
-	}
-	
-	#img{
-		width: 100%;
-		height: 638px;
-	}
-	
-	.modal_content{
-		display: grid;
-		grid-template-columns: 600px 335px;
-		background: white;
-		z-index:10000;
-	}
-	.modal_content .image-wrap {
-			max-width: 600px;
-			max-height: 600px;
-		}
-	
-	.mata-wrap{
-		padding:20px;
-	}
+
+.mata-wrap{
+	padding:20px;
+}
 	
 .meta-wrap {
   padding: 20px;
@@ -144,33 +145,39 @@
   }
 }
 
+.likeList{
+	background-color: transparent;
+	border:0;
+	font-weight: 600;
+}
+.likeLink{
+	margin-left: 8px;
+}
+
 /* 게시일 css */
 .regdate{
 	font-size: 10px;
     letter-spacing: .2px;
     color: gray;
 }
- 	.image-wrap{
-		display:inline-block;
-		float:left;
-		width:100%;
-		height: 100%;
-	}
-		
-	.modal_close{
-		position:fixed;
-		right:0;
-		top:0;
-		z-index:10000;
-	}
- 	.hidden{
-		display: none;
-	}
+
+.image-wrap{
+	display:inline-block;
+	float:left;
+	width:100%;
+	height: 100%;
+}
 	
-.handle {
-    text-decoration: lowercase;
-    font-weight: 600;
-  }
+.modal_close{
+	position:fixed;
+	right:0;
+	top:0;
+	z-index:10000;
+}
+	.hidden{
+	display: none;
+}
+
 /* .items */
 
   .items{
@@ -294,7 +301,9 @@
 			var lev=json.lev;
 			var step=json.step;
 			var regdate=json.regdate;
-			
+			alert(regdate);
+			var realdate=new Date();
+			//////////////////////////////////////////////////////////////////////////시간처리하기(div class='time')
 			var div=document.createElement("div");
 			div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
 								"<div class='modal_content'>"+
@@ -350,11 +359,10 @@
 												"<img src='${cp}/upload/comm.PNG'>"+
 											"</button>"+
 										"</span>"+
-										"<div class='likeList'>"+
-											"<p>가장 먼저 <label for='likeBtn' style='display:inline-block'>좋아요</label>를 눌러보세요.</p>"+
+										"<div class='likeLink'>"+
 										"</div>"+
 										"<div class='time'>"+
-											"<p><time class='regdate'datetime='2016-05-25'>2016년 5월 25일</time></p>"+
+											"<p><time class='regdate'datetime='2016-05-25'>"+regdate+"</time></p>"+
 										"</div>"+
 									"</div>"+
 									"<div class='commwrite'>"+//댓글작성하기
@@ -383,9 +391,10 @@
 			var commtext=document.getElementById("commtext");
 			commtext.addEventListener('keypress',function(e){
 				if(e.keyCode==13){
-					var commtext=document.getElementById("commtext").value;
-					if(commtext!=null && commtext!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
+					var commtext=document.getElementById("commtext");
+					if(commtext.value!=null && commtext.value!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
 						insertComment(json);
+						commtext.value="";
 					}
 				}
 			});
@@ -393,9 +402,10 @@
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
 			var sendComment=document.getElementById("sendComment");
 			sendComment.addEventListener('click',function(){
-				var commtext=document.getElementById("commtext").value;
-				if(commtext!=null && commtext!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
+				var commtext=document.getElementById("commtext");
+				if(commtext.value!=null && commtext.value!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
 					insertComment(json);
+					commtext.value="";
 				}
 			});
 		}
@@ -407,14 +417,9 @@
 		var board_no=num;
 		likeaction.onreadystatechange=function(){
 			if(likeaction.readyState==4 && likeaction.status==200){
-				var likeImg=document.getElementById("likeImg");
 				var data=likeaction.responseText;
 				var json=JSON.parse(data);
-				if(json.result==0){
-					likeImg.innerHTML="<img src='${cp}/upload/likenull.PNG'>";
-				}else if(json.result==1){
-					likeImg.innerHTML="<img src='${cp}/upload/like.PNG'>";
-				}
+				getLikeList(json.board_no);
 			}
 		}
 		likeaction.open('get','${cp}/good/insertdelete?board_no='+board_no+'&member_no=${sessionScope.member_no}',true);
@@ -428,9 +433,34 @@
 		likeList=new XMLHttpRequest();
 		likeList.onreadystatechange=function(){
 			if(likeList.readyState==4 && likeList.status==200){
+				var likeLink=document.getElementsByClassName("likeLink")[0];
 				var data=likeList.responseText;
 				var json=JSON.parse(data);
-				//////////////////////////////////////////////////////작업할공간
+				var likeChk=false;
+				if(json!=null && json!=""){
+					for(let i=0; i<json.length; i++){
+						var id=json[i].id;
+						var pwd=json[i].pwd;
+						var name=json[i].name;
+						var nickname=json[i].nickname;
+						var profile=json[i].profile;
+						var good_no=json[i].good_no;
+						var member_no=json[i].member_no;
+						var board_no=json[i].board_no;
+						if(member_no==${sessionScope.member_no}){
+							likeChk=true;
+						}
+					}
+					likeLink.innerHTML="<button class='likeList'>좋아요 "+json.length+"개</button>";
+				}else{
+					likeLink.innerHTML="<p>가장 먼저 <label for='likeBtn' style='display:inline-block;font-weight:600'>좋아요</label>를 눌러보세요.</p>";
+				}
+				var likeImg=document.getElementById("likeImg");
+				if(likeChk==true){
+					likeImg.innerHTML="<img src='${cp}/upload/like.PNG'>";
+				}else{
+					likeImg.innerHTML="<img src='${cp}/upload/likenull.PNG'>";
+				}
 			}
 		}
 		likeList.open('get','${cp}/good/list?board_no='+board_no,true);

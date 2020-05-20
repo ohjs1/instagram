@@ -25,17 +25,19 @@ public class GoodListController extends HttpServlet{
 		GoodDao dao=new GoodDao();
 		ArrayList<Good_MemberVo> list=dao.goodList(board_no);
 		JSONArray jarr=new JSONArray();
-		for(Good_MemberVo vo:list) {
-			JSONObject json=new JSONObject();
-			json.put("id",vo.getId());
-			json.put("pwd", vo.getPwd() );
-			json.put("name", vo.getName());
-			json.put("nickname",vo.getNickname());
-			json.put("profile", vo.getProfile());
-			json.put("good_no", vo.getGood_no());
-			json.put("member_no", vo.getMember_no());
-			json.put("board_no", vo.getBoard_no());
-			jarr.put(json);
+		if(list!=null) {
+			for(Good_MemberVo vo:list) {
+				JSONObject json=new JSONObject();
+				json.put("id",vo.getId());
+				json.put("pwd", vo.getPwd() );
+				json.put("name", vo.getName());
+				json.put("nickname",vo.getNickname());
+				json.put("profile", vo.getProfile());
+				json.put("good_no", vo.getGood_no());
+				json.put("member_no", vo.getMember_no());
+				json.put("board_no", vo.getBoard_no());
+				jarr.put(json);
+			}	
 		}
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();

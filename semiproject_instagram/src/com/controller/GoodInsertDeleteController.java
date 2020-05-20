@@ -23,7 +23,7 @@ public class GoodInsertDeleteController extends HttpServlet{
 		GoodDao dao=new GoodDao();
 		int n=dao.goodInsertDelete(member_no,board_no);
 		JSONObject json=new JSONObject();
-		json.put("result", n);
+		json.put("board_no", board_no);
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();
 		pw.print(json);

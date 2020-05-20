@@ -2,6 +2,8 @@ package com.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -38,7 +40,9 @@ public class BoardCommentList extends HttpServlet{
 			json.put("ref",vo.getRef());
 			json.put("lev",vo.getLev());
 			json.put("step",vo.getStep());
-			json.put("regdate", vo.getRegdate());
+			DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			System.out.println(df.format(vo.getRegdate()));
+			json.put("regdate", df.format(vo.getRegdate()));
 			jarr.put(json);
 		}
 		resp.setContentType("text/plain;charset=utf-8");
