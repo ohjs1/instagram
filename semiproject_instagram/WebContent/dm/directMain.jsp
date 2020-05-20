@@ -92,6 +92,11 @@
 		width: 95%;
 		margin: auto;
 	}
+	
+	#mtextff {
+		width: 95%;
+		margin: auto;
+	}
 	 
 	#msgboxdel {
 		text-align: right;
@@ -124,7 +129,7 @@
 				<div id="showMsg">
 				<div id="msgboxdel"><a href="${ cp }/dm/delete?myMember_no=${member_no}&yourMember_no=${yourMember_no}">DM 삭제하기</a></div>
 					<div id="msgTextBox">
-						<div id="mText"></div>
+						<div id="mText"><div id="mtextff"></div></div>
 					</div>
 					<input type="text" class="showTextf" placeholder="메시지 입력..." onkeyup="enterkey()"/>
 				</div>
@@ -270,17 +275,20 @@
 	
 	//채팅 받기 기능 구현 ajax
 	var showMsg_xhr = null;
+	var schk = 0;
 	function dshowBox(){
 		showMsg_xhr = new XMLHttpRequest();
 		showMsg_xhr.onreadystatechange = function(){
 			var data = showMsg_xhr.responseText;
 			var json = JSON.parse(data);
 			var mText = document.getElementById("mText");
+			var mtextff = document.getElementById("mtextff");
+			
 			
 			if(showMsg_xhr.readyState==4 && showMsg_xhr.status==200){
 				
 				//초기화
-				mText.innerHTML = "";
+				mtextff.innerHTML = "";
 				
 				for(var i=0; i<json.length; i++){
 				console.log("myMember_no>>" + myMember_no);
@@ -288,14 +296,17 @@
 				console.log("json[i].rmember_no>>" + json[i].rmember_no);
 				
 					if(myMember_no == json[i].smember_no){
-						mText.innerHTML += "<div class='tbox_dm' style='text-align:right; padding: 15px; background-color: white;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: gray; width:12em; margin-left:auto; border-radius:30%; margin-top:10px;'>" + json[i].content + "</div>";
 					} else if(myMember_no == json[i].rmember_no){
-						mText.innerHTML += "<div class='tbox_dm' style='text-align:left; padding: 15px; background-color: white;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: gray; width:12em; margin-right:auto; border-radius:30%; margin-top:10px;'>" + json[i].content + "</div>";
 					}
 				}
 				
-				//스크롤바 제일아래로
-				msgTextBox.scrollTop = msgTextBox.scrollHeight;
+				//스크롤바 제일아래로(한번실행)
+				if(schk == 0){
+					msgTextBox.scrollTop = msgTextBox.scrollHeight;
+					schk++;
+				}
 			}			
 		}
 		
