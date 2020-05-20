@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.db.ConnectionPool;
+import com.vo.FollowVo;
 import com.vo.MemberVo;
 
 public class FollowDao {
+	
+	//ÆÈ·Î¿ì
 	public int insert(int mymember_no, int youmember_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -30,7 +33,7 @@ public class FollowDao {
 				ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	
+	// ÆÈ·Î¿ö ÆÈ·ÎÀ× Ã£±â
 	public ArrayList<MemberVo> followingMem(int mymember_no, int youmember_no, boolean bl){
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -68,6 +71,7 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	//ÆÈ·Î¿ì ÇØÁ¦
 	public int delete(int mymember_no,int youmember_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -84,6 +88,29 @@ public class FollowDao {
 			return -1;
 		}finally {
 			ConnectionPool.close(con, pstmt, null);
+		}
+	}
+	//ÆÈ·Î¿ì Áßº¹ Ã£±â
+	public boolean followfind(int mymember_no,int youmember_no) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "select * from follow where mymember_no=? and youmember_no=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, mymember_no);
+			pstmt.setInt(2, youmember_no);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			return false;
+		}catch(SQLException se) {
+			se.printStackTrace();
+			return false;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
 }

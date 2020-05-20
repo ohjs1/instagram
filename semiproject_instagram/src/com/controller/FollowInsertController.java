@@ -20,11 +20,15 @@ public class FollowInsertController extends HttpServlet{
 			resp.sendRedirect("/member/login");
 		}
 		mymember_no=Integer.parseInt(smymember_no);
+		FollowDao dao = new FollowDao();
 		if(mymember_no==youmember_no) {
 			System.out.println("불가");
 			req.setAttribute("msg", "팔로우불가");
+		}else if(dao.followfind(mymember_no,youmember_no)){
+			System.out.println("이미팔로우");
+			req.setAttribute("msg", "이미팔로우");
+			
 		}else {
-			FollowDao dao = new FollowDao();
 			int n = dao.insert(mymember_no, youmember_no);
 			if(n>0) {
 				System.out.println("팔로우완료");

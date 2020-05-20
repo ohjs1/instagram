@@ -18,6 +18,7 @@ public class FollowSelectController extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			String syoumember_no=req.getParameter("youmember_no");
 			String smymember_no=req.getParameter("mymember_no");
+			String profile=req.getParameter("profile");
 			int youmember_no=0;
 			int mymember_no=0;
 			boolean bl=false;
@@ -32,6 +33,8 @@ public class FollowSelectController extends HttpServlet{
 			req.setAttribute("bl", bl);
 			req.setAttribute("list", list);
 			req.setAttribute("main", "/follow/followList.jsp");
+			req.setAttribute("mymember_no", smymember_no);
+			req.setAttribute("profile", profile);
 			req.getRequestDispatcher("/layout.jsp").forward(req,resp);
 	}
 }
