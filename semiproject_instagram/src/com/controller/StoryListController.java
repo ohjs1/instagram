@@ -20,6 +20,7 @@ import com.vo.StoryVo;
 public class StoryListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//homefeed.jsp 에서 내 프로필사진 눌렀을 때 실행됨
 		HttpSession session=req.getSession();
 		int member_no=(int)session.getAttribute("member_no");
 		StoryDao dao=new StoryDao();
@@ -30,6 +31,7 @@ public class StoryListController extends HttpServlet{
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//story.jsp에서 등록버튼 눌렀을 때 실행됨
 		int member_no=(int) req.getAttribute("member_no");
 		String filepath=(String)req.getAttribute("filepath");
 		System.out.println("방금업로드한 파일명:"+filepath);

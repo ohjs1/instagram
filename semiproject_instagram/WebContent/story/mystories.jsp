@@ -40,8 +40,8 @@ body {
 
 
 #exit {
-	width: 50px;
-	height: 50px;
+	width: 40px;
+	height: 40px;
 	top: 10px;
 	right: 0px;
 	position: absolute;
@@ -61,14 +61,13 @@ body {
 
 	<div id="wrap">
 		<img id="myprofile"
-			style="width: 50px; height: 50px; border-radius: 50%;"> <label
-			style="color: white">${nickname}</label> <input type="button"
-			value="이전" onclick="previousImg()"> <input type="button"
-			value="다음" onclick="nextImg()">
-		<!-- somebody help me!!!!!!!!!!!! -->
-		
+			style="width: 50px; height: 50px; border-radius: 50%;"> 
+			<label style="color: white">${nickname}</label> 
+			<input type="button" value="이전" onclick="previousImg()"> 
+			<input type="button" value="다음" onclick="nextImg()">
+
 		<div id="exit">
-			<input type="image" style="width: 50px; height: 50px"
+			<input type="image" style="width: 40px; height: 40px"
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
 
@@ -101,9 +100,11 @@ body {
 				<div id="content" class="cdivs">
 					${vo.getContent() } 
 					${vo.getStory_no() }
-				
+					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
+					<div class="readuser">읽은사람:</div>
 				</div>
-
+				
+				
 			</div>
 
 		</c:forEach>
@@ -113,6 +114,31 @@ body {
 	</div>
 </body>
 <script type="text/javascript">
+
+	function getReaduser(readstory,i){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var read=document.getElementsByClassName("readuser")[i];
+				var data = xhr.responseText;
+				var json = JSON.parse(data);
+				for (let i = 0; i < json.length; i++) {
+						var m=json[i].member_no;
+						var div = document.createElement("div");
+						console.log(json[i].member_no);
+						div.innerHTML = m;
+						div.style.display = "inline-block";
+						div.style.border="1px solid red";					
+						div.className = "read";
+						read.appendChild(div);
+				}
+			}
+		}
+		xhr.open('get', '${cp}/readuser/list?story_no='+readstory, true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send();		
+	}
+	
 	function getProfile() {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -137,21 +163,24 @@ body {
 	function showStory() {
 
 		getProfile();
-
+		
 		const divs = document.getElementsByClassName("divs");
 		const cdivs = document.getElementsByClassName("cdivs");
 		const imgs = document.getElementsByClassName("imgs");
+		var readstory = document.getElementsByClassName("readstory");
 		for (let i = 0; i < imgs.length; i++) {
 			if (i == index) {
-
+				getReaduser(readstory[i].value,i);
 				divs[i].style.display = "block";
 				imgs[i].style.display = "block";
 				cdivs[i].style.display = "block";
+
 			} else {
 
 				divs[i].style.display = "none";
 				imgs[i].style.display = "none";
 				cdivs[i].style.display = "none";
+
 			}
 		}
 

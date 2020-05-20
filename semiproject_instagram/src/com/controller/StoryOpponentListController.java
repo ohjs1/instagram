@@ -48,7 +48,6 @@ public class StoryOpponentListController extends HttpServlet{
 			json.put("member_no", vo.getMember_no());
 			json.put("profile", vo.getProfile());
 			json.put("nickname", vo.getNickname());
-
 			jarr.put(json);
 		}
 		

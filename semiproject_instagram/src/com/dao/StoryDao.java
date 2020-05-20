@@ -14,7 +14,7 @@ import com.vo.StoryVo;
 
 public class StoryDao {
 	
-	//스토리 올린 회원들 멤버번호 중복없이 가져오기(storydate 내림차순)
+	//스토리 올린 회원들 멤버번호 중복없이 가져오기(storydate 내림차순)-> 로그인한 멤버가 팔로우한 멤버 중 스토리 올린 멤버만 가져오기ㅠ
 	public ArrayList<StoryMemberVo> storymembers(int login_no) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -22,17 +22,21 @@ public class StoryDao {
 		ArrayList<StoryMemberVo> list=new ArrayList<StoryMemberVo>();		
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select * from\r\n" + 
-					"(\r\n" + 
-					"    select * from(select m.member_no, maxdate, profile, nickname\r\n" + 
-					"    from (select member_no,max(storydate) maxdate\r\n" + 
-					"    from story \r\n" + 
-					"    group by member_no \r\n" + 
-					"    order by maxdate desc)s, member m\r\n" + 
-					"    where s.member_no=m.member_no )\r\n" + 
-					"    where member_no not in(?)\r\n" + 
-					")a,follow f\r\n" + 
-					"where f.mymember_no=? and f.youmember_no=a.member_no";
+			String sql="select s.* from\r\n" + 
+					"(select * from\r\n" + 
+					"        (\r\n" + 
+					"            select m.member_no, maxdate, profile, nickname from\r\n" + 
+					"            (\r\n" + 
+					"                select member_no,max(storydate) maxdate\r\n" + 
+					"                from story \r\n" + 
+					"                group by member_no \r\n" + 
+					"                order by maxdate desc\r\n" + 
+					"            )s , member m \r\n" + 
+					"            where s.member_no=m.member_no\r\n" + 
+					"        )a\r\n" + 
+					"        where member_no not in(?)\r\n" + 
+					"        ) s, follow f\r\n" + 
+					"where f.mymember_no=? and f.youmember_no=s.member_no";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, login_no);
 			pstmt.setInt(2, login_no);
@@ -40,10 +44,11 @@ public class StoryDao {
 			while(rs.next()) {
 				StoryMemberVo vo=new StoryMemberVo();
 				int member_no=rs.getInt("member_no");
-				int youmember_no=rs.getInt("youmember_no");
+				Date maxdate=rs.getDate("maxdate");
 				String profile=rs.getString("profile");
 				String nickname=rs.getString("nickname");
 				vo.setMember_no(member_no);
+				vo.setStorydate(maxdate);
 				vo.setProfile(profile);
 				vo.setNickname(nickname);
 

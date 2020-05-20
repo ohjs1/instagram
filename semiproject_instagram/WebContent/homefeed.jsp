@@ -6,26 +6,35 @@
 <meta charset="UTF-8">
 <title>HomeFeed</title>
 <style>
-.sto {width:100px;height:50px;text-align: center;}
+#wrap{width:40%;height: 100%;margin:auto;border:1px solid black;}
+#s{width:95%;height: 25%; border:2px solid gray;margin:10px;padding:5px;}
 #my {width:100px;height:100px; text-align: center;display:inline-block;position:relative;}
 #plus {width:50px;height:50px;position:absolute;top:1px;right:1px;}
+.sto {width:100px;height:50px;text-align: center;}
 </style>
 </head>
 <body onload="addStorys()">
+<div id="wrap">
 	<h1>홈피드입니다</h1>
 	계정설정 :
 	<a href="${ cp }/member/memberInfo">프로필 수정</a>
 	<a href="${cp }/member/logout">로그아웃</a><br>
 	<br>
 	<br>
-	<div id="my">
-	<a href="${ cp }/story/list"><img id="myprofile"
-		style="width: 50px; height: 50px;border-radius: 50%;"></a>
-	${nickname }<div id="plus"><a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png"></a><br></div></div>
+	<div id="s">
+		<div id="my">
+			<a href="${ cp }/story/list"><img id="myprofile"
+				style="width: 50px; height: 50px;border-radius: 50%;"></a>
+			${nickname }
+				<div id="plus">
+					<a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png" style="width:20px;height: 20px"></a><br>
+				</div>
+		</div>
+		<div id="storys"></div>
+	</div>
 	
 	
-	<div id="storys"></div>
-
+</div>
 </body>
 <script>
 	function getProfile() {
