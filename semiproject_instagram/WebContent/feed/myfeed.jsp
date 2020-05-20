@@ -68,9 +68,10 @@
     margin: 0;
     color: $black;
 }
-.meta .handle {
+.handle {
     text-decoration: lowercase;
     font-weight: 600;
+    color:black;
 }
 
 .meta .location {
@@ -305,21 +306,30 @@
 									"<div class='meta-wrap'>"+
 										"<div class='meta'>"+//프로필사진,닉네임이 들어갈 div
 											"<div>"+
-												"<img src='../upload/"+profile+"'>"+//프로필사진
+												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+													"<img src='../upload/"+profile+"'>"+//프로필사진
+												"</a>"+
 											"</div>"+
 											"<div>"+
-												"<p class='handle'>"+nickname+"</p>"+//닉네임
+												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+													"<p class='handle'>"+nickname+"</p>"+//닉네임
+												"</a>"+
+												
 											"</div>"+
 										"</div>"+
 									"</div>"+
 									"<div class='scroll1'>"+
 										"<div class='meta comments'>"+
 											"<div>"+
-												"<img src='../upload/"+profile+"'>"+//프로필사진
+												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+													"<img src='../upload/"+profile+"'>"+//프로필사진
+												"</a>"+
 											"</div>"+
 											"<div>"+
 												"<p>"+
-													"<span class='handle'>"+nickname+"</span> "+//닉네임
+													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+														"<span class='handle'>"+nickname+"</span> "+//닉네임
+													"</a>"+
 													"<span>"+content+"</span>"+//글내용
 												"</p>"+
 											"</div>"+
@@ -329,17 +339,19 @@
 									//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
 									"<div class='items'>"+
 										"<span class='like'>"+
+											//좋아요버튼
 											"<button class='btn1' id='likeBtn'>"+
-												"<div id='likeImg'></div>"+
+												"<div id='likeImg'></div>"+ //좋아요버튼 이미지가 들어갈 공간
 											"</button>"+
 										"</span>"+
+										//댓글버튼
 										"<span class='comm'>"+
-											"<button class='btn1'>"+
+											"<button class='btn1' onclick='commFocus()'>"+
 												"<img src='${cp}/upload/comm.PNG'>"+
 											"</button>"+
 										"</span>"+
 										"<div class='likeList'>"+
-											"<p>가장 먼저 좋아요를 눌러보세요.</p>"+
+											"<p>가장 먼저 <label for='likeBtn' style='display:inline-block'>좋아요</label>를 눌러보세요.</p>"+
 										"</div>"+
 										"<div class='time'>"+
 											"<p><time class='regdate'datetime='2016-05-25'>2016년 5월 25일</time></p>"+
@@ -359,6 +371,7 @@
 			modal1.appendChild(div);
 			getImgList(board_no); //이미지리스트
 			commentList(board_no); //댓글리스트 가져오기
+			getLikeList(board_no); //좋아요리스트 가져오기
 			
 			//좋아요버튼 클릭시 좋아요테이블에 추가or삭제 ajax함수 호출
 			var likeBtn=document.getElementById("likeBtn");
@@ -366,11 +379,22 @@
 				likeAction(board_no);
 			});
 			
+			//댓글 엔터버튼 누를 시 댓글생성
+			var commtext=document.getElementById("commtext");
+			commtext.addEventListener('keypress',function(e){
+				if(e.keyCode==13){
+					var commtext=document.getElementById("commtext").value;
+					if(commtext!=null && commtext!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
+						insertComment(json);
+					}
+				}
+			});
+			
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
 			var sendComment=document.getElementById("sendComment");
 			sendComment.addEventListener('click',function(){
-				var comment=document.getElementById("comment").value;
-				if(comment!=null && comment!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
+				var commtext=document.getElementById("commtext").value;
+				if(commtext!=null && commtext!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
 					insertComment(json);
 				}
 			});
@@ -393,24 +417,31 @@
 				}
 			}
 		}
-		likeaction.open('get','${cp}/good/insertdelete?board_no='+board_no+'&member_no=${member_no}',true);
+		likeaction.open('get','${cp}/good/insertdelete?board_no='+board_no+'&member_no=${sessionScope.member_no}',true);
 		likeaction.send();
 	}
-	//게시글별 좋아요 리스트
+	
+	//좋아요 리스트
 	var likeList=null;
-	function getLikeList(board_no){
+	function getLikeList(num){
+		var board_no=num;
 		likeList=new XMLHttpRequest();
 		likeList.onreadystatechange=function(){
-			
+			if(likeList.readyState==4 && likeList.status==200){
+				var data=likeList.responseText;
+				var json=JSON.parse(data);
+				//////////////////////////////////////////////////////작업할공간
+			}
 		}
-		likeList.open();
+		likeList.open('get','${cp}/good/list?board_no='+board_no,true);
 		likeList.send();
 	}
+	
 	//댓글생성 ajax
 	var commInsert=null;
 	function insertComment(json){
 		var board_no=json.board_no;
-		var comment=document.getElementById("comment").value;
+		var commtext=document.getElementById("commtext").value;
 		var ref=json.ref;
 		var lev=json.lev;
 		var step=json.step;
@@ -428,7 +459,7 @@
 		}
 		commInsert.open('post','../board/commentInsert',true);
 		commInsert.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		commInsert.send('board_no='+board_no+'&member_no=${member_no}&comment='+comment+'&ref='+ref+'&lev='+lev+'&step='+step);
+		commInsert.send('board_no='+board_no+'&member_no=${member_no}&comment='+commtext+'&ref='+ref+'&lev='+lev+'&step='+step);
 	}
 	
 	//댓글 리스트 가져오기
@@ -456,11 +487,15 @@
 					var regdate=json[i].regdate;
 					comments_wrap.innerHTML+="<div class='comments'>"+
 												"<div>"+
-													"<img src='../upload/"+profile+"'>"+//프로필사진
+													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+														"<img src='../upload/"+profile+"'>"+//프로필사진
+													"</a>"+
 												"</div>"+
 												"<div>"+
 													"<p>"+
-														"<span class='handle'>"+nickname+"</span> "+//닉네임
+														"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+															"<span class='handle'>"+nickname+"</span> "+//닉네임
+														"</a>"+
 														"<span>"+content+"</span>"+//글내용
 													"</p>"+
 												"</div>"+
@@ -472,6 +507,23 @@
 		commList.send();
 	}
 	
+	//댓글아이콘 클릭시 댓글 입력창으로 포커스주기
+	function commFocus(){
+		var commtext=document.getElementById("commtext");
+		commtext.focus();
+	}
+	
+	
+	//댓글 입력창에서 엔터입력시 전송버튼눌리게하기
+/* 	var commtext=document.getElementById("commtext");
+	commtext.addEventListener('keyup',function(e){
+		alert("엔터");
+		if(e.keyCode==13){
+			var sendComment=document.getElementById("sendComment");
+			alert("엔터");
+		}
+	});
+	 */
 	//게시물클릭시 이미지 가져오기
 	var imgList=null;
 	function getImgList(board_no){

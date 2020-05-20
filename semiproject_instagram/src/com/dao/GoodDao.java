@@ -4,11 +4,48 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.db.ConnectionPool;
+import com.vo.Good_MemberVo;
 
 public class GoodDao {
-	public int GoodInsertDelete(int member_no,int board_no) {
+	public ArrayList<Good_MemberVo> goodList(int board_no){
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,g.* from" + 
+					"(" + 
+					"    select * from good where board_no=? " + 
+					")g,member m " + 
+					"where g.member_no=m.member_no";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, board_no);
+			rs=pstmt.executeQuery();
+			ArrayList<Good_MemberVo> list=new ArrayList<Good_MemberVo>();
+			if(rs.next()) {
+				do {
+					String id=rs.getString("id");
+					String pwd=rs.getString("pwd");
+					String name=rs.getString("name");
+					String nickname=rs.getString("nickname");
+					String profile=rs.getString("profile");
+					int good_no=rs.getInt("good_no");
+					int member_no=rs.getInt("member_no");
+					Good_MemberVo vo=new Good_MemberVo(id,pwd,name,nickname,profile,good_no,member_no,board_no);
+					list.add(vo);
+				}while(rs.next());
+				return list;
+			}
+			return null;
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return null;
+		}
+	}
+	public int goodInsertDelete(int member_no,int board_no) {
 		Connection con=null;
 		PreparedStatement pstmt1=null;
 		PreparedStatement pstmt2=null;
@@ -30,7 +67,6 @@ public class GoodDao {
 				pstmt2.executeUpdate();
 				return 0; //삭제되었다는 뜻으로 0(거짓) 리턴
 			}else {
-				System.out.println(member_no+"멤버"+board_no+"글번호zzz");
 				String sql3="insert into good values(good_seq.nextval,?,?)";
 				pstmt3=con.prepareStatement(sql3);
 				pstmt3.setInt(1, member_no);
