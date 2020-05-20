@@ -54,6 +54,40 @@ body {
 	right: 5px;
 	position: absolute;
 }
+
+.modal_overlay {
+		background-color: rgba(0,0,0,0.6);
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index:10;
+	}
+	
+	
+	.modal_content{
+		display: grid;
+		border-radius:10px;
+		text-align:center;
+		grid-template-columns: 300px;
+		grid-template-rows: 50px 250px;
+		background: white;
+		z-index:10000;
+		font-family: 맑은고딕;
+	}
+	
+	.modal2 {
+		position: fixed;
+		top:0;
+		left:0;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+
+
 </style>
 
 </head>
@@ -101,7 +135,7 @@ body {
 					${vo.getContent() } 
 					${vo.getStory_no() }
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
-					<div class="readuser">읽은사람:</div>
+					<div class="readuser"></div>
 				</div>
 				
 				
@@ -112,9 +146,58 @@ body {
 
 
 	</div>
+<div id="modal1"></div>
 </body>
 <script type="text/javascript">
 
+	function showModal(readstory,i){
+		clearTimeout(timeout);
+		
+				var modal1=document.getElementById("modal1");
+				var div=document.createElement("div");
+				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
+								"<div class='modal_content'><br>조회한 사람<br>"+
+								"<div class='modal_list'></div></div>";								
+				div.className="modal2";
+				div.setAttribute("id","modal2");
+				modal1.appendChild(div);
+				getReaduserList(readstory);
+		
+	}
+
+	//모달 닫기버튼
+	function closeModal(){
+		var modal=document.getElementById("modal");
+		var modal1=document.getElementById("modal1");
+		modal1.innerHTML="";
+		//$("#modal").html("");
+		counter=0;
+	}
+	
+	//조회한 사람 리스트
+	function getReaduserList(readstory){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var modal_list=document.getElementsByClassName("modal_list")[0];
+				modal_list.innerHTML="";
+				var data=xhr.responseText;
+				var json=JSON.parse(data);
+				for(let i=0; i<json.length; i++){
+					console.log(json[i].member_no);
+					modal_list.innerHTML+="<div id='readlist'>"+
+					"<div style='display:inline-block'><img src='${cp}/upload/"+json[i].profile+"' style='width:30px;heigth:30px;border-radius:50%'></div>"+
+					"<div style='display:inline-block'><a href='${cp}/feed/myfeed?youmember_no="+json[i].member_no+"'>"+json[i].nickname+"</a></div><div>"
+				}
+			}
+		}
+		xhr.open('post','${cp}/readuser/list',true);
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		xhr.send('story_no='+readstory);
+		
+	}
+	
+	//읽은 사람 수 링크
 	function getReaduser(readstory,i){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -122,16 +205,15 @@ body {
 				var read=document.getElementsByClassName("readuser")[i];
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
-				for (let i = 0; i < json.length; i++) {
-						var m=json[i].member_no;
+				
 						var div = document.createElement("div");
-						console.log(json[i].member_no);
-						div.innerHTML = m;
-						div.style.display = "inline-block";
-						div.style.border="1px solid red";					
+						div.innerHTML = "<a href='#' onclick='showModal("+readstory+","+i+")'>"+json[i].count_ru +"명이 읽음</a>";
+						div.style.display = "inline-block";					
 						div.className = "read";
 						read.appendChild(div);
-				}
+					
+				
+				
 			}
 		}
 		xhr.open('get', '${cp}/readuser/list?story_no='+readstory, true);
@@ -139,6 +221,7 @@ body {
 		xhr.send();		
 	}
 	
+	//내 프로필 가져오기
 	function getProfile() {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -158,6 +241,7 @@ body {
 		xhr.send();
 	}
 
+	//기본
 	var index = 0;
 	var timeout = null;
 	function showStory() {
@@ -193,7 +277,9 @@ body {
 
 	}
 
+	//스토리 종료
 	function closeStory() {
+
 		location.href = "../layout.jsp";
 	}
 

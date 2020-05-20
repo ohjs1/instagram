@@ -24,7 +24,7 @@
 	<div id="s">
 		<div id="my">
 			<a href="${ cp }/story/list"><img id="myprofile"
-				style="width: 50px; height: 50px;border-radius: 50%;"></a>
+				style="width: 50px; height: 50px;border-radius: 50%;"></a><br>
 			${nickname }
 				<div id="plus">
 					<a href="${ cp }/story/insert"><img src="${ cp }/upload/plus.png" style="width:20px;height: 20px"></a><br>
