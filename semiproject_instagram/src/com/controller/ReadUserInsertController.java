@@ -27,6 +27,7 @@ public class ReadUserInsertController extends HttpServlet{
 		boolean bl=false;
 		if(n>0) {
 			bl=true;
+			System.out.println("readuser table insert success!");
 		}
 		json.put("bl", bl);
 		resp.setContentType("text/plain;charset=utf-8");

@@ -16,24 +16,47 @@
 body {
 	background-color: #292929;
 }
+#main{
+	width:504px;
+	height:1000px;
+	margin-top: 100px;
+	margin:0 auto;
+	overflow: hidden;
+}
+
+#prebtn{
+	width: 50px;
+	height: 600px;
+	float:left;
+	margin-top: 100px;
+	padding-top: 400px;
+	position: relative;
+}
 
 #wrap {
 	width: 400px;
 	height: 850px;
-	margin: auto;
+	float:left;
 	margin-top: 100px;
 	position: relative;
 }
 
+#nextbtn{
+	width: 50px;
+	height: 600px;
+	float:left;
+	margin-top: 100px;
+	padding-top: 400px;
+}
 #content {
-	width: 280px;
-	height: 200px;
+	width: 350px;
+	height: 400px;
 	position: absolute;
-	top: 350px;
+	top: 300px;
 	left: 10px;
 	display: none;
 	color: white;
-	font-family: HY견고딕;
+	font-family: 맑은고딕;
 	font-size: 20px;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
@@ -49,16 +72,16 @@ body {
 
 </head>
 <body onload="showStory()">
+<div id="main">
+<div id="prebtn"><img src="${cp }/upload/pre.png" style="width:30px;height: 30px" onclick="previousImg()"></div>
 	<div id="wrap">
 		<div id="oppprofile"></div>
-		<input type="button" value="이전" onclick="previousImg()"> 
-		<input type="button" value="다음" onclick="nextImg()">
 		 
 		<div id="exit">
-			<input type="image" style="width: 50px; height: 50px"
+			<input type="image" style="width: 32px; height: 32px"
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
-
+<br><br>
 		<c:forEach var="vo" items="${list }">
 
 
@@ -85,9 +108,10 @@ body {
 				</c:choose>
 
 				<div id="content" class="cdivs">
-					${vo.getContent() } <br> 저장될 읽은사람(현재로그인한 나) ${nickname } <br>
+					${vo.getContent() } 
+					<!-- <br> 저장될 읽은사람(현재로그인한 나) ${nickname } <br>
 					${vo.getNickname()} 의 현재 스토리 번호 : ${vo.getStory_no() }
-					<!--  <c:set var="snolist">${vo.getStory_no() }</c:set>  -->
+					 <c:set var="snolist">${vo.getStory_no() }</c:set>  -->
 					<input type="hidden" class="readuser" name="readuser" value="${member_no }"> 
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 					<input type="hidden" id="oppnickname" name="oppnickname" value="${vo.getNickname()}">
@@ -100,6 +124,8 @@ body {
 
 
 	</div>
+	<div id="nextbtn"><img src="${cp }/upload/next.png" style="width:30px;height: 30px" onclick="nextImg()"></div>
+</div>
 
 </body>
 <script type="text/javascript">
@@ -120,11 +146,15 @@ body {
 							opp.removeChild(opp.firstChild);
 						}
 						var div = document.createElement("div");
-						div.innerHTML = "<img src='${cp}/upload/"
+						div.innerHTML = "<a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"+
+						"<img src='${cp}/upload/"
 								+ json[i].profile
-								+ "' style='width: 50px; height: 50px;border-radius: 50%;'><label style='color:white'>"
-								+ nick + "</label>";
+								+ "' style='width: 32px; height: 32px;border-radius: 50%;'></a>"+
+								"<a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"
+								+ nick  +"</a>";
 						div.style.display = "inline";
+						div.style.height="54px";
+						div.style.paddingBottom="15px";
 						div.className = "opp"
 
 						opp.appendChild(div);
@@ -135,8 +165,7 @@ body {
 			}
 		}
 		xhr.open('post', '${cp}/story/opponentlist', true);
-		xhr.setRequestHeader('Content-Type',
-				'application/x-www-form-urlencoded');
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		xhr.send();
 	}
 
@@ -212,25 +241,18 @@ body {
 	}
 
 	function insertReadUser(readuser, readstory) {
-		console.log("dddddddddddddddddddd")
 		let xhr1 = new XMLHttpRequest();
 		console.log(readuser + "///" + readstory);
-
 		xhr1.onreadystatechange = function() {
-			console.log("1111111111");
 			if (xhr1.readyState == 4 && xhr1.status == 200) {
-
 				var data = xhr1.responseText;
 				var json = JSON.parse(data);
 				if (json.bl) {
-
+					console.log("insert >> readuser table << !");
 				}
 			}
 		}
-		xhr1.open('get', '${cp}/readuser/insert?member_no=' + readuser
-				+ "&story_no=" + readstory, true);
-		//		xhr1.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		console.log("2222222222222");
+		xhr1.open('get', '${cp}/readuser/insert?member_no=' + readuser + "&story_no=" + readstory, true);
 		xhr1.send();
 	}
 </script>

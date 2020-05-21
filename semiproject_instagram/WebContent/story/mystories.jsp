@@ -16,33 +16,55 @@
 body {
 	background-color: #292929;
 }
+#main{
+	width:504px;
+	height:1000px;
+	margin-top: 100px;
+	margin:0 auto;
+	overflow: hidden;
+}
+
+#prebtn{
+	width: 50px;
+	height: 600px;
+	float:left;
+	margin-top: 100px;
+	padding-top: 400px;
+	position: relative;
+}
 
 #wrap {
 	width: 400px;
 	height: 850px;
-	margin: auto;
+	float:left;
 	margin-top: 100px;
 	position: relative;
 }
 
+#nextbtn{
+	width: 50px;
+	height: 600px;
+	float:left;
+	margin-top: 100px;
+	padding-top: 400px;
+}
+
 #content {
 	width: 350px;
-	height: 450px;
+	height: 400px;
 	position: absolute;
-	top: 250px;
+	top: 300px;
 	left: 10px;
 	display: none;
-	border:1px solid red;
 	color: white;
-	font-family: HY견고딕;
+	font-family: 맑은고딕;
 	font-size: 20px;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
-
 #exit {
-	width: 40px;
-	height: 40px;
+	width: 32px;
+	height: 32px;
 	top: 10px;
 	right: 0px;
 	position: absolute;
@@ -57,54 +79,53 @@ body {
 }
 
 .modal_overlay {
-		background-color: rgba(0,0,0,0.6);
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		z-index:10;
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index:10;
 	}
 	
 	
-	.modal_content{
-		display: grid;
-		border-radius:10px;
-		text-align:center;
-		grid-template-columns: 300px;
-		grid-template-rows: 50px 250px;
-		background: white;
-		z-index:10000;
-		font-family: 맑은고딕;
-	}
+.modal_content{
+	display: grid;
+	border-radius:10px;
+	text-align:center;
+	grid-template-columns: 300px;
+	grid-template-rows: 50px 250px;
+	background: white;
+	z-index:10000;
+	font-family: 맑은고딕;
+}
 	
-	.modal2 {
-		position: fixed;
-		bottom:0px;
-		left:0px;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+.modal2 {
+	position: fixed;
+	bottom:0px;
+	left:0px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 
 </style>
 
 </head>
 <body onload="showStory()">
-
+<div id="main">
+<div id="prebtn"><img src="${cp }/upload/pre.png" style="width:30px;height: 30px" onclick="previousImg()"></div>
 	<div id="wrap">
-		<img id="myprofile"
-			style="width: 50px; height: 50px; border-radius: 50%;"> 
-			<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">${nickname}</a>
-			<input type="button" value="이전" onclick="previousImg()"> 
-			<input type="button" value="다음" onclick="nextImg()">
+		<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none;display: inline;">
+		<img id="myprofile" style="width: 32px; height: 32px; border-radius: 50%;"> </a>
+		<div style="text-align: center;line-height:33px; width: 80px;height: 32px;display: inline;"><a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">${nickname}</a></div>
 
 		<div id="exit">
-			<input type="image" style="width: 40px; height: 40px"
+			<input type="image" style="width: 32px; height: 32px"
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
-
+		<br><br>
 
 		<c:forEach var="vo" items="${list }">
 
@@ -143,9 +164,9 @@ body {
 
 		</c:forEach>
 
-
-
 	</div>
+	<div id="nextbtn"><img src="${cp }/upload/next.png" style="width:30px;height:30px;padding-left: 18px;" onclick="nextImg()"></div>
+</div>
 <div id="modal1"></div>
 </body>
 <script type="text/javascript">
@@ -206,9 +227,11 @@ body {
 				var json=JSON.parse(data);
 				for(let i=0; i<json.length; i++){
 					console.log(json[i].member_no);
-					modal_list.innerHTML+="<div id='readlist'>"+
-					"<div style='display:inline-block'><img src='${cp}/upload/"+json[i].profile+"' style='width:30px;heigth:30px;border-radius:50%'></div>"+
-					"<div style='display:inline-block'><a href='${cp}/feed/myfeed?youmember_no="+json[i].member_no+"'>"+json[i].nickname+"</a></div><div>"
+					modal_list.innerHTML+="<div id='readlist' style='text-align:center'>"+
+					"<div style='display:inline-block'>"+
+					"<img src='${cp}/upload/"+json[i].profile+"' style='width:30px;heigth:30px;border-radius:50%'></div>"+
+					"<div style='display:inline-block'>"+
+					"<a href='${cp}/feed/myfeed?youmember_no="+json[i].member_no+"' style='color:black;font-weigth:bold;text-decoration: none'>"+json[i].nickname+"</a></div><div>"
 				}
 			}
 		}
@@ -229,8 +252,13 @@ body {
 				read.innerHTML="";
 				if(!(json.length==0)){
 					var div = document.createElement("div");
-					div.innerHTML = "<a href='#' onclick='showModal("+readstory+","+i+")'>"+json.length +"명이 읽음</a>";
-					div.style.display = "inline-block";					
+					div.innerHTML = "<a href='#' onclick='showModal("+readstory+","+i+")' style='font-size:12px;text-decoration:none;color:white'>"
+					+json.length +"명이 읽음</a>";
+					div.style.display = "inline-block";
+					div.style.position="absolute";
+					div.style.width="200px";
+					div.style.height="40px";
+					div.style.bottom="0";
 					div.className = "read";
 					read.appendChild(div);
 				}
@@ -249,7 +277,7 @@ body {
 				var modal1=document.getElementById("modal1");
 				var div=document.createElement("div");
 				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
-								"<div class='modal_content'><br>조회한 사람<br>"+
+								"<div class='modal_content'><div class='readtitle'>조회한 사람</div>"+
 								"<div class='modal_list'></div></div>";								
 				div.className="modal2";
 				div.setAttribute("id","modal2");
@@ -260,10 +288,8 @@ body {
 
 	//모달 닫기버튼
 	function closeModal(){
-		var modal=document.getElementById("modal");
 		var modal1=document.getElementById("modal1");
 		modal1.innerHTML="";
-		//$("#modal").html("");
 		counter=0;
 	}
 	
@@ -321,8 +347,7 @@ body {
 			}
 		}
 		xhr.open('post', '${cp}/story/delete', true);
-		xhr.setRequestHeader('Content-Type',
-				'application/x-www-form-urlencoded');
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhr.send('story_no=' + story_no);
 
 	}
