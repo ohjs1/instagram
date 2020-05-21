@@ -301,12 +301,12 @@
 				for(var i=0; i<json.length; i++){
 				
 					if(myMember_no == json[i].smember_no){
-						mtextff.innerHTML += "<div style='width:100%; text-align:right; margin-top:15px;'><a href='${cp}/follow/move?youmember_no=" + json[i].smember_no +
-								"'><img src='${cp}/upload/" + json[i].myProfile +
-						"' style='width:40px; height:40px; border-radius:70%;'></a>" +
+						mtextff.innerHTML += "<div style='width:100%; text-align:right; margin-top:15px;'>" +
 						"<div class='tbox_dm' style='padding: 10px; background-color: white;" +
 						" border:1px solid gray; width:12em; display:inline; border-radius:50%; margin-top:10px;'>" +
-						json[i].content + "</div></div>";
+						json[i].content + "</div><a href='${cp}/follow/move?youmember_no=" + json[i].smember_no +
+								"'><img src='${cp}/upload/" + json[i].myProfile +
+						"' style='width:40px; height:40px; border-radius:70%;'></a></div>";
 					} else if(myMember_no == json[i].rmember_no){
 						mtextff.innerHTML += "<div style='width:100%; text-align:left; margin-top:15px;'><a href='${cp}/follow/move?youmember_no=" + json[i].smember_no +
 						"'><img src='${cp}/upload/" + json[i].yourProfile +
