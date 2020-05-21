@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import com.dao.BoardDao;
 import com.dao.ImageDao;
-import com.vo.Board_MemberVo;
 import com.vo.ImageVo;
 
 @WebServlet("/feed/myfeed")
@@ -45,6 +44,7 @@ public class BoardMyFeedController extends HttpServlet{
 //		}
 		//게시물당 1개씩 메인이미지가 담긴 ImageVo를 ArrayList에 담음
 		ArrayList<ImageVo> mainImgList=imageDao.selectMainImg(member_no);
+		
 		req.setAttribute("mainImgList", mainImgList);
 //		req.setAttribute("board_memberList", board_memberList);
 //		req.setAttribute("boardImgList", boardImgList);

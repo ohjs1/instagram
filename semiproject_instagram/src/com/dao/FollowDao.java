@@ -113,4 +113,26 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	//팔로워 카운트
+/*	public boolean followcount(int mymember_no, int youmember_no, boolean bl) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		bl = true;
+		try {
+			String sql = "select count(*) from member where member_no in (select ";
+			if(bl) {
+				sql+= " youmember_no from follow where mymember_no=?)";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setInt(1, mymember_no);
+			}else{
+				sql+= " mymember_no from follow where youmember_no=?)";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setInt(1, youmember_no);
+			}
+			rs=pstmt.executeQuery();
+		}catch(SQLException se) {
+			se.printStackTrace();
+		}
+	}*/
 }
