@@ -66,20 +66,26 @@
 	}
 	
 	#userlisthidden {
-		width: 1012px;
+		width: 70%;
+	}
+	
+	#userlist {
+		width: 30%;
 	}
 	
 	.showTextf {
-		width: 70%;
+		width: 90%;
 	}
 	
 	#msgTextBox {
-		width: 70%;
+		width: 95%;
 		background-color: white;
 		border: 2px solid white;
 		height: 450px;
 		margin: auto;
 		overflow: auto; 
+		border: 1px solid silver;
+		margin-bottom: 15px;
 	}
 	
 	#showMsg {
@@ -136,6 +142,7 @@
 			</th>
 		</tr>
 		<tr>
+		<tr>
 			<div id="userlist">
 			<td rowspan='5'>
 				로그인된 아이디 번호 : ${ member_no }<br>
@@ -160,6 +167,7 @@
 				</ul>
 			</td>
 			</div>
+		</tr>
 		</tr>
 	</table>
 	<div id="myModal" class="modal2">
@@ -293,9 +301,19 @@
 				for(var i=0; i<json.length; i++){
 				
 					if(myMember_no == json[i].smember_no){
-						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: white; border:1px solid gray; width:12em; margin-left:auto; border-radius:5%; margin-top:10px;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div style='width:100%; text-align:right; margin-top:15px;'><a href='${cp}/follow/move?youmember_no=" + json[i].smember_no +
+								"'><img src='${cp}/upload/" + json[i].myProfile +
+						"' style='width:40px; height:40px; border-radius:70%;'></a>" +
+						"<div class='tbox_dm' style='padding: 10px; background-color: white;" +
+						" border:1px solid gray; width:12em; display:inline; border-radius:50%; margin-top:10px;'>" +
+						json[i].content + "</div></div>";
 					} else if(myMember_no == json[i].rmember_no){
-						mtextff.innerHTML += "<div class='tbox_dm' style='padding: 10px; background-color: white; border:1px solid gray; width:12em; margin-right:auto; border-radius:5%; margin-top:10px;'>" + json[i].content + "</div>";
+						mtextff.innerHTML += "<div style='width:100%; text-align:left; margin-top:15px;'><a href='${cp}/follow/move?youmember_no=" + json[i].smember_no +
+						"'><img src='${cp}/upload/" + json[i].yourProfile +
+						"' style='width:40px; height:40px; border-radius:70%;'></a>" +
+						"<div class='tbox_dm' style='padding: 10px; background-color: white;" +
+						" border:1px solid gray; width:12em; display:inline; border-radius:50%; margin-top:10px;'>" +
+						json[i].content + "</div></div>";
 					}
 				}
 				
@@ -337,7 +355,7 @@
 			showTextf[0].value = "";
 			
 			//스크롤바 제일아래로
-			msgTextBox.scrollTop = msgTextBox.scrollHeight;
+			//msgTextBox.scrollTop = msgTextBox.scrollHeight;
 		}
 	}
 	
@@ -354,6 +372,20 @@
 		if(timeId != null){
 			clearInterval(timeId);
 		}
+	}
+	
+	
+	//유저가 채팅읽은지 확인해주는 함수
+	var cxhr = null;
+	function chatChecked(){
+		xchr = new XMLHttpRequest();
+		xchr.onreadystatechange = function(){
+			if(xchr.readyState==4 && xchr.status==200){
+				
+			}
+		}
+		xchr.open('get', '${cp}/dm/chatChecked', true);
+		xchr.send();
 	}
 </script>
 </html>

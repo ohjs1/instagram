@@ -17,7 +17,7 @@ public class DirectMessageServiceController extends HttpServlet {
 		int myMember_no =Integer.parseInt(req.getParameter("myMember_no"));
 		int yourMember_no =Integer.parseInt(req.getParameter("yourMember_no"));
 		String nickname = req.getParameter("nickname");
-		String showboxCheck = req.getParameter("showboxCheck");
+		//String showboxCheck = req.getParameter("showboxCheck");
 //		System.out.println("showboxCheck>>" + showboxCheck);
 		
 		HttpSession session =req.getSession();
