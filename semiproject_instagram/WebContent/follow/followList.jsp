@@ -20,43 +20,67 @@ h1{position: relative; left:35% ;margin-bottom: 28px;}
 
 <div id="list">
 	<div id="list1">
+		<c:if test="${bl==true}">
 	<table id="list2">
 		<tr>
-		<c:if test="${bl==true}">
-		${sessionScope.member_no }
-		${mymember_no }
-		${list.size() }
-		<h1>팔로워 ${list.size() }</h1>
+		<td colspan="3">
+		<h1>팔로워</h1></td></tr>
 			<c:forEach var="vo" items='${list }'>
-				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
-					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
-				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
-				<c:choose>
-					<c:when test="${sessionScope.member_no == mymember_no }">
-						<td><a href="${cp }/follow/delete?youmember_no=${vo.getMember_no() }">삭제</a><br></td>			
-					</c:when>			
-				</c:choose>
-				</tr><tr>		
+				<c:set var="i" value="${i+1 }"/>
+				<tr id="result${i }">
+					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
+						<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
+					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
+					<c:choose>
+						<c:when test="${sessionScope.member_no == mymember_no }">
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>	
+						</c:when>			
+					</c:choose>
+					</tr>
 			</c:forEach>
+		</table>
 		</c:if>
+		
 		<c:if test="${bl==false}">
-		${list.size() }
-		<h1>팔로잉 ${list.size() }</h1>
+			<table id="list3">
+		<tr>
+		<td colspan="3">
+			<h1>팔로잉</h1></tr>
 			<c:forEach var="vo" items='${list }'>
+				<c:set var="j" value="${j+1 }"/>
+			<tr>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a>
 				</td>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<td><a href="${cp }/follow/insert?youmember_no=${vo.getMember_no() }">
-				<input type="button" value="팔로우" class="folbtn">
-				</a></td>			
-				</tr><tr>
+				<input type="button" value="팔로우" class="folbtn"></a>
+				</td>			
+			</tr>
 			</c:forEach>
+		</table><br>
 		</c:if>
-		</tr>
-	</table><br>
 	<a href="javascript:history.back()">뒤로가기</a>
 	</div>
 </div>
 </body>
+<script type="text/javascript">
+	function callDelete(member_no,i){
+		console.log(member_no+":"+i);
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				console.log("삭제");
+				var list2=document.getElementById("list2");
+				list2.deleteRow(i);
+			}
+		};
+		xhr.open('get','${cp}/follow/delete?youmember_no='+member_no,true);
+		xhr.send();
+	}
+	
+	function callinsert(member_no,j){
+		
+	}
+</script>
 </html>
