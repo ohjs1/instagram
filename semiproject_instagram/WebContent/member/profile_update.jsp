@@ -22,14 +22,15 @@
 		</div>
 		<div id="form">
 			<form name="fileForm" enctype="multipart/form-data" method="post" action="${cp }/member/profileUpdate">
-				<div>
+				<div id="form1">
 					<input type="file" name="profile" style="display: none"
-				  	onchange="fileupdate(this.files[0].name)" id="profile"><br>
+				  	onchange="fileupdate(this.files[0].name)" id="profile">
 			  		<div id="div_imgs">
 						<label for="profile"><img id="img"></label>
 					</div>
 					<div id="div_nic">
-						<h1>${sessionScope.nickname }</h1>
+						<h1>${nickname}</h1>
+						<a id="delProfile" onclick="delProfile()">프로필 사진 지우기</a>
 					</div>
 				</div>
 				<div>
@@ -42,7 +43,6 @@
 					<input type="hidden" value="${sessionScope.profile }" name="profile1" id="profile1">
 				</div>
 			</form>
-				<input type="button" value="-" id="delProfile" onclick="delProfile()">
 		</div>
 	</div><!-- wrap2 -->
 </div>

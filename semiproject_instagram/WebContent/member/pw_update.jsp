@@ -38,7 +38,7 @@
 		</div>
 		<div id="form">
 			<form method="post" action="${cp }/member/pwdupdate" onsubmit="validate(event)">
-				<div >
+				<div id="form1">
 					<div id="div_imgs">
 						<label><img id="img" src="${cp }/upload/${sessionScope.profile}"></label>
 					</div>

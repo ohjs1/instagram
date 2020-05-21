@@ -25,9 +25,9 @@ public class MemberIdCheckController extends HttpServlet {
 		boolean b=dao.check(id);
 		JSONObject json = new JSONObject();
 		if (!b) {
-			json.put("idcheck", "사용가능");
+			json.put("idcheck", "o");
 		} else {
-			json.put("idcheck", "X");
+			json.put("idcheck", "x");
 		}
 		resp.setContentType("text/plian; charset=utf-8");
 		PrintWriter pw = resp.getWriter();
