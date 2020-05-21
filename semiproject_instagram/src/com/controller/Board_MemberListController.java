@@ -38,11 +38,8 @@ public class Board_MemberListController extends HttpServlet{
 		json.put("content", vo.getContent());
 		json.put("ref",vo.getRef());
 		json.put("lev",vo.getLev());
-		json.put("step",vo.getStep());
-		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'"); //시간처리하기
-		
-		json.put("regdate", df.format(vo.getRegdate()));
-
+		json.put("step",vo.getStep());		
+		json.put("regdate", vo.getRegdate().getTime());
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();
 		pw.print(json);

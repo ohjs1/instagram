@@ -5,6 +5,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.db.ConnectionPool;
@@ -20,7 +23,7 @@ public class BoardDao {
 		ResultSet rs=null;
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
+			String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.board_no,b.member_no,b.content,b.ref,b.lev,b.step,to_char(b.regdate,'YYYYMMDDHH24MISS') regdate " + 
 					"from board b, member m " + 
 					"where m.member_no=b.member_no and b.board_no=? " + 
 					"order by b.regdate desc";
@@ -38,7 +41,18 @@ public class BoardDao {
 				int ref=rs.getInt("ref");
 				int lev=rs.getInt("lev");
 				int step=rs.getInt("step");
-				Date regdate=rs.getDate("regdate");
+				String sregdate=rs.getString("regdate");
+				String y=sregdate.substring(0, 4);
+				String m=sregdate.substring(4,6);
+				String d=sregdate.substring(6, 8);
+				String h=sregdate.substring(8,10);
+				String mm=sregdate.substring(10,12);
+				String s=sregdate.substring(12,14);
+				String date=y+"-"+m+"-"+d+" "+h+":"+mm+":"+s;
+				SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date ddd=sd.parse(date);
+				
+				Date regdate=new Date(ddd.getTime());
 				Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
 				return vo;
 			}else {
@@ -47,11 +61,14 @@ public class BoardDao {
 		}catch(SQLException se) {
 			System.out.println(se.getMessage());
 			return null;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			return null;
 		}finally {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
-	//로그인된 회원의 게시글 얻어오기
+	//로그인된 회원의 게시글 업어오기
 	public ArrayList<BoardVo> selectBoard(int member_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -85,7 +102,7 @@ public class BoardDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
-	//이미지vo 얻어오기
+	//이미지vo 업어오기
 	public ArrayList<ImageVo> selectImg(int member_no){
 		Connection con=null;
 		PreparedStatement pstmt=null;
@@ -124,7 +141,7 @@ public class BoardDao {
 	}
 	//해당 게시물의 댓글 리스트
 	public ArrayList<Board_MemberVo> selectComment(int board_no){
-		String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.* " + 
+		String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.board_no,b.member_no,b.content,b.ref,b.lev,b.step,to_char(b.regdate,'YYYYMMDDHH24MISS') regdate " + 
 				"					from board b, member m " + 
 				"					where m.member_no=b.member_no and b.board_no!=? and ref=? " + 
 				"					order by b.regdate asc,step asc";
@@ -149,13 +166,28 @@ public class BoardDao {
 				int ref=rs.getInt("ref");
 				int lev=rs.getInt("lev");
 				int step=rs.getInt("step");
-				Date regdate=rs.getDate("regdate");
+				String sregdate=rs.getString("regdate");
+				String y=sregdate.substring(0, 4);
+				String m=sregdate.substring(4,6);
+				String d=sregdate.substring(6, 8);
+				String h=sregdate.substring(8,10);
+				String mm=sregdate.substring(10,12);
+				String s=sregdate.substring(12,14);
+				String date=y+"-"+m+"-"+d+" "+h+":"+mm+":"+s;
+				SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date ddd=sd.parse(date);
+				
+				Date regdate=new Date(ddd.getTime());
+				
 				Board_MemberVo vo=new Board_MemberVo(id,pwd,name,nickname,profile,board_no,member_no,content,ref,lev,step,regdate);
 				list.add(vo);
 			}
 			return list;
 		}catch(SQLException se) {
 			System.out.println(se.getMessage());
+			return null;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 			return null;
 		}finally {
 			ConnectionPool.close(con, pstmt, rs);
