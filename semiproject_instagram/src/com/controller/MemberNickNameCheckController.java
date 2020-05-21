@@ -12,26 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.dao.MemberDao;
-@WebServlet("/member/findpwd")
-public class MemberFindpwdController extends HttpServlet{
+import com.vo.MemberVo;
+
+@WebServlet("/member/nicknameCheck")
+public class MemberNickNameCheckController extends HttpServlet {
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
-		String id=req.getParameter("id");
-		String name=req.getParameter("name");
-		
-		MemberDao dao=MemberDao.getInstance();
-		String pwd=dao.memberFindpwd(id,name);
-		
-		resp.setContentType("text/plian; charset=utf-8");
-		JSONObject json=new JSONObject();
-		if(pwd!=null) {
-			json.put("msg", pwd);
-		}else {
-			json.put("msg", "아이디 또는 이름이 맞지 않아요!");
+		String nickname = req.getParameter("nickname");
+		MemberDao dao = MemberDao.getInstance();
+		boolean b=dao.nickNamecheck(nickname);
+		JSONObject json = new JSONObject();
+		if (!b) {
+			json.put("nicknameCheck", "o");
+		} else {
+			json.put("nicknameCheck", "x");
 		}
-		PrintWriter pw=resp.getWriter();
+		resp.setContentType("text/plian; charset=utf-8");
+		PrintWriter pw = resp.getWriter();
 		pw.print(json);
-		
 	}
 }

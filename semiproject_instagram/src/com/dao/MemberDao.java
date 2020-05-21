@@ -161,6 +161,28 @@ public class MemberDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
+	//닉네임 중복체크
+		public boolean nickNamecheck(String nickname) {
+			Connection con=null;
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			try {
+				con=ConnectionPool.getCon();
+				String sql="select * from member where nickname=?";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setString(1, nickname);
+				rs=pstmt.executeQuery();
+				if(rs.next()) {
+					return true;
+				}
+				return false;
+			}catch (SQLException se) {
+				se.getStackTrace();
+				return false;
+			}finally {
+				ConnectionPool.close(con, pstmt, rs);
+			}
+		}
 	//프로필사진 변경
 	public int memberProfileUpdate(String id, String profile) {
 		Connection con=null;
