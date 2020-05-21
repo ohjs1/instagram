@@ -25,6 +25,7 @@ public class MemberUpdateController extends HttpServlet{
 		int n=dao.memberUpdate(id,name,nickname);
 		if(n>0) {
 			System.out.println("변경 완료");
+			session.setAttribute("nickname", nickname);
 		}
 	
 	}

@@ -67,6 +67,8 @@
 		xhrupdate.open('post','${cp}/member/update',true);
 		xhrupdate.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhrupdate.send('name=' + name + '&nickname=' + nickname);
+		alert('변경 완료');
+		location.reload();
 	}
 	var xhrdel=null;
 	function delProfile() {
@@ -76,6 +78,7 @@
 		xhrdel.onreadystatechange;
 		xhrdel.open('get','${cp}/member/delProfile?profile=profile.jpg',true);
 		xhrdel.send();
+		location.reload();
 	}
 </script>
 </html>

@@ -33,6 +33,7 @@
 		width: 100%;
 		height: 60%;
 		border: 1px solid gray;
+		border-radius: 2%;
 	}
 	#login_logo img{
 		width: 180px;
@@ -62,23 +63,28 @@
 		padding: 20px;
 		margin-top: 10px;
 	}
+	#btn{
+		background-color: #0095f6;
+		color: white;
+		border-radius: 10%;
+	}
 </style>
 </head>
 <body>
 <div id="login_wrap">
 	<div id="login_phone">
-		<img src="../images/instagram.png">
+		<img src="${cp }/images/instagram.png">
 	</div>
 	<div id="form_r1">
 		<div id="form_r2">
 			<div id="login_logo">
-				<img src="../images/logo.png">
+				<img src="${cp }/images/logo.png">
 			</div>
 			<div id="form">
-				<form method="post" action="${cp }/member/login">
+				<form method="post" action="${cp }/member/login" name="frm">
 					<input type="text" name="id" placeholder="아이디"><br>
 					<input type="password" name="pwd" placeholder="비밀번호"><br>
-					<input type="submit" value="로그인"><br>
+					<input type="submit" value="로그인" id="btn"><br>
 				</form>
 			</div>
 			<div id="form_r3">
