@@ -26,6 +26,7 @@ public class MemberPassWordUpdateController extends HttpServlet{
 		int n=dao.pwdupdate(id,newPwd);
 		if(n>0) {
 			System.out.println("비밀번호 변경 완료");
+			session.setAttribute("pwd", newPwd);
 			req.setAttribute("main", "/member/pw_update.jsp");
 			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		}

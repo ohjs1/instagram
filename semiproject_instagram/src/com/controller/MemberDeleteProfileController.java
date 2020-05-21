@@ -19,6 +19,8 @@ public class MemberDeleteProfileController extends HttpServlet{
 		String id=(String)session.getAttribute("id");
 		String profile=req.getParameter("profile");
 		
+		System.out.println("아이디"+id + " 프로필"+profile);
+		
 		MemberDao dao=MemberDao.getInstance();
 		int n=dao.memberProfileUpdate(id,profile);
 		if(n>0) {

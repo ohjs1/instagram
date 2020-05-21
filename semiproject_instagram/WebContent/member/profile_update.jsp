@@ -9,7 +9,6 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="${cp }/css/member_profile.css" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="${cp }/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <div id="wrap">
@@ -61,7 +60,6 @@
 	}
 	var xhrupdate=null;
 	function update() {
-		var profile=document.getElementById("profile1");
 		var name=document.getElementById("name").value;
 		var nickname=document.getElementById("nickname").value;
 		xhrupdate=new XMLHttpRequest();
@@ -69,15 +67,17 @@
 		xhrupdate.open('post','/member/update',true);
 		xhrupdate.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhrupdate.send('name=' + name + '&nickname=' + nickname);
+		alert(`이름 ${name} 닉네임 ${nickname}`);
 	}
 	var xhrdel=null;
 	function delProfile() {
 		var img=document.getElementById("img");
-		img.src=img.src="${cp}/upload/profile.jpg";
+		img.src="${cp}/upload/profile.jpg";
 		xhrdel=new XMLHttpRequest();
 		xhrdel.onreadystatechange;
 		xhrdel.open('get','/member/delProfile?profile=profile.jpg',true);
 		xhrdel.send();
+		alert(img.src);
 	}
 </script>
 </html>

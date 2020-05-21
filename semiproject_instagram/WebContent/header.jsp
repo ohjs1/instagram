@@ -118,7 +118,8 @@
 			var json=JSON.parse(data);
 			div.innerHTML="";
 		for(var i=0; i<json.length; i++){
-				if(json[i].keyword.substr(0,1)=="#"){
+				/* if(json[i].keyword.substr(0,1)=="#"){ */
+				if(json[i].result==1){
 				var keyword=json[i].keyword.replace("#", "%23");
 					div.innerHTML+=
 					"<div class='search_div'>"+
@@ -131,7 +132,7 @@
 							"게시물"+json[i].board_cnt+
 						"</div>"+
 					"</div>";
-				}else {
+				}else if(json[i].result==2){
 					div.innerHTML+=
 					"<div class='search_div'>"+
 						"<div class='search_profile'>"+
@@ -143,6 +144,34 @@
 							json[i].name+
 						"</div>"+
 					"</div>";
+				}else if(json[i].result==3){
+					if(json[i].cnt>0){
+					var keyword=json[i].keyword.replace("#", "%23");
+						div.innerHTML+=
+						"<div class='search_div'>"+
+							"<div class='search_profile'>"+
+								"<img src='${cp}/upload/tag.PNG' class='search_img'>"+
+							"</div>"+
+							"<div class='search_link'>"+
+								"<a href='${cp}/tag/list?keyword="+ keyword +"'>"+
+								"#"+keyword.substr(3, keyword.length) +"</a><br>"+
+								"게시물"+json[i].cnt+
+							"</div>"+
+						"</div>";
+					}else{
+						div.innerHTML+=
+						"<div class='search_div'>"+
+							"<div class='search_profile'>"+
+								"<img src='${cp}/upload/"+json[i].profile+"' class='search_img'>"+
+							"</div>"+
+							"<div class='search_link'>"+
+								"<a href='${cp}/follow/move?youmember_no="+ json[i].member_no +"'>"+
+								"@"+json[i].nickname +"</a><br>"+
+								json[i].name+
+							"</div>"+
+						"</div>";
+					}
+						
 				}
 			}
 		}

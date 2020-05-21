@@ -51,9 +51,9 @@
 					<label for="pwd"><strong>이전 비밀번호</strong></label>
 					<input type="text" name="pwd" id="pwd" class="input"><br>
 					<label for="newPwd1"><strong>새 비밀번호</strong></label>
-					<input type="text" name="newPwd1" id="newPwd1" class="input"><br>
+					<input type="password" name="newPwd1" id="newPwd1" class="input"><br>
 					<label for="newPwd2"><strong>새 비밀번호 확인</strong></label>
-					<input type="text" name="newPwd2" id="newPwd2" class="input"><br>
+					<input type="password" name="newPwd2" id="newPwd2" class="input"><br>
 					<label></label>
 					<input type="submit" value="비밀번호 변경" id="btn">
 				</div>
