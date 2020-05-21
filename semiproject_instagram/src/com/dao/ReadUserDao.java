@@ -72,20 +72,39 @@ public class ReadUserDao {
 	public int insert(ReaduserVo vo) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
-		
+		PreparedStatement pstmt2=null;
+		ResultSet rs=null;
+		int n=0;
 		try {
 			con=ConnectionPool.getCon();
-			String sql="insert into readuser values(readuser_seq.nextval,?,?)";
+			
+			
+			String sql="select member_no, story_no from readuser where member_no=? and story_no=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, vo.getMember_no());
 			pstmt.setInt(2, vo.getStory_no());
-			int n = pstmt.executeUpdate();
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				System.out.println("이미 저장된 정보입니다(readuser)");
+				
+			}else {
+				String sql2="insert into readuser values(readuser_seq.nextval,?,?)";
+				pstmt2=con.prepareStatement(sql2);
+				pstmt2.setInt(1, vo.getMember_no());
+				pstmt2.setInt(2, vo.getStory_no());
+				n = pstmt2.executeUpdate();
+				
+			}
+			
 			return n;
+			
+			
+			
 		}catch(SQLException se) {
 			
 			return -1;
 		}finally {
-			ConnectionPool.close(con, pstmt, null);
+			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
 

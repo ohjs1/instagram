@@ -26,12 +26,13 @@ body {
 }
 
 #content {
-	width: 280px;
-	height: 200px;
+	width: 350px;
+	height: 450px;
 	position: absolute;
 	top: 250px;
 	left: 10px;
 	display: none;
+	border:1px solid red;
 	color: white;
 	font-family: HY견고딕;
 	font-size: 20px;
@@ -77,15 +78,14 @@ body {
 	
 	.modal2 {
 		position: fixed;
-		top:0;
-		left:0;
+		bottom:0px;
+		left:0px;
 		width: 100%;
 		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
-	
 
 
 </style>
@@ -96,7 +96,7 @@ body {
 	<div id="wrap">
 		<img id="myprofile"
 			style="width: 50px; height: 50px; border-radius: 50%;"> 
-			<label style="color: white">${nickname}</label> 
+			<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">${nickname}</a>
 			<input type="button" value="이전" onclick="previousImg()"> 
 			<input type="button" value="다음" onclick="nextImg()">
 
@@ -133,7 +133,7 @@ body {
 
 				<div id="content" class="cdivs">
 					${vo.getContent() } 
-					${vo.getStory_no() }
+					<!--  ${vo.getStory_no() } -->
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 					<div class="readuser"></div>
 				</div>
@@ -150,30 +150,51 @@ body {
 </body>
 <script type="text/javascript">
 
-	function showModal(readstory,i){
-		clearTimeout(timeout);
-		
-				var modal1=document.getElementById("modal1");
-				var div=document.createElement("div");
-				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
-								"<div class='modal_content'><br>조회한 사람<br>"+
-								"<div class='modal_list'></div></div>";								
-				div.className="modal2";
-				div.setAttribute("id","modal2");
-				modal1.appendChild(div);
-				getReaduserList(readstory);
-		
+	//기본
+	var index = 0;
+	var timeout = null;
+	function showStory() {
+		getProfile();		
+		const divs = document.getElementsByClassName("divs");
+		const cdivs = document.getElementsByClassName("cdivs");
+		const imgs = document.getElementsByClassName("imgs");
+		var readstory = document.getElementsByClassName("readstory");
+		for (let i = 0; i < imgs.length; i++) {
+			if (i == index) {
+				getReaduser(readstory[i].value,i);
+				divs[i].style.display = "block";
+				imgs[i].style.display = "block";
+				cdivs[i].style.display = "block";
+			} else {
+				divs[i].style.display = "none";
+				imgs[i].style.display = "none";
+				cdivs[i].style.display = "none";
+			}
+		}
+		index++;
+		timeout = setTimeout(showStory, 3000);
+		if (index > imgs.length - 1) {
+			setTimeout(closeStory, 3000);
+		}
 	}
 
-	//모달 닫기버튼
-	function closeModal(){
-		var modal=document.getElementById("modal");
-		var modal1=document.getElementById("modal1");
-		modal1.innerHTML="";
-		//$("#modal").html("");
-		counter=0;
-	}
 	
+	//내 프로필 가져오기
+	function getProfile() {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var myprofile = document.getElementById("myprofile");
+				var data = xhr.responseText;
+				var json = JSON.parse(data);
+				myprofile.src = "${cp}/upload/" + json.profile;
+			}
+		}
+		xhr.open('post', '${cp}/member/memberInfo', true);
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		xhr.send();
+	}
+
 	//조회한 사람 리스트
 	function getReaduserList(readstory){
 		var xhr = new XMLHttpRequest();
@@ -205,14 +226,14 @@ body {
 				var read=document.getElementsByClassName("readuser")[i];
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
-				
-						var div = document.createElement("div");
-						div.innerHTML = "<a href='#' onclick='showModal("+readstory+","+i+")'>"+json[i].count_ru +"명이 읽음</a>";
-						div.style.display = "inline-block";					
-						div.className = "read";
-						read.appendChild(div);
-					
-				
+				read.innerHTML="";
+				if(!(json.length==0)){
+					var div = document.createElement("div");
+					div.innerHTML = "<a href='#' onclick='showModal("+readstory+","+i+")'>"+json.length +"명이 읽음</a>";
+					div.style.display = "inline-block";					
+					div.className = "read";
+					read.appendChild(div);
+				}
 				
 			}
 		}
@@ -221,65 +242,34 @@ body {
 		xhr.send();		
 	}
 	
-	//내 프로필 가져오기
-	function getProfile() {
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && xhr.status == 200) {
-				var myprofile = document.getElementById("myprofile");
-				var data = xhr.responseText;
-				var json = JSON.parse(data);
-
-				myprofile.src = "${cp}/upload/" + json.profile;
-
-			}
-
-		}
-		xhr.open('post', '${cp}/member/memberInfo', true);
-		xhr.setRequestHeader('Content-Type',
-				'application/x-www-form-urlencoded');
-		xhr.send();
-	}
-
-	//기본
-	var index = 0;
-	var timeout = null;
-	function showStory() {
-
-		getProfile();
+	//모달 실행
+	function showModal(readstory,i){
+		clearTimeout(timeout);
 		
-		const divs = document.getElementsByClassName("divs");
-		const cdivs = document.getElementsByClassName("cdivs");
-		const imgs = document.getElementsByClassName("imgs");
-		var readstory = document.getElementsByClassName("readstory");
-		for (let i = 0; i < imgs.length; i++) {
-			if (i == index) {
-				getReaduser(readstory[i].value,i);
-				divs[i].style.display = "block";
-				imgs[i].style.display = "block";
-				cdivs[i].style.display = "block";
-
-			} else {
-
-				divs[i].style.display = "none";
-				imgs[i].style.display = "none";
-				cdivs[i].style.display = "none";
-
-			}
-		}
-
-		index++;
-		timeout = setTimeout(showStory, 3000);
-		if (index > imgs.length - 1) {
-			setTimeout(closeStory, 3000);
-
-		}
-
+				var modal1=document.getElementById("modal1");
+				var div=document.createElement("div");
+				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
+								"<div class='modal_content'><br>조회한 사람<br>"+
+								"<div class='modal_list'></div></div>";								
+				div.className="modal2";
+				div.setAttribute("id","modal2");
+				modal1.appendChild(div);
+				getReaduserList(readstory);
+		
 	}
 
-	//스토리 종료
+	//모달 닫기버튼
+	function closeModal(){
+		var modal=document.getElementById("modal");
+		var modal1=document.getElementById("modal1");
+		modal1.innerHTML="";
+		//$("#modal").html("");
+		counter=0;
+	}
+	
+	
+	//스토리 종료 : index가 끝에 도달했을 때 실행되는데.. mousedown/up 안됨 
 	function closeStory() {
-
 		location.href = "../layout.jsp";
 	}
 
@@ -299,7 +289,8 @@ body {
 		}
 		showStory();
 	}
-
+	
+	//마우스 클릭 중: 멈춤 / 클릭 떼면 다시 재생
 	const imgs = document.getElementsByClassName("imgs");
 	for (var i = 0; i < imgs.length; i++) {
 		console.log("imgs:" + imgs);
@@ -314,6 +305,7 @@ body {
 		});
 	}
 
+	// 스토리 삭제 *cascade readuser delete 
 	function deleteStory() {
 		var xhr = new XMLHttpRequest();
 		var story_no = document.getElementById("story_no").value;
