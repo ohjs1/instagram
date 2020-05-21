@@ -3,6 +3,7 @@ package com.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +28,7 @@ public class TagSearchController extends HttpServlet{
 		TagDao dao=new TagDao();
 		ArrayList<Tag_linkVo> tag_linklist=null;
 		ArrayList<MemberVo> memberlist=null;
-		ArrayList<Tag_boardVo> allList=null;
+		Set<Tag_boardVo> set=null;
 		
 		JSONArray jrr =new JSONArray();
 		
@@ -67,9 +68,9 @@ public class TagSearchController extends HttpServlet{
 			pw.print(jrr);
 		//전체검색
 		}else {
-			allList=dao.allSearch(search);
+			set=dao.allSearch(search);
 			
-			for(Tag_boardVo l : allList) {
+			for(Tag_boardVo l : set) {
 				JSONObject json=new JSONObject();
 				json.put("result", 3);
 				json.put("keyword", l.getSearch());

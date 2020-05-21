@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.db.ConnectionPool;
 import com.vo.ImageVo;
@@ -82,14 +84,14 @@ public class TagDao {
 	}
 	
 	//전체검색
-	public ArrayList<Tag_boardVo> allSearch(String search) {
+	public Set<Tag_boardVo> allSearch(String search) {
 		Connection con=null;
 		PreparedStatement pstmt=null;
 		PreparedStatement pstmt2=null;
 		ResultSet rs=null;
 		ResultSet rs2=null;
 		
-		ArrayList<Tag_boardVo> list=new ArrayList<Tag_boardVo>();
+		Set<Tag_boardVo> set=new HashSet<Tag_boardVo>();
 		
 		try {
 			con =ConnectionPool.getCon();
@@ -104,7 +106,7 @@ public class TagDao {
 			while(rs.next()) {
 				int cnt=rs.getInt("cnt");
 				String keyword=rs.getString("search");
-				list.add(new Tag_boardVo(0, null, null, null, cnt, keyword));
+				set.add(new Tag_boardVo(0, null, null, null, cnt, keyword));
 			}
 			String sql2 ="select * from member where nickname like ? or name like ?";
 			pstmt2=con.prepareStatement(sql2);
@@ -117,9 +119,9 @@ public class TagDao {
 				String name=rs2.getString("name");
 				String nickname=rs2.getString("nickname");
 				String profile=rs2.getString("profile");
-				list.add(new Tag_boardVo(member_no, name, nickname, profile, 0, null));
+				set.add(new Tag_boardVo(member_no, name, nickname, profile, 0, null));
 			}
-			return list;
+			return set;
 		} catch(SQLException se) {
 			se.getStackTrace();
 			return null;

@@ -64,10 +64,9 @@
 		var nickname=document.getElementById("nickname").value;
 		xhrupdate=new XMLHttpRequest();
 		xhrupdate.onreadystatechange;
-		xhrupdate.open('post','/member/update',true);
+		xhrupdate.open('post','${cp}/member/update',true);
 		xhrupdate.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhrupdate.send('name=' + name + '&nickname=' + nickname);
-		alert(`이름 ${name} 닉네임 ${nickname}`);
 	}
 	var xhrdel=null;
 	function delProfile() {
@@ -75,9 +74,8 @@
 		img.src="${cp}/upload/profile.jpg";
 		xhrdel=new XMLHttpRequest();
 		xhrdel.onreadystatechange;
-		xhrdel.open('get','/member/delProfile?profile=profile.jpg',true);
+		xhrdel.open('get','${cp}/member/delProfile?profile=profile.jpg',true);
 		xhrdel.send();
-		alert(img.src);
 	}
 </script>
 </html>
