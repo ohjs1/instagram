@@ -1,12 +1,15 @@
 package com.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
 
 import com.dao.FollowDao;
 @WebServlet("/follow/insert")
@@ -24,20 +27,26 @@ public class FollowInsertController extends HttpServlet{
 		if(mymember_no==youmember_no) {
 			System.out.println("ºÒ°¡");
 			req.setAttribute("msg", "ÆÈ·Î¿ìºÒ°¡");
+			req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 		}else if(dao.followfind(mymember_no,youmember_no)){
 			System.out.println("ÀÌ¹ÌÆÈ·Î¿ì");
 			req.setAttribute("msg", "ÀÌ¹ÌÆÈ·Î¿ì");
-			
+			req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 		}else {
 			int n = dao.insert(mymember_no, youmember_no);
+			resp.setContentType("text/plain;charset=utf-8");
+			PrintWriter pw =resp.getWriter();
+			JSONObject json = new JSONObject();
 			if(n>0) {
-				System.out.println("ÆÈ·Î¿ì¿Ï·á");
-				req.setAttribute("msg", "ÆÈ·Î¿ì¼º°ø");
+				System.out.println("ÆÈ·Î¿ì");
+				json.put("using", true);
+				pw.print(json);
 			}else {
-				System.out.println("¿À·ù");
-				req.setAttribute("msg", "ÆÈ·Î¿ì½ÇÆÐ");
+				System.out.println("noÆÈ·Î¿ì");
+				json.put("using", false);
+				pw.print(json);
 			}
 		}
-		req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
+
 	}
 }

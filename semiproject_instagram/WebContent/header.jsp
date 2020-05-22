@@ -61,7 +61,8 @@
 <body>
 <div id="header_wrap">
 	<div id="header_logo">
-		<img src="${ cp }/images/logo.png" alt="logo" id="logo">
+		<a href="${ cp }/layout.jsp">
+		<img src="${ cp }/images/logo.png" alt="logo" id="logo"></a>
 	</div>
 	<div id="header_search">
 		<input type="text" placeholder="검색" name="search" id="search" class='input-medium search-query'

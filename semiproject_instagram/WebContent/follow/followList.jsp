@@ -7,12 +7,21 @@
 <meta charset="UTF-8">
 <title>팔로우 리스트</title>
 <style>
-#list{width:50%;height:70%;margin: auto; border: 2px solid black;}
-#list1{width:50%;height:100%;margin:auto; border: 2px solid black;}
-h1{position: relative; left:35% ;margin-bottom: 28px;}
+#list{width:50%;height:70%;margin: auto;}
+#list1{width: 330px;
+    height: 500px;
+    margin-left: 244px;
+    margin-top: 40px;}
+h1{position: relative; left:25% ;margin-bottom: 28px;}
 #list2{margin: auto;}
-.mem{
-	width:100px;
+#list3{margin: auto;}
+.mem{width:100px;}
+#back{width: 400px;
+    position: relative;
+    left: 337px; margin-left: -200px;}
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
 }
 </style>
 </head>
@@ -53,14 +62,18 @@ h1{position: relative; left:35% ;margin-bottom: 28px;}
 					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a>
 				</td>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
-				<td><a href="${cp }/follow/insert?youmember_no=${vo.getMember_no() }">
-				<input type="button" value="팔로우" class="folbtn"></a>
-				</td>			
+				<c:choose>
+						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
+							<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
+							<input type="button" value="팔로우" class="folbtn" name="btn"></a>
+							</td>			
+						</c:when>			
+				</c:choose>
 			</tr>
 			</c:forEach>
 		</table><br>
 		</c:if>
-	<a href="javascript:history.back()">뒤로가기</a>
+	<a href="javascript:history.back()" id="back">뒤로가기</a>
 	</div>
 </div>
 </body>
@@ -79,8 +92,21 @@ h1{position: relative; left:35% ;margin-bottom: 28px;}
 		xhr.send();
 	}
 	
-	function callinsert(member_no,j){
-		
+	function callInsert(member_no,j){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				var xml = xhr.responseXML;
+				var json = JSON.parse(xml);
+					var btn=document.getElementsByName("btn")[j-1];
+					btn.value="팔로우됨";
+					btn.disabled=true;
+					btn.style.backgroundColor="black";
+					btn.style.color="white";
+			}
+		};
+		xhr.open('get','${cp }/follow/insert?youmember_no='+member_no,true);
+		xhr.send();
 	}
 </script>
 </html>
