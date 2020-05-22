@@ -146,7 +146,7 @@
 			<div id="userlist">
 			<td rowspan='5'>
 				로그인된 아이디 번호 : ${ member_no }<br>
-				[ ${ nickname } ]
+				검색되어 선택된 유저 : [ ${ nickname } ]
 			
 				<br><br>
 				
@@ -283,6 +283,7 @@
 	
 	//채팅 받기 기능 구현 ajax
 	var showMsg_xhr = null;
+	var onescroll = 0;
 	function dshowBox(){
 		showMsg_xhr = new XMLHttpRequest();
 		
@@ -316,9 +317,16 @@
 						json[i].content + "</div></div>";
 					}
 				}
-				
+				if(onescroll == 0){
+					msgTextBox.scrollTop = msgTextBox.scrollHeight;
+					onescroll++;
+				}
 				//스크롤바 제일아래로
-				msgTextBox.scrollTop = msgTextBox.scrollHeight;
+				//console.log(msgTextBox.scrollTop); //1090
+				if(msgTextBox.scrollTop >= 1090){
+					msgTextBox.scrollTop = msgTextBox.scrollHeight;
+				}
+				//console.log(msgTextBox.scrollHeight); //1050
 			}			
 		}
 		
