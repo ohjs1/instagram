@@ -25,8 +25,8 @@ public class StoryDeleteController extends HttpServlet{
 		
 		if(n>0) {
 			System.out.println(story_no+"번 스토리 삭제 성공");
-			
-			resp.sendRedirect(req.getContextPath() + "/story/list");
+			req.setAttribute("main", "/homefeed.jsp");
+			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		}else {
 			resp.sendRedirect(req.getContextPath() + "/story/storyfail.jsp");
 		}

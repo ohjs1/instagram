@@ -14,6 +14,31 @@ import com.vo.StoryVo;
 
 public class StoryDao {
 	
+	public StoryVo story_date(int story_no) {
+		Connection con=null;
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql="select storydate from story where story_no=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setInt(1, story_no);
+			rs=pstmt.executeQuery();
+			StoryVo vo=new StoryVo();
+			if(rs.next()) {
+				Date storydate=rs.getDate("storydate");
+
+				vo.setStorydate(storydate);
+				
+			}
+			return vo;
+		}catch(SQLException se) {
+			se.printStackTrace();
+			return null;
+		}finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
 	//스토리 올린 회원들 멤버번호 중복없이 가져오기(storydate 내림차순)-> 로그인한 멤버가 팔로우한 멤버 중 스토리 올린 멤버만 가져오기ㅠ
 	public ArrayList<StoryMemberVo> storymembers(int login_no) {
 		Connection con=null;
@@ -84,7 +109,7 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	
+	//방금 올린 스토리 부터 가져오기 가능? 이전 누르면? ㅠ
 	//해당 멤버의 모든 스토리 정보 가져오기
 	public ArrayList<StoryMemberVo> mem_list(int member_no){
 		Connection con=null;

@@ -62,6 +62,20 @@ body {
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
+.date{
+	width: 200px;
+	height: 100px;
+	position: absolute;
+	top: -45px;
+	left: 150px;
+	color: white;
+	font-family: 맑은고딕;
+	font-size: 15px;
+	border:1px solid red;
+
+
+}
+
 #exit {
 	width: 32px;
 	height: 32px;
@@ -85,7 +99,10 @@ body {
 	position: absolute;
 	z-index:10;
 	}
-	
+/*스크롤바 기능은 하면서 보이지는 않게 하기*/
+::-webkit-scrollbar {
+	display:none;
+}	
 	
 .modal_content{
 	display: grid;
@@ -109,17 +126,74 @@ body {
 	align-items: center;
 }
 
+.read_title{
+	font-family: 맑은고딕;
+	padding: 10px;
+	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+	font-weight: 600;
+}
 
+.readmodal_close{
+	width: 18px;
+	height: 24px;
+	float:right;
+}
+
+.read_list{
+	display: flex;    
+	align-items: center;
+	padding-bottom: 8px;
+    padding-top: 8px;
+	padding-left: 16px;
+    padding-right: 16px;
+
+}
+.read_list img{
+	align-self: center;
+    max-width: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+ .handle {
+    text-decoration: lowercase;
+    font-weight: 600;
+    font-size: 14px;
+  }  
+  
+ .read_list p{
+ 	margin:0;
+
+ }
+ 
+  .read_list p a{
+ 	margin:0;
+	text-decoration: none;
+	color:black;
+ }
+ 
+ .name{
+	color: rgba(var(--f52,142,142,142),1);
+	font-weight: 400;
+	font-size:12px;
+	
+}
 </style>
 
 </head>
 <body onload="showStory()">
+
 <div id="main">
 <div id="prebtn"><img src="${cp }/upload/pre.png" style="width:30px;height: 30px" onclick="previousImg()"></div>
+
 	<div id="wrap">
 		<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none;display: inline;">
 		<img id="myprofile" style="width: 32px; height: 32px; border-radius: 50%;"> </a>
-		<div style="text-align: center;line-height:33px; width: 80px;height: 32px;display: inline;"><a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">${nickname}</a></div>
+		<div id="topm" style="text-align: center;line-height:33px; width: 80px;height: 32px;display: inline;">
+			<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">
+			${nickname} 
+			</a>
+
+		</div>
 
 		<div id="exit">
 			<input type="image" style="width: 32px; height: 32px"
@@ -132,17 +206,16 @@ body {
 			<c:set var="file2" value="${vo.getFilepath()}" />
 
 
-			<div id="file"
-				style="width: 400px; height: 700px; position: absolute; display: none"
-				class="divs">
-			<a href="#" onclick="location.href='${cp }/story/delete?story_no=${vo.getStory_no()}' ">
+			<div id="file" style="width: 400px; height: 700px; position: absolute; display: none" class="divs">
+			<a href="#" onclick="delchk(${vo.getStory_no()})">	
 			<img src="../upload/del.png" id="del"></a>
+			<div class="date"></div>
 				<c:choose>
 					<c:when
 						test="${fn:endsWith(file2,'.png') or fn:endsWith(file2,'.jpg') }">
+						
 						<img src="${cp }/upload/${file2 }"
-							style="width: 400px; height: 700px; display: none" id="output"
-							class="imgs">
+							style="width: 400px; height: 700px; display: none" id="output" class="imgs">
 
 					</c:when>
 					<c:otherwise>
@@ -154,9 +227,11 @@ body {
 
 				<div id="content" class="cdivs">
 					${vo.getContent() } 
+					
 					<!--  ${vo.getStory_no() } -->
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 					<div class="readuser"></div>
+	
 				</div>
 				
 				
@@ -170,7 +245,43 @@ body {
 <div id="modal1"></div>
 </body>
 <script type="text/javascript">
-
+	function getStorydate(readstory,i){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var day=document.getElementsByClassName("date")[i];
+				var data = xhr.responseText;
+				var json = JSON.parse(data);
+				day.innerHTML="";
+				var storydate=new Date(json.storydate);
+				var date=new Date();
+				var dd=Math.floor((date-storydate)/1000);
+				var realDate="";
+				if(dd<60){
+					realDate="<p>"+dd+"초 전</p>";
+				}else if(dd<3600){
+					realDate="<p>"+Math.floor((dd/60))+"분 전</p>";
+				}else if(dd<86400){
+					realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
+				}else if(dd<604800){
+					realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
+				}
+				var div = document.createElement("div");
+				div.innerHTML = realDate;
+				div.style.position="absolute";
+				div.style.width="80px";
+				div.style.height="40px";
+				div.className = "day";
+				day.appendChild(div);
+			
+				
+			}
+		}
+		xhr.open('get', '${cp}/story/storydate?story_no='+readstory, true);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send();	
+		
+	}
 	//기본
 	var index = 0;
 	var timeout = null;
@@ -183,6 +294,7 @@ body {
 		for (let i = 0; i < imgs.length; i++) {
 			if (i == index) {
 				getReaduser(readstory[i].value,i);
+				getStorydate(readstory[i].value,i);
 				divs[i].style.display = "block";
 				imgs[i].style.display = "block";
 				cdivs[i].style.display = "block";
@@ -215,6 +327,28 @@ body {
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		xhr.send();
 	}
+	
+	//모달 실행
+	function showModal(readstory,i){
+		clearTimeout(timeout);
+		
+				var modal1=document.getElementById("modal1");
+				var div=document.createElement("div");
+				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
+									"<div class='modal_content'><div class='read_title'>조회한 사람"+
+										"<span class='readmodal_close' onclick='closeModal();'>"+
+											"<button>X</button>"+
+										"</span><br>"+
+									"</div>"+
+									"<div class='modal_list'></div></div>"+
+								"</div>";								
+				div.className="modal2";
+				div.setAttribute("id","modal2");
+				modal1.appendChild(div);
+				getReaduserList(readstory);
+		
+	}
+
 
 	//조회한 사람 리스트
 	function getReaduserList(readstory){
@@ -226,12 +360,29 @@ body {
 				var data=xhr.responseText;
 				var json=JSON.parse(data);
 				for(let i=0; i<json.length; i++){
-					console.log(json[i].member_no);
-					modal_list.innerHTML+="<div id='readlist' style='text-align:center'>"+
-					"<div style='display:inline-block'>"+
-					"<img src='${cp}/upload/"+json[i].profile+"' style='width:30px;heigth:30px;border-radius:50%'></div>"+
-					"<div style='display:inline-block'>"+
-					"<a href='${cp}/feed/myfeed?youmember_no="+json[i].member_no+"' style='color:black;font-weigth:bold;text-decoration: none'>"+json[i].nickname+"</a></div><div>"
+					var nickname=json[i].nickname;
+					var profile=json[i].profile;
+					var member_no=json[i].member_no;
+					var name=json[i].name;
+					modal_list.innerHTML+="<div class='read_list'>"+
+					"<div>"+
+					"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+						"<img src='../upload/"+profile+"' style='width:32px;height:32px'>"+//프로필사진
+					"</a>"+
+				"</div>"+
+				"<div style='text-align:left;'>"+
+					"<p>"+
+						"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+							"<span class='handle'>"+nickname+"</span> "+//닉네임
+						"</a>"+
+					"</p>"+
+					"<p>"+
+						"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+							"<span class='name'>"+name+"</span> "+//이름
+						"</a>"+
+					"</p>"+
+				"</div>"+
+			"</div>";
 				}
 			}
 		}
@@ -270,21 +421,6 @@ body {
 		xhr.send();		
 	}
 	
-	//모달 실행
-	function showModal(readstory,i){
-		clearTimeout(timeout);
-		
-				var modal1=document.getElementById("modal1");
-				var div=document.createElement("div");
-				div.innerHTML="<div class='modal_overlay' onclick='closeModal();'></div>"+//모달창의 배경색
-								"<div class='modal_content'><div class='readtitle'>조회한 사람</div>"+
-								"<div class='modal_list'></div></div>";								
-				div.className="modal2";
-				div.setAttribute("id","modal2");
-				modal1.appendChild(div);
-				getReaduserList(readstory);
-		
-	}
 
 	//모달 닫기버튼
 	function closeModal(){
@@ -332,7 +468,16 @@ body {
 	}
 
 	// 스토리 삭제 *cascade readuser delete 
-	function deleteStory() {
+	function delchk(story_no){
+		if(confirm("이 스토리를 정말 삭제하시겠습니까?")){
+			location.href="${cp }/story/delete?story_no="+story_no;
+			alert("삭제되었습니다!")
+			
+		}else{
+			alert("삭제 실패!");
+		}
+	}
+	/*function deleteStory() {
 		var xhr = new XMLHttpRequest();
 		var story_no = document.getElementById("story_no").value;
 		xhr.onreadystatechange = function() {
@@ -350,6 +495,6 @@ body {
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhr.send('story_no=' + story_no);
 
-	}
+	}*/
 </script>
 </html>

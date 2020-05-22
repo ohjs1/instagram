@@ -7,8 +7,8 @@
 <title>HomeFeed</title>
 <style>
 #wrap{width:60%;height: 100%;margin:auto;}
-#s{width:97%;height: 25%; border:1px solid #d3d3d3; border-radius:5px;  margin:10px;padding:5px;}
-#my {width:100px;height:100px; text-align: center;display:inline-block;position:relative;}
+#s{width:97%;height: 25%; border:1px solid #d3d3d3; border-radius:5px;  margin:10px;padding:5px;display: flex;}
+#my {width:100px;height:100px; text-align: center;position:relative;}
 #plus {width:50px;height:50px;position:absolute;top:1px;right:1px;}
 .sto {width:100px;height:50px;text-align: center;}
 </style>

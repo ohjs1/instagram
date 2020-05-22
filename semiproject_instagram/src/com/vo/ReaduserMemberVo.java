@@ -8,17 +8,21 @@ public class ReaduserMemberVo {
 	private int story_no;
 	private String nickname;
 	private String profile;
+	private String name;
+
+
 	public ReaduserMemberVo() {}
 	
 	
 	
-	public ReaduserMemberVo(int readuser_no, int member_no, int story_no, String nickname, String profile) {
+	public ReaduserMemberVo(int readuser_no, int member_no, int story_no, String nickname, String profile, String name) {
 		super();
 		this.readuser_no = readuser_no;
 		this.member_no = member_no;
 		this.story_no = story_no;
 		this.nickname = nickname;
 		this.profile = profile;
+		this.name=name;
 	}
 
 
@@ -52,6 +56,14 @@ public class ReaduserMemberVo {
 	}
 	public void setProfile(String profile) {
 		this.profile = profile;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

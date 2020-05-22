@@ -53,6 +53,7 @@ public class ReadUserListController extends HttpServlet{
 			json.put("member_no",vo.getMember_no());
 			json.put("nickname",vo.getNickname());
 			json.put("profile",vo.getProfile());
+			json.put("name", vo.getName());
 			jarr.put(json);
 		}
 		resp.setContentType("text/plain;charset=utf-8");

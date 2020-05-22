@@ -44,8 +44,8 @@ public class ReadUserDao {
 		ArrayList<ReaduserMemberVo> list=new ArrayList<ReaduserMemberVo>();
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select r.*, nickname, profile from\n" + 
-					"(select * from readuser where story_no=?)r, member m\n" + 
+			String sql="select r.*, nickname, profile, name from\n" + 
+					"(select * from readuser where story_no=?)r, member m \n" + 
 					"where r.member_no=m.member_no";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, story_no);
@@ -55,7 +55,8 @@ public class ReadUserDao {
 				int member_no=rs.getInt("member_no");
 				String nickname=rs.getString("nickname");
 				String profile=rs.getString("profile");
-				ReaduserMemberVo vo=new ReaduserMemberVo(readuser_no, member_no, story_no, nickname, profile);
+				String name=rs.getString("name");
+				ReaduserMemberVo vo=new ReaduserMemberVo(readuser_no, member_no, story_no, nickname, profile,name);
 				list.add(vo);
 			}
 			

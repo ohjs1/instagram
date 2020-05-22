@@ -27,12 +27,13 @@ public class StoryListController extends HttpServlet{
 		ArrayList<StoryMemberVo> list= dao.mem_list(member_no);
 
 		req.setAttribute("list", list);	
-		req.getRequestDispatcher("/story/mystories.jsp").forward(req, resp);
+		req.getRequestDispatcher("/story/mystories.jsp?member_no="+member_no).forward(req, resp);
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//story.jsp에서 등록버튼 눌렀을 때 실행됨
 		int member_no=(int) req.getAttribute("member_no");
+		int story_no=(int) req.getAttribute("story_no");
 		String filepath=(String)req.getAttribute("filepath");
 		System.out.println("방금업로드한 파일명:"+filepath);
 		StoryDao dao=new StoryDao();
@@ -40,7 +41,7 @@ public class StoryListController extends HttpServlet{
 
 		req.setAttribute("list", list);
 		
-		req.getRequestDispatcher("/story/mystories.jsp").forward(req, resp);
+		req.getRequestDispatcher("/story/mystories.jsp?story_no="+story_no).forward(req, resp);
 	}
 
 }

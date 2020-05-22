@@ -53,6 +53,7 @@ public class StoryIsertController extends HttpServlet{
 		if(chk) {
 			req.setAttribute("member_no", member_no);
 			req.setAttribute("filepath", filepath);
+			req.setAttribute("story_no", vo.getStory_no());
 			req.getRequestDispatcher("/story/list").forward(req, resp);
 			
 		}else {
