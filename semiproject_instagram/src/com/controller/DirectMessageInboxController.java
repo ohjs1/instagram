@@ -31,6 +31,7 @@ public class DirectMessageInboxController extends HttpServlet {
 		//dm메뉴에서 클릭시 채팅창 감추기
 		session.setAttribute("showboxCheck", "off"); 
 		
+		
 		req.setAttribute("main", "/dm/directMain.jsp"); 
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}

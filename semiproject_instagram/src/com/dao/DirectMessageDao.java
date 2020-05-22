@@ -155,6 +155,29 @@ public class DirectMessageDao {
 		}
 	}
 	
+	//채팅방 읽음으로 표시
+	public int setStatusChatRoom(int rmember_no, int chat_no) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "update chatcontent set status=1 where rmember_no=? and chat_no=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, rmember_no);
+			pstmt.setInt(2, chat_no);
+			
+			
+			return pstmt.executeUpdate();
+			
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return -1;
+		} finally {
+			ConnectionPool.close(con, pstmt, null);
+		}
+	}
+	
 	//상대 번호 구하기
 	public MemberVo getYourMember(int member_no) {
 		Connection con = null;

@@ -120,7 +120,15 @@
 </style>
 <!-- Bootstrap -->
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+   
 </head>
+<script type="text/javascript">
+/*
+	$(document).ready(function() {
+		alert("aaa");
+	});
+*/
+</script>
 <body>
 <div id="maxSize">
 	<table id="dmtId">
@@ -185,6 +193,7 @@
 	<script src="https://code.jquery.com/jquery.js"></script>
     <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
+
 <script type="text/javascript">
 	var btn = document.getElementById("btn");
 	var modal = document.getElementById("myModal");
@@ -322,11 +331,7 @@
 					onescroll++;
 				}
 				//스크롤바 제일아래로
-				//console.log(msgTextBox.scrollTop); //1090
-				if(msgTextBox.scrollTop >= 1090){
-					msgTextBox.scrollTop = msgTextBox.scrollHeight;
-				}
-				//console.log(msgTextBox.scrollHeight); //1050
+				msgTextBox.scrollTop = msgTextBox.scrollHeight;
 			}			
 		}
 		
@@ -384,16 +389,6 @@
 	
 	
 	//유저가 채팅읽은지 확인해주는 함수
-	var cxhr = null;
-	function chatChecked(){
-		xchr = new XMLHttpRequest();
-		xchr.onreadystatechange = function(){
-			if(xchr.readyState==4 && xchr.status==200){
-				
-			}
-		}
-		xchr.open('get', '${cp}/dm/chatChecked', true);
-		xchr.send();
-	}
+	
 </script>
 </html>

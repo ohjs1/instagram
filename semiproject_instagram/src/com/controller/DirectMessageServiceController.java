@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dao.DirectMessageDao;
+
 @WebServlet("/dm/connectClient")
 public class DirectMessageServiceController extends HttpServlet {
 	@Override
@@ -27,7 +29,20 @@ public class DirectMessageServiceController extends HttpServlet {
 		
 		//닉네임정보
 		session.setAttribute("nickname", nickname);
-
+		
+		//채팅창번호
+		DirectMessageDao dao = DirectMessageDao.getInstance();
+		int chat_no = dao.getChattingRoomNumber(myMember_no, yourMember_no);
+		session.setAttribute("chat_no", chat_no);
+		//System.out.println("채팅창 번호: " + chat_no); 
+		System.out.println(myMember_no + "회원이, " + yourMember_no + "회원방에 입장하였습니다." + "채팅방 번호는 " + chat_no);
+		
+		//채팅방 읽음으로 표시
+		int n = dao.setStatusChatRoom(yourMember_no, chat_no);
+		if(n>0) {
+			System.out.println("채팅방 상태값 수정 완료" + n);
+		}
+		
 		req.setAttribute("main", "/dm/directMain.jsp"); 
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 	}
