@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
+
 import com.db.ConnectionPool;
 import com.vo.BoardVo;
 import com.vo.Board_MemberVo;
@@ -140,7 +142,7 @@ public class BoardDao {
 		}
 	}
 	//해당 게시물의 댓글 리스트
-	public ArrayList<Board_MemberVo> selectComment(int board_no){
+	public ArrayList<Board_MemberVo> selectComment(int board_no1){
 		String sql="select m.id,m.pwd,m.name,m.nickname,m.profile,b.board_no,b.member_no,b.content,b.ref,b.lev,b.step,to_char(b.regdate,'YYYYMMDDHH24MISS') regdate " + 
 				"					from board b, member m " + 
 				"					where m.member_no=b.member_no and b.board_no!=? and ref=? " + 
@@ -151,8 +153,8 @@ public class BoardDao {
 		try {
 			con=ConnectionPool.getCon();
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1,board_no);
-			pstmt.setInt(2, board_no);
+			pstmt.setInt(1,board_no1);
+			pstmt.setInt(2, board_no1);
 			rs=pstmt.executeQuery();
 			ArrayList<Board_MemberVo> list=new ArrayList<Board_MemberVo>();
 			while(rs.next()) {
@@ -161,6 +163,7 @@ public class BoardDao {
 				String name=rs.getString("name");
 				String nickname=rs.getString("nickname");
 				String profile=rs.getString("profile");
+				int board_no=rs.getInt("board_no");
 				int member_no=rs.getInt("member_no");
 				String content=rs.getString("content");
 				int ref=rs.getInt("ref");
@@ -337,4 +340,52 @@ public class BoardDao {
 			ConnectionPool.close(con, pstmtTag, rs);
 		}
 	}
+	
+	//게시글 또는 댓글 삭제(댓글도 삭제해야되므로 트랜잭션처리,이미지테이블,링크테이블은 CASCADE로 설정되어 자동삭제)
+	public int boardDelete(int board_no) {
+		Connection con=null;
+		PreparedStatement pstmt1=null;
+		PreparedStatement pstmt2=null;
+		try {
+			con=ConnectionPool.getCon();
+			con.setAutoCommit(false);
+			String sql1="delete from board where board_no=?";
+			pstmt1=con.prepareStatement(sql1);
+			pstmt1.setInt(1, board_no);
+			pstmt1.executeUpdate();
+			
+			String sql2="delete from board where ref=?";
+			pstmt2=con.prepareStatement(sql2);
+			pstmt2.setInt(1, board_no);
+			pstmt2.executeUpdate();
+			con.commit();
+			return 1;
+		}catch(SQLException se) {
+			System.out.println(se.getMessage());
+			return -1;
+		}finally {
+			ConnectionPool.close(con, pstmt1, null);
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

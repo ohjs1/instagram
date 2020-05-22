@@ -17,6 +17,13 @@
 .board{width: 100%; height: 100%;}
 td{width:200px;height:200px;}
 
+/* .modal_wrap{
+	height: 100%;
+    margin: 0 auto;
+    max-width: 935px;
+    pointer-events: none;
+    width: 100%;
+} */
 .modal2 {
 	position: fixed;
 	top:0;
@@ -59,6 +66,7 @@ td{width:200px;height:200px;}
 	
 .meta-wrap {
   padding: 20px;
+  border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
 }
 .meta img{
 	align-self: center;
@@ -85,19 +93,41 @@ td{width:200px;height:200px;}
 	margin-top:20px;
     border-bottom: none;
 }
-
+/* 게시자 CSS(meta) */
 .meta {
-  display: flex;    
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+	display: flex;    
+	align-items: center;
+	padding-bottom: 20px;
 }
-
+.meta .boardoption{
+	margin-left: 150px;
+	align-items: center;
+}
+.meta .boardbtn{
+	background: 0;
+	border: 0;
+	font-weight: 1000;
+	text-align: center;
+}
 .comments{
+	position:relative;
 	display: flex;    
 	align-items: center;
 }
-
+.comments p{
+	margin:0;
+}
+.comments .boardoption{
+	position:absolute;
+	right:0;
+	align-items: center;
+}
+.comments .boardbtn{
+	background: 0;
+	border: 0;
+	font-weight: 1000;
+	text-align: center;
+}
 .comments-wrap img{
 	align-self: center;
     max-width: 40px;
@@ -253,6 +283,45 @@ td{width:200px;height:200px;}
 	  
 	  opacity: 0.4;
 	}
+	
+/*--------------------------- 삭제,수정,취소 모달 CSS ----------------------------------*/
+.boardOptionModal1{
+	position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.option_overlay{
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index:10000;
+}
+.option_content{
+	display: grid;
+	border-radius:10px;
+	text-align:center;
+	grid-template-columns: 400px;
+	grid-template-rows: 50px 50px 50px;
+	background: white;
+	z-index:10000;
+}
+.option_content .delete, .option_content .update{
+	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+}
+.option_btn{
+	background:0;
+	border:0;
+	width: 100%;
+	height: 100%;
+	border-radius:10px;
+}
+
 /*--------------------------- 좋아요 모달 CSS ----------------------------------*/
 .like_overlay {
 		background-color: rgba(0,0,0,0.6);
@@ -313,7 +382,7 @@ td{width:200px;height:200px;}
 }
 .likeusers p{
 	margin: 0;
-	color
+
 }
 .name{
 	color: rgba(var(--f52,142,142,142),1);
@@ -351,7 +420,9 @@ td{width:200px;height:200px;}
 	</c:forEach>
 	</tr>
 </table>
+
 <div id="modal1"></div> <!-- 게시글 모달 -->
+<div id="boardOptionModal"></div> <!-- 삭제,수정,취소 모달 -->
 <div id="likeModal"></div> <!-- 좋아요 모달 -->
 </body>
 <script type="text/javascript">
@@ -369,13 +440,15 @@ td{width:200px;height:200px;}
 		boardList.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		boardList.send('board_no='+board_no);
 	}
-	
+	//게시글 띄우기
 	function getBoardListOk(){
 		if(boardList.readyState==4 && boardList.status==200){
 			var data=boardList.responseText;
 			var json=JSON.parse(data); //게시글에 대한 member정보,board정보를 가져옴
 			var modal1=document.getElementById("modal1");
-			
+			var boardOptionModal=document.getElementById("boardOptionModal");
+			modal1.innerHTML=""; //댓글삭제시 게시글 모달창을 다시 띄워야하므로 초기화
+			boardOptionModal.innerHTML=""; //댓글삭제시 삭제,수정,취소 모달창을 다시 띄워야하므로 초기화 
 			var id=json.id;
 			var pwd=json.pwd;
 			var name=json.name;
@@ -411,12 +484,12 @@ td{width:200px;height:200px;}
 			div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
 								"<div class='modal_content'>"+
 								"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
-									"<button class='prev' onclick='prevImg ()'>&#60;</button>"+
-								    "<button class='next' onclick='nextImg ()'>&#62;</button>"+
+									"<button class='prev' onclick='prevImg()'>&#60;</button>"+
+								    "<button class='next' onclick='nextImg()'>&#62;</button>"+
 								"</div>"+
 								"<div class='meta-info'>"+//modal 우측의 사용자,글내용,댓글,댓글달기를 감싸는 div
 									"<div class='meta-wrap'>"+
-										"<div class='meta'>"+//프로필사진,닉네임이 들어갈 div
+										"<div class='meta' id='meta'>"+//프로필사진,닉네임이 들어갈 div
 											"<div>"+
 												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
 													"<img src='../upload/"+profile+"'>"+//프로필사진
@@ -426,26 +499,12 @@ td{width:200px;height:200px;}
 												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
 													"<p class='handle'>"+nickname+"</p>"+//닉네임
 												"</a>"+
-												
 											"</div>"+
 										"</div>"+
 									"</div>"+
 									"<div class='scroll1'>"+
-										"<div class='meta comments'>"+
-											"<div>"+
-												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
-													"<img src='../upload/"+profile+"'>"+//프로필사진
-												"</a>"+
-											"</div>"+
-											"<div>"+
-												"<p>"+
-													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
-														"<span class='handle'>"+nickname+"</span> "+//닉네임
-													"</a>"+
-													"<span>"+content+"</span>"+//글내용
-													"<div class='time'><p>"+realDate+"</p></div>"+//작성시간
-												"</p>"+
-											"</div>"+
+										//게시글 글쓴이 프사,닉네임,글내용이 들어갈 공간
+										"<div class='meta comments' id='meta_comments'>"+
 										"</div>"+
 										"<div class='comments-wrap'></div>"+//작성된 댓글
 									"</div>"+
@@ -486,6 +545,45 @@ td{width:200px;height:200px;}
 			commentList(board_no); //댓글리스트 가져오기
 			getLikeCnt(board_no); //좋아요리스트 가져오기
 			
+			
+			//글내용이 있을경우 meta comment에 내용추가
+			var meta_comments=document.getElementById("meta_comments");
+			if(content!=null && content!=""){
+				meta_comments.innerHTML="<div>"+
+											"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+												"<img src='../upload/"+profile+"'>"+//프로필사진
+											"</a>"+
+										"</div>"+
+										"<div>"+
+											"<p>"+
+												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+													"<span class='handle'>"+nickname+"</span> "+//닉네임
+												"</a>"+
+												"<span>"+content+"</span>"+//글내용
+												"<div class='time'><p>"+realDate+"</p></div>"+//작성시간
+											"</p>"+
+										"</div>";
+			}else{
+				meta_comments.innerHTML="";
+				meta_comments.style.margin=0;
+			}
+			
+			//자기게시글일경우 삭제,수정,업데이트 버튼 생성
+			var meta=document.getElementById("meta");
+			if(${sessionScope.member_no}==member_no){
+				meta.innerHTML+= "<div class='boardoption'>"+
+									 "<button class='boardbtn'>···</button>"+
+								 "</div>";
+			}
+////////////////////////////////// 이벤트구역 /////////////////////////////////////////			
+			
+			//회원정보 옆의 ...버튼 클릭시 게시글,댓글 삭제,수정,취소버튼 모달 함수호출
+			var boardbtn=document.getElementsByClassName("boardbtn");
+			for(let i=0;i<boardbtn.length;i++){
+				boardbtn[i].addEventListener('click',function(){
+					showBoardOptionModal(board_no,member_no,ref);
+				});
+			}
 			//좋아요버튼 클릭시 좋아요테이블에 추가or삭제 ajax함수 호출
 			var likeBtn=document.getElementById("likeBtn");
 			likeBtn.addEventListener('click',function(){
@@ -645,7 +743,9 @@ td{width:200px;height:200px;}
 					}else{
 						realDate="<p>"+Math.floor((dd/60/60/24/7/4.2/12))+"년 전</p>";
 					}
-					comments_wrap.innerHTML+="<div class='comments'>"+
+					var comments=document.getElementById("comments");
+					if(${sessionScope.member_no}==member_no){
+					comments_wrap.innerHTML+="<div class='comments' id='comments'>"+
 												"<div>"+
 													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
 														"<img src='../upload/"+profile+"'>"+//프로필사진
@@ -660,7 +760,28 @@ td{width:200px;height:200px;}
 														"<div class='time'><p>"+realDate+"</p></div>"+//작성시간
 													"</p>"+
 												"</div>"+
+												"<div class='boardoption'>"+
+													"<button class='boardbtn' onclick='showBoardOptionModal("+board_no+","+member_no+","+ref+");'>···</button>"+
+												"</div>";
 											"</div>";
+					}else{
+					comments_wrap.innerHTML+="<div class='comments' id='comments'>"+
+												 "<div>"+
+													 "<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+													 	 "<img src='../upload/"+profile+"'>"+//프로필사진
+													 "</a>"+
+												 "</div>"+
+												 "<div>"+
+													 "<p>"+
+														 "<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+															 "<span class='handle'>"+nickname+"</span> "+//닉네임
+														 "</a>"+
+														 "<span>"+content+"</span>"+//글내용
+														 "<div class='time'><p>"+realDate+"</p></div>"+//작성시간
+													 "</p>"+
+												 "</div>"+
+											 "</div>";
+					}
 				}
 			}
 		}
@@ -718,10 +839,25 @@ td{width:200px;height:200px;}
 		counter=index;
 		slider=document.getElementById("image-wrap");
 		images=slider.getElementsByTagName("img");
+		var prev=document.getElementsByClassName("prev")[0];
+		var next=document.getElementsByClassName("next")[0];
 		for(var i=0; i<images.length; i++){
 			images[i].className="hideImage";
 		}
 		images[index].className ="showImage";
+		if(counter==0 && counter==images.length-1){
+			prev.style.display="none";
+			next.style.display="none";
+		}else if(counter==images.length-1){
+			prev.style.display="inline";
+			next.style.display="none";
+		}else if(counter==0){
+			prev.style.display="none";
+			next.style.display="inline";
+		}else{
+			prev.style.display="inline";
+			next.style.display="inline";
+		}
 	}
 	
 	function nextImg(){
@@ -740,6 +876,59 @@ td{width:200px;height:200px;}
 			counter=images.length-1;
 		}
 		showImage(counter);
+	}
+	
+	/////////////////////////////* 삭제,수정,취소 모달창 *////////////////////////////////////////
+	// 삭제,수정,취소 모달창 오픈
+	function showBoardOptionModal(board_no,member_no,ref){
+		var boardOptionModal=document.getElementById("boardOptionModal");
+		var div=document.createElement("div");
+		div.innerHTML="<div class='option_overlay' onclick='closeOptionModal();'></div>"+//모달창의 배경색
+					  "<div class='option_content'>"+
+						  "<div class='delete_option'>"+
+							  "<button class='option_btn' id='delete_btn'>삭제하기</button>"+
+						  "</div>"+
+						  "<div class='update_option'>"+
+						 	  "<button class='option_btn' id='update_btn'>수정하기</button>"+
+						  "</div>"+
+						  "<div class='cancle_option'>"+
+					 	 	  "<button class='option_btn' onclick='closeOptionModal();'>취소</button>"+
+					  	  "</div>"+
+					  "</div>";
+		div.className="boardOptionModal1";
+		div.setAttribute("id","boardOptionModal1");
+		boardOptionModal.appendChild(div);
+		var delete_btn=document.getElementById("delete_btn");
+		delete_btn.addEventListener('click', function() {
+			deleteBoard(board_no,member_no,ref);
+		});
+	}
+	//게시글 삭제버튼 ajax
+	var boardDelete=null;
+	function deleteBoard(board_no,member_no,ref){
+		boardDelete=new XMLHttpRequest();
+		boardDelete.onreadystatechange=function(){
+			if(boardDelete.readyState==4 && boardDelete.status==200){
+				var data=boardDelete.responseText;
+				var json=JSON.parse(data);
+				var result=json.result;
+				if(result>0 && board_no==ref){
+					location.href="${cp}/follow/move?youmember_no="+member_no;
+				}else if(result>0 && board_no!=ref){
+					getBoardList(ref);
+				}else{
+					alert("삭제실패!");
+				}
+			}
+		}
+		boardDelete.open('get','${cp}/board/delete?board_no='+board_no,true);
+		boardDelete.send();
+	}
+	
+	//삭제,수정,취소 모달 닫기버튼
+	function closeOptionModal(){
+		var boardOptionModal=document.getElementById("boardOptionModal");
+		boardOptionModal.innerHTML="";
 	}
 	
 	/////////////////////////////* 좋아요 리스트 모달창 *////////////////////////////////////////
@@ -800,7 +989,6 @@ td{width:200px;height:200px;}
 	function closeLikeModal(){
 		var likeModal=document.getElementById("likeModal");
 		likeModal.innerHTML="";
-		counter=0;
 	}
 	
 </script>
