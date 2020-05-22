@@ -118,7 +118,6 @@
 			var json=JSON.parse(data);
 			div.innerHTML="";
 		for(var i=0; i<json.length; i++){
-				/* if(json[i].keyword.substr(0,1)=="#"){ */
 				if(json[i].result==1){
 				var keyword=json[i].keyword.replace("#", "%23");
 					div.innerHTML+=

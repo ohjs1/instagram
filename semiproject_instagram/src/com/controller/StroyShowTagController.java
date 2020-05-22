@@ -27,6 +27,7 @@ public class StroyShowTagController extends HttpServlet{
 		for(StoryVo l : list) {
 			JSONObject json=new JSONObject();
 			json.put("filepath", l.getFilepath());
+			System.out.println(l.getFilepath()+"------");
 			jrr.put(json);
 		}
 		

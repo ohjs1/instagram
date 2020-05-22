@@ -107,10 +107,14 @@
 	
 	function idcheck() {
 		var id=document.getElementById("id").value;
-		xhrId=new XMLHttpRequest();
-		xhrId.onreadystatechange=idcheckOk;
-		xhrId.open('get','${cp}/member/idcheck?id='+id,true);
-		xhrId.send();
+		if(id!=""){
+			xhrId=new XMLHttpRequest();
+			xhrId.onreadystatechange=idcheckOk;
+			xhrId.open('get','${cp}/member/idcheck?id='+id,true);
+			xhrId.send();
+		}else{
+			check.src="${cp}/images/x.PNG";
+		}
 	}
 	function idcheckOk() {
 		if(xhrId.readyState==4 && xhrId.status==200){
@@ -128,10 +132,14 @@
 	var xhrNickname=null;
 	function nickNamecheck() {
 		var nickname=document.getElementById("nickname").value;
-		xhrNickname=new XMLHttpRequest();
-		xhrNickname.onreadystatechange=nickNamecheckOk;
-		xhrNickname.open('get','${cp}/member/nicknameCheck?nickname='+nickname,true);
-		xhrNickname.send();
+		if(nickname!=""){
+			xhrNickname=new XMLHttpRequest();
+			xhrNickname.onreadystatechange=nickNamecheckOk;
+			xhrNickname.open('get','${cp}/member/nicknameCheck?nickname='+nickname,true);
+			xhrNickname.send();
+		}else{
+			nickCheck.src="${cp}/images/x.PNG";
+		}
 	}
 	function nickNamecheckOk() {
 		if(xhrNickname.readyState==4 && xhrNickname.status==200){
@@ -174,6 +182,8 @@
 			btn.disabled='disabled';
 		}
 	}
+	
+	
 </script>
 </body>
 </html>

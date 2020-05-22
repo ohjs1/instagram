@@ -58,8 +58,8 @@ public class TagDao {
 			con =ConnectionPool.getCon();
 			String sql ="select * from member where nickname like ? or name like ?";
 			pstmt=con.prepareStatement(sql);
-			pstmt.setString(1, search + "%");
-			pstmt.setString(2, search + "%");
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, "%" + search + "%");
 			rs=pstmt.executeQuery();
 			
 			ArrayList<MemberVo> list=new ArrayList<MemberVo>();
@@ -110,8 +110,8 @@ public class TagDao {
 			}
 			String sql2 ="select * from member where nickname like ? or name like ?";
 			pstmt2=con.prepareStatement(sql2);
-			pstmt2.setString(1, search + "%");
-			pstmt2.setString(2, search + "%");
+			pstmt2.setString(1, "%" + search + "%");
+			pstmt2.setString(2, "%" + search + "%");
 			rs2=pstmt2.executeQuery();
 			
 			while(rs2.next()) {
@@ -131,6 +131,47 @@ public class TagDao {
 	}
 	
 	//검색한 게시물리스트
+	public ArrayList<ImageVo> list(String keyword,int snum,int endnum) {
+		System.out.println(keyword+"keyword");
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		try {
+			con=ConnectionPool.getCon();
+			String sql ="select * from(\r\n" + 
+					"    select i.board_no,i.image_no,i2.imagepath,rownum rnum from\r\n" + 
+					"        (select board_no,min(image_no) image_no from image where board_no in\r\n" + 
+					"            (select board_no from link,tag\r\n" + 
+					"                where link.tag_no=tag.tag_no \r\n" + 
+					"                and link.tag_no=(select tag_no from tag where search=?) \r\n" + 
+					"            ) group by board_no\r\n" + 
+					"        )i, image i2\r\n" + 
+					"    where i.image_no=i2.image_no\r\n" + 
+					")where rnum>=? and rnum<=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, keyword);
+			pstmt.setInt(2, snum);//추가됨
+			pstmt.setInt(3, endnum);//추가됨
+			rs=pstmt.executeQuery();
+			
+			ArrayList<ImageVo> list=new ArrayList<ImageVo>();
+
+			while(rs.next()) {
+				int image_no=rs.getInt("image_no");
+				int board_no=rs.getInt("board_no");
+				String imagepath=rs.getString("imagepath");
+				
+				list.add(new ImageVo(image_no, board_no, imagepath));
+			}
+			return list;
+		} catch(SQLException se) {
+			se.getStackTrace();
+			return null;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	public ArrayList<ImageVo> list(String keyword) {
 		System.out.println(keyword+"keyword");
 		Connection con =null;
@@ -138,15 +179,15 @@ public class TagDao {
 		ResultSet rs =null;
 		try {
 			con=ConnectionPool.getCon();
-			String sql ="select i.board_no,i.image_no,i2.imagepath from\r\n" + 
-					"(\r\n" + 
-					"    select board_no,min(image_no) image_no from image where board_no in\r\n" + 
-					"            (select board_no from link,tag \r\n" + 
-					"            where link.tag_no=tag.tag_no\r\n" + 
-					"            and link.tag_no=(select tag_no from tag where search=?)\r\n" + 
-					"            ) group by board_no\r\n" + 
-					")i, image i2\r\n" + 
-					"where i.image_no=i2.image_no";
+			
+			  String sql ="select i.board_no,i.image_no,i2.imagepath from\r\n" + "(\r\n" +
+			  "    select board_no,min(image_no) image_no from image where board_no in\r\n"
+			  + "            (select board_no from link,tag \r\n" +
+			  "            where link.tag_no=tag.tag_no\r\n" +
+			  "            and link.tag_no=(select tag_no from tag where search=?)\r\n" +
+			  "            ) group by board_no\r\n" + ")i, image i2\r\n" +
+			  "where i.image_no=i2.image_no";
+			 
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			rs=pstmt.executeQuery();
@@ -194,6 +235,7 @@ public class TagDao {
 				String content=rs.getString("content");
 				String filepath=rs.getString("filepath");
 				Date storydate=rs.getDate("storydate");
+				System.out.println("Dao---"+filepath);
 				list.add(new StoryVo(story_no, member_no, content, filepath, storydate));
 			}
 			return list;
