@@ -2,16 +2,6 @@
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
-	table{
-		display: inline-block;
-	}
-	th{
-		padding: 10px;
-	}
-	#imglist{
-		text-align: center;
-		clear: both;
-	}
 	#headerTag{
 		width:940px;
 		margin:auto;
@@ -30,6 +20,20 @@
 	strong{
 		font-size: 2.0em;
 	}
+	.list_img{
+		display: block;
+		float: left;
+		padding: 10px;
+		width: 293px;
+		height: 293px;'
+	}
+	#div_ajax{
+		width: 50%;
+		margin: auto;
+	}
+	#div_img{
+		display: inline-block;
+	}
 </style>
 <!DOCTYPE html>
 <html>
@@ -44,26 +48,20 @@
 	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
 </div>
 <div id="imglist">
-	<c:set var="i" value="0" />
-	<c:set var="j" value="3" />
 	<c:set var="c" value="0" />
-	<table id="table_img">
-		<%-- <c:forEach var="vo" items="${vo}">
-			<c:if test="${i%j == 0 }">
-				<tr>
-			</c:if>
-				<th>
-					<c:if test="${c<6 }">
-						<img src="${cp }/upload/${vo.imagepath}" style='width: 293px;height: 293px'>
-						<c:set var="c" value="${c+1 }"/>
-					</c:if>
-				</th>
-			<c:if test="${i%j == j-1 }">
-				</tr>
-			</c:if>
-			<c:set var="i" value="${i+1 }" />
-		</c:forEach> --%>
-	</table>
+	<div id="div_ajax">
+		<div id="div_img">
+			<c:forEach var="vo" items="${vo}">
+				<c:if test="${c<6 }">
+					<img src="${cp }/upload/${vo.imagepath}" class="list_img">
+					<c:set var="c" value="${c+1 }"/>
+				</c:if>
+			</c:forEach>
+		</div>
+	</div>
+</div>
+<div id="enters">
+
 </div>
 </body>
 <script type="text/javascript">
@@ -87,38 +85,34 @@
 			}
 		}
 	}
+	
 	//무한스크롤
 	xhrImg=null;
-	var snum=1;
-	var endnum=3;
-	window.onscroll = function(ev) {
-    	xhrImg=new XMLHttpRequest();
-    	//scroll.top = window.scrollHeight
-    	xhrImg.onreadystatechange=function(){
-    		var table_img=document.getElementById("table_img");
-    		if(xhrImg.readyState==4 && xhrImg.status==200){
-    			setTimeout(function() {}, 2000);
-    			data=JSON.parse(xhrImg.responseText);
-    			var str="";
-    			str+="<tr>";
-    			for(var i=0;i<data.length;i++){
-    				if(i%3==0){
-    					str+="</tr>";
-    					str+="<tr>";
-    				}
-    					str+="<th><img src='${cp}/upload/"+data[i].filepath+"' style='width: 293px;height: 293px'</th>";
-    			}
-    				str+="</tr>";
-    				$("#table_img").append(str);
-    				snum+=3;
-    				endnum+=3;
-    		}
-    	}
-    	var k='${keyword}';
-    	var test=k.replace("#", "%23");
-    	xhrImg.open('get','${cp}/tag/list?keyword='+test+'&snum='+snum+'&endnum='+endnum,true);
-    	xhrImg.send();
-	};
+	var snum=7;
+	var endnum=9;
+	$(window).scroll(function() {
+	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+	    	xhrImg=new XMLHttpRequest();
+	    	xhrImg.onreadystatechange=function(){
+	    		if(xhrImg.readyState==4 && xhrImg.status==200){
+	    			setTimeout(function() {}, 2000);
+	    			data=JSON.parse(xhrImg.responseText);
+	    			var str="";
+	    			for(var i=0;i<data.length;i++){
+    					str+="<img src='${cp}/upload/"+data[i].filepath+"'class='list_img'>";
+	    			}
+	    				$("#div_img").append(str);
+	    				snum+=3;
+	    				endnum+=3;
+	    		}
+	    	}
+	    	
+	    	var k='${keyword}';
+	    	var test=k.replace("#", "%23");
+	    	xhrImg.open('get','${cp}/tag/list?keyword='+test+'&snum='+snum+'&endnum='+endnum,true);
+	    	xhrImg.send();
+	    }
+	});
 </script>
 </html>
 

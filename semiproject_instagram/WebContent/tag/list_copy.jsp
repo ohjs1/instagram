@@ -7,6 +7,7 @@
 	}
 	th{
 		padding: 10px;
+		border: 1px solid;
 	}
 	#imglist{
 		text-align: center;
@@ -30,6 +31,9 @@
 	strong{
 		font-size: 2.0em;
 	}
+	img{
+		display: block;
+	}
 </style>
 <!DOCTYPE html>
 <html>
@@ -37,24 +41,25 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-<body onload="stroyTagImg()">
+<body>
 <div id="headerTag">
-	<img src="${cp }/upload/${vo[0].imagepath}" id="storyTagImg"><!-- 스토리 ajax로 보여지기 -->
+	<img src="${cp}/upload/${vo[0].imagepath}" id="storyTagImg"><!-- 스토리 ajax로 보여지기 -->
 	<div id="dd"><strong>${keyword }</strong></div>
 	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
 </div>
 <div id="imglist">
 	<c:set var="i" value="0" />
 	<c:set var="j" value="3" />
-	<table>
+	<c:set var="c" value="0" />
+	<table id="table_img">
 		<c:forEach var="vo" items="${vo}">
-		<c:set var="y" value="${y+1}" />
 			<c:if test="${i%j == 0 }">
 				<tr>
 			</c:if>
 				<th>
-					<c:if test="${y <= 6 }">
-						<img src="${cp }/upload/${vo.imagepath}" style='width: 293px;height: 293px' class=${y }>
+					<c:if test="${c<6 }">
+						<img src="${cp }/upload/${vo.imagepath}" style='width: 293px;height: 293px'>
+						<c:set var="c" value="${c+1 }"/>
 					</c:if>
 				</th>
 			<c:if test="${i%j == j-1 }">
@@ -64,15 +69,18 @@
 		</c:forEach>
 	</table>
 </div>
+<div id="enters">
+
+</div>
 </body>
 <script type="text/javascript">
 	var storyTagImg=document.getElementById("storyTagImg");
-	var y=${y};
 	var xhr=null;
 	function stroyTagImg(){
+		alert(storyTagImg.src);
 		xhr=new XMLHttpRequest();
 		xhr.onreadystatechange=showTagImg;
-		xhr.open('get','/tag/showStroy?keyword=${keyword }',true);
+		xhr.open('get','${cp}/tag/showStroy?keyword=${keyword }',true);
 		xhr.send();
 	}
 	function showTagImg() {
@@ -86,12 +94,41 @@
 			}
 		}
 	}
+	
 	//무한스크롤
-	window.onscroll = function(ev) {
-	    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-	        alert(y);
+	xhrImg=null;
+	var snum=1;
+	var endnum=3;
+	$(window).scroll(function() {
+	    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+	    	xhrImg=new XMLHttpRequest();
+	    	xhrImg.onreadystatechange=function(){
+	    		var table_img=document.getElementById("table_img");
+	    		if(xhrImg.readyState==4 && xhrImg.status==200){
+	    			setTimeout(function() {}, 2000);
+	    			data=JSON.parse(xhrImg.responseText);
+	    			var str="";
+	    			str+="<tr>";
+	    			for(var i=0;i<data.length;i++){
+	    				if(i%3==0){
+	    					str+="</tr>";
+	    					str+="<tr>";
+	    				}
+	    					str+="<th><img src='${cp}/upload/"+data[i].filepath+"' style='width: 293px;height: 293px; display:block'</th>";
+	    			}
+	    				str+="</tr>";
+	    				$("#table_img").append(str);
+	    				snum+=3;
+	    				endnum+=3;
+	    		}
+	    	}
+	    	
+	    	var k='${keyword}';
+	    	var test=k.replace("#", "%23");
+	    	xhrImg.open('get','${cp}/tag/list?keyword='+test+'&snum='+snum+'&endnum='+endnum,true);
+	    	xhrImg.send();
 	    }
-	};
+	});
 </script>
 </html>
 
