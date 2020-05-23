@@ -32,7 +32,7 @@
 		</div>
 		<div id="storys"></div>
 	</div>
-	
+	<div id="modal2"></div> <!-- 내 게시글 및 내가 팔로우한 회원들의 게시글이 추가될 div -->
 	
 </div>
 </body>
@@ -44,7 +44,7 @@
 				var myprofile = document.getElementById("myprofile");
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
-				myprofile.src = "${cp}/upload/" + json.profile;			
+				myprofile.src = "${cp}/upload/" + json.profile;
 			}
 		}
 		xhr.open('post', '${cp}/member/memberInfo', true);
@@ -77,6 +77,17 @@
 			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 			xhr.send();		
 		}
+/////////////////////////////////// 게시글 파트 //////////////////////////////////////////
+	//게시글 리스트 불러오기
+	var boardList=null;
+	function getBoardList(board_no){
+		//const board_no=${imageVo.board_no};
+		boardList=new XMLHttpRequest();
+		boardList.onreadystatechange=getBoardListOk;
+		boardList.open('post','../board/list',true);
+		boardList.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		boardList.send('board_no='+board_no);
+	}
 
 </script>
 </html>
