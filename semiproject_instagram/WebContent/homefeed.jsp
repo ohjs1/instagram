@@ -32,7 +32,11 @@
 		</div>
 		<div id="storys"></div>
 	</div>
-	<div id="modal2"></div> <!-- 내 게시글 및 내가 팔로우한 회원들의 게시글이 추가될 div -->
+	<div id="modal1">
+		<c:forEach var="vo" items="${boardList }" varStatus="i">
+		
+		</c:forEach>
+	</div> <!-- 내 게시글 및 내가 팔로우한 회원들의 게시글이 추가될 div -->
 	
 </div>
 </body>
@@ -45,6 +49,11 @@
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
 				myprofile.src = "${cp}/upload/" + json.profile;
+				
+				//게시글파트(송영현)
+				for(let i=0; i<${boardList.size()}; i++){
+					
+				}
 			}
 		}
 		xhr.open('post', '${cp}/member/memberInfo', true);
