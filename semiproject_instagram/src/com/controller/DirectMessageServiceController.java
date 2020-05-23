@@ -38,7 +38,7 @@ public class DirectMessageServiceController extends HttpServlet {
 		System.out.println(myMember_no + "회원이, " + yourMember_no + "회원방에 입장하였습니다." + "채팅방 번호는 " + chat_no);
 		
 		//채팅방 읽음으로 표시
-		int n = dao.setStatusChatRoom(yourMember_no, chat_no);
+		int n = dao.setStatusChatRoom(myMember_no, chat_no);
 		if(n>0) {
 			System.out.println("채팅방 상태값 수정 완료" + n);
 		}

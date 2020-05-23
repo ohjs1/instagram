@@ -62,6 +62,7 @@ public class DirectMessageDao {
 			rs =pstmt.executeQuery();
 			
 			if(rs.next()) {
+//				System.out.println("채팅방번호" + rs.getInt("chatroom_no"));
 				return rs.getInt("chatroom_no");
 			} else {
 				return -1;
@@ -126,7 +127,6 @@ public class DirectMessageDao {
 			String profile
 			 */
 			ArrayList<MemberVo> list = new ArrayList<MemberVo>();
-			
 			while(rs.next()) {
 				//상대 번호 구하기
 				int m_num = rs.getInt("mymember_no");
@@ -144,6 +144,7 @@ public class DirectMessageDao {
 				MemberVo vo = getYourMember(member_no);
 				
 				list.add(vo);
+
 			}
 			return list;
 			
@@ -155,6 +156,54 @@ public class DirectMessageDao {
 		}
 	}
 	
+	//DM유저목록 채팅상태값 
+		public int getDMUserStatusList(int mymember_no){
+			Connection con =null;
+			PreparedStatement pstmt =null;
+			ResultSet rs =null;
+			
+			
+			try {
+				con = ConnectionPool.getCon();
+				String sql = "select * from chatroom where mymember_no=? or youmember_no=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, mymember_no);
+				pstmt.setInt(2, mymember_no);
+				rs = pstmt.executeQuery();
+				/*
+				 * int member_no, String id, String pwd, String name, String nickname, Date regdate,
+				String profile
+				 */
+				
+				int status = 0;
+				while(rs.next()) {
+					//상대 번호 구하기
+					int m_num = rs.getInt("mymember_no");
+					int y_num = rs.getInt("youmember_no");
+					
+					
+					int member_no = 0;
+
+					if(m_num == mymember_no) {
+						member_no = m_num;
+					} else {
+						member_no = y_num;
+					}
+//					System.out.println("채팅상태값 유저 번호 : " + member_no);
+//					System.out.println("채팅상태값 채팅번호 : " + getChattingRoomNumber(m_num, y_num));
+					status += getStatusChat(member_no, getChattingRoomNumber(m_num, y_num));
+
+				}
+				return status;
+				
+			} catch(SQLException s) {
+				System.out.println(s.getMessage());
+				return -1;
+			} finally {
+				ConnectionPool.close(con, pstmt, rs);
+			}
+		}
+	
 	//채팅방 읽음으로 표시
 	public int setStatusChatRoom(int rmember_no, int chat_no) {
 		Connection con = null;
@@ -162,7 +211,7 @@ public class DirectMessageDao {
 		
 		try {
 			con = ConnectionPool.getCon();
-			String sql = "update chatcontent set status=1 where rmember_no=? and chat_no=?";
+			String sql = "update chatcontent set status=0 where rmember_no=? and chat_no=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, rmember_no);
 			pstmt.setInt(2, chat_no);
@@ -244,6 +293,34 @@ public class DirectMessageDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
+	
+	//채팅방 상태값 읽어와 새글 있는지 검사
+	public int getStatusChat(int rmember_no, int chat_no) {
+		Connection con =null;
+		PreparedStatement pstmt =null;
+		ResultSet rs =null;
+		
+		try {
+			con = ConnectionPool.getCon();
+			String sql = "select sum(status) sums from chatcontent where rmember_no=? and chat_no=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, rmember_no);
+			pstmt.setInt(2, chat_no);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt("sums");
+			}
+			return -1;
+		} catch(SQLException s) {
+			System.out.println(s.getMessage());
+			return -1;
+		} finally {
+			ConnectionPool.close(con, pstmt, rs);
+		}
+	}
+	
 	
 	//검색된 유저를 구하는 메소드
 	public ArrayList<MemberVo> getUserList(String keyword, int myMember_no){

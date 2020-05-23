@@ -57,6 +57,9 @@
 </style>
 <!-- Bootstrap -->
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- DM검사 js -->
+    <script src="${ cp }/dm/js/chat_module.js"></script>
+    
 </head>
 <body>
 <div id="header_wrap">
@@ -75,7 +78,7 @@
 		<a href="${ cp }/board/homefeed"><img
 			src="${ cp }/images/icon/home.jpg" alt="홈" /></a>
 		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img
-			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a>
+			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a><span class="badge badge-important">${ sessionScope.cc_result }</span>
 		<a href="${ cp }/feed/myfeed"> <img
 			src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
 		</a>
@@ -93,6 +96,10 @@
 	<script src="https://code.jquery.com/jquery.js"></script>
     <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
 </body>
+<script type="text/javascript">
+    var member_no = '${member_no}';
+   		$(document).ready(chatConfirm(member_no)); //시작할때, 채팅상태 검사 함수 실행
+</script>
 <script type="text/javascript">
 	var myAccount=document.getElementById("myAccount");
 	var xhr =null;

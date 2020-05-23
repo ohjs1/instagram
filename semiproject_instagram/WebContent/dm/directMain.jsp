@@ -122,13 +122,6 @@
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
    
 </head>
-<script type="text/javascript">
-/*
-	$(document).ready(function() {
-		alert("aaa");
-	});
-*/
-</script>
 <body>
 <div id="maxSize">
 	<table id="dmtId">
@@ -160,6 +153,7 @@
 				
 				DM 보낼 유저목록
 				<ul>
+				<c:if test="${ dmlist != null }">
 					<c:forEach var="n" items="${ dmlist }">
 				<li>
 						<div id="dmuserlist">
@@ -171,7 +165,7 @@
 						</div>
 				</li>
 					</c:forEach>
-			
+				</c:if>
 				</ul>
 			</td>
 			</div>
@@ -192,6 +186,7 @@
 </div>
 	<script src="https://code.jquery.com/jquery.js"></script>
     <script src="${ cp }/bootstrap/js/bootstrap.min.js"></script>
+    <!--  <script src="${ cp }/dm/js/chat_module.js"></script>-->
 </body>
 
 <script type="text/javascript">
@@ -203,6 +198,7 @@
 	var checkAuto = false; //자동새로고침 인터발
 	var msgTextBox = document.getElementById("msgTextBox"); //DM윈도우 DOM
 	var showboxCheck = '${showboxCheck}'; //showbox보여주게하는 체트변수 기본값 off;
+	//$(document).ready(chatConfirm(myMember_no)); //시작할때, 채팅상태 검사 함수 실행
 	
 	//유저검색버튼 액션 생성
 	btn.onclick = function(){
@@ -388,7 +384,6 @@
 	}
 	
 	
-	//유저가 채팅읽은지 확인해주는 함수
 	
 </script>
 </html>

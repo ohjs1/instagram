@@ -43,7 +43,7 @@ public class DirectMessageController extends HttpServlet {
 		int chat_num = dao.getChattingRoomNumber(myMember_no, yourMember_no);
 		
 		//채팅내용 DB에 넣기
-		ChatContentVo vo = new ChatContentVo(0, chat_num, myMember_no, yourMember_no, content, false, null);
+		ChatContentVo vo = new ChatContentVo(0, chat_num, myMember_no, yourMember_no, content, true, null);
 		dao.saveChatDatabase(vo);
 	}
 	

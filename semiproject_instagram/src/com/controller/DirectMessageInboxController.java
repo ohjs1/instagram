@@ -27,6 +27,7 @@ public class DirectMessageInboxController extends HttpServlet {
 		HttpSession session =req.getSession();
 		ArrayList<MemberVo> list = dao.getDMUserList(member_no);
 		session.setAttribute("dmlist", list);
+
 		
 		//dm메뉴에서 클릭시 채팅창 감추기
 		session.setAttribute("showboxCheck", "off"); 
