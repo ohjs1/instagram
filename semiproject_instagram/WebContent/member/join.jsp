@@ -60,7 +60,7 @@
 	}
 </style>
 </head>
-<body>
+<body onload="btnDisabled()">
 <div id="join">
 	<div id="join_wrar">
 		<div>
@@ -84,7 +84,7 @@
 				<input type="password" name="pwd" id="pwd" placeholder="비밀번호" onblur="pwdCheck()" class="input">
 				<span><img src="" id="pwdCheck2"></span>
 			</div>
-			<input type="submit" value="가입" disabled="disabled" id="btn" class="input"><br>
+			<input type="submit" value="가입" id="btn" class="input"><br>
 			<p id="join_p">가입하면 Instagram의 약관, 데이터 정책 및 쿠키<br> 정책에 동의하게 됩니다.</p>
 		</form>
 	</div>
@@ -102,7 +102,7 @@
 	var pwd="";
 	
 	var btn=document.getElementById("btn");
-	var srcCheck="http://localhost:8081/images/o.PNG";
+	var srcCheck="http://localhost:8081${cp}/images/o.PNG";
 	var xhrId=null;
 	
 	function idcheck() {
