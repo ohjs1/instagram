@@ -40,9 +40,13 @@ table {
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 						<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
-					<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
-					<input type="button" value="팔로우" class="folbtn" name="btn"></a>
-					</td>			
+				<c:choose>
+					<c:when test="${sessionScope.member_no != vo.getMember_no() }">
+						<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
+						<input type="button" value="팔로우" class="folbtn" name="btn"></a>
+						</td>	
+					</c:when>			
+				</c:choose>			
 					</tr>
 			</c:forEach>
 		</table>
@@ -62,14 +66,15 @@ table {
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<c:choose>
 						<c:when test="${sessionScope.member_no == mymember_no }">
-							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>	
-						</c:when>			
-				</c:choose>	
-				<c:choose>
-						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>
 							<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
 							<input type="button" value="팔로우" class="folbtn" name="btn"></a>
-							</td>			
+							</td>	
+						</c:when>		
+				</c:choose>
+				<c:choose>
+						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>			
 						</c:when>		
 				</c:choose>
 			</tr>
