@@ -205,6 +205,7 @@ td{width:200px;height:200px;}
 	float:left;
 	width:100%;
 	height: 100%;
+	border: 1px solid rgba(var(--ce3,239,239,239),1);
 }
 	
 .modal_close{
@@ -257,18 +258,20 @@ td{width:200px;height:200px;}
 	
 	button.next, button.prev {
 	  position: absolute;
-	  height: 100%;
-	  top: 0;
-	  background-color: #212121;
-	  color: #fff;
+	  top:50%;
+	  width:30px;
+	  height: 30px;
+	  text-align:center;
+	  background-color: #fff;
+	  color: #212121;
+	  border-radius:50px;
 	  border: none;
 	  font-size: 15px;
 	  font-weight: 700;
-	  padding: 20px;
 	  z-index: 999;
 	}
 	.image-wrap button:hover {
-	  opacity: 0.6;
+	  opacity: 0.7;
 	  cursor: pointer;
 	}
 	
@@ -506,14 +509,14 @@ td{width:200px;height:200px;}
 										//게시글 글쓴이 프사,닉네임,글내용이 들어갈 공간
 										"<div class='meta comments' id='meta_comments'>"+
 										"</div>"+
-										"<div class='comments-wrap'></div>"+//작성된 댓글
+										"<div class='comments-wrap'></div>"+//작성된 댓글이 들어갈 div
 									"</div>"+
 									//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
 									"<div class='items'>"+
 										"<span class='like'>"+
 											//좋아요버튼
 											"<button class='btn1' id='likeBtn'>"+
-												"<div id='likeImg'></div>"+ //좋아요버튼 이미지가 들어갈 공간
+												"<div id='likeImg'></div>"+ //좋아요버튼 이미지가 들어갈 div
 											"</button>"+
 										"</span>"+
 										//댓글버튼
