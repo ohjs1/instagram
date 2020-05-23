@@ -40,7 +40,7 @@
 		<td>
 			<img src="../upload/${imageVo.imagepath }" class="board" onclick="getBoardList(${imageVo.board_no})">
 		</td>
-	</c:forEach>
+</c:forEach>
 	</tr>
 </table>
 

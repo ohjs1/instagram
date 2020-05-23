@@ -36,10 +36,10 @@ public class LoginController extends HttpServlet{
 			session.setAttribute("nickname", vo.getNickname());
 			session.setAttribute("profile", vo.getProfile());
 			
-			req.setAttribute("main", "/homefeed.jsp"); 
+//			req.setAttribute("main", "/homefeed.jsp"); 
 			
-			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
-//			resp.sendRedirect(req.getContextPath()+"/member/result.jsp");
+//			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
+			resp.sendRedirect(req.getContextPath()+"/board/homefeed"); // homefeed컨트롤러로 이동(송영현 수정)
 		}else {
 			req.setAttribute("errMsg", "아이디 또는 비밀번호가 맞지 않아요!");
 			req.getRequestDispatcher("/member/login.jsp").forward(req, resp);

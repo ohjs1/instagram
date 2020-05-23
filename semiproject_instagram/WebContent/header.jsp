@@ -72,7 +72,7 @@
 		<a href="${ cp }/board/insert"> <img
 			src="${ cp }/images/icon/writer.jpg" alt="글쓰기" />
 		</a>
-		<a href="${ cp }/layout.jsp"><img
+		<a href="${ cp }/board/homefeed"><img
 			src="${ cp }/images/icon/home.jpg" alt="홈" /></a>
 		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img
 			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a>
