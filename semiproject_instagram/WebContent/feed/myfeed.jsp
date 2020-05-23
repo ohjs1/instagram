@@ -20,12 +20,12 @@
 	<c:choose>
 		<c:when test="${sessionScope.member_no != youmember_no }">
 			<a href="${cp }/follow/insert?youmember_no=${member_no}">팔로우</a>
-			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로워</a>
-			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로잉</a>
+			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로워</a>
+			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로잉</a>
 		</c:when>
 		<c:otherwise>
-			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로워</a>
-			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로잉</a>
+			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로워</a>
+			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로잉</a>
 			<a href="${cp }/member/memberInfo">프로필편집</a>
 		</c:otherwise>
 	</c:choose>
