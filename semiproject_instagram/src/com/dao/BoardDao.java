@@ -49,6 +49,7 @@ public class BoardDao {
 					int board_no=rs.getInt("board_no");
 					int member_no=rs.getInt("member_no");
 					String content=rs.getString("content");
+					content = content.replace("\r\n", "<br>");
 					int ref=rs.getInt("ref");
 					int lev=rs.getInt("lev");
 					int step=rs.getInt("step");
