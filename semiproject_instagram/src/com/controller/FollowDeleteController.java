@@ -30,11 +30,12 @@ public class FollowDeleteController extends HttpServlet{
 				//resp.sendRedirect("/follow/select?mymember_no="+mymember_no);
 				json.put("using", true);
 				pw.print(json);
+				System.out.println("ì‚­ì œ");
 			}
 		}catch(Exception e) {
 			json.put("using", false);
 			pw.print(json);
-			//System.out.println("ÆÈ·Î¿ìµô¸®Æ®ÄÁÆ®·Ñ·¯ ¿¹¿Ü¹ß»ý");
+			//System.out.println("ï¿½È·Î¿ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ï¿½ï¿½Ü¹ß»ï¿½");
 			//req.setAttribute("msg", "fail");
 			//req.getRequestDispatcher("/follow/followinfo.jsp").forward(req, resp);
 		}

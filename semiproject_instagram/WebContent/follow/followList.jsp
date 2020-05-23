@@ -35,8 +35,8 @@ table {
 		<td colspan="3">
 		<h1>팔로잉</h1></td></tr>
 			<c:forEach var="vo" items='${list }'>
-				<c:set var="i" value="${i+1 }"/>
-				<tr id="result${i }">
+				<c:set var="j" value="${j }"/>
+				<tr id="result${j }">
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 						<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
@@ -57,8 +57,7 @@ table {
 		<tr>
 		<td colspan="3">
 			<h1>팔로워</h1></tr>
-			<c:forEach var="vo" items='${list }'>
-				<c:set var="j" value="${j+1 }"/>
+			<c:forEach var="vo" items='${list }'>		
 			<tr>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a>
@@ -66,7 +65,7 @@ table {
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<c:choose>
 						<c:when test="${sessionScope.member_no == mymember_no }">
-							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>
+							<c:set var="j" value="${j }"/>
 							<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
 							<input type="button" value="팔로우" class="folbtn" name="btn"></a>
 							</td>	
@@ -74,7 +73,8 @@ table {
 				</c:choose>
 				<c:choose>
 						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
-							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>			
+							<c:set var="i" value="${i }"/>
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i+1 });">삭제</a></td>			
 						</c:when>		
 				</c:choose>
 			</tr>

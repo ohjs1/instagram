@@ -12,23 +12,77 @@
 <head>
 <meta charset="UTF-8">
 <title>내 피드</title>
+<style type="text/css">
+#following{
+	width: 500px;
+	margin-top: 28px;
+	margin-left: 660px;
+}
+#followh1{
+	position: relative;
+	left: 221px;
+	bottom: 170px;
+}
+#followbtn{
+	background-color: white;
+	color: black;
+	font-size: 20px;
+	border: 0;
+	outline: 0;
+}
+.erbtn{
+	position: relative;
+    left: 250px;
+    bottom: 152px;
+}
+.erbtn1{
+	position: relative;
+    left: 191px;
+    bottom: 152px;
+}
+.repairbtn{
+	position: relative;
+    left: 254px;
+    bottom: 207px;
+}
+.owbtn{
+	position: relative;
+    left: 405px;
+    bottom: 210px;
+}
+.ingbtn{
+	position: relative;
+    left: 310px;
+    bottom: 152px;
+}
+.ingbtn1{
+	position: relative;
+    left: 257px;
+    bottom: 152px;
+}
+</style>
 <link rel="stylesheet" type="text/css" href="${cp}/css/myfeed.css"> <!-- myfeed CSS -->
 </head>
 <body>
-	<h1>${id }</h1>
-	${youmember_no } ${sessionScope.member_no }
-	<c:choose>
-		<c:when test="${sessionScope.member_no != youmember_no }">
-			<a href="${cp }/follow/insert?youmember_no=${member_no}">팔로우</a>
-			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로워</a>
-			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로잉</a>
-		</c:when>
-		<c:otherwise>
-			<a href="${cp }/follow/select?youmember_no=${member_no}">팔로워</a>
-			<a href="${cp }/follow/select?mymember_no=${member_no}">팔로잉</a>
-			<a href="${cp }/member/memberInfo">프로필편집</a>
-		</c:otherwise>
-	</c:choose>
+<div id="following">
+		<c:choose>
+			<c:when test="${sessionScope.member_no != youmember_no }">
+				<img src="${cp }/upload/${profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
+				<h1 id="followh1">${id }</h1>
+				<a href="${cp }/follow/insert?youmember_no=${member_no}"><input type="submit" value="팔로우" id="followbtn" class="owbtn"></a>
+				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn1"></a>
+				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn1"></a>
+			</c:when>
+			<c:otherwise>
+				<img src="${cp }/upload/${profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
+				<h1 id="followh1">${id }</h1>
+				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn"></a>
+				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn"></a>
+				<a href="${cp }/member/memberInfo"><input type="submit" value="프로필편집" id="followbtn" class="repairbtn"></a>
+			</c:otherwise>
+		</c:choose>
+</div>	
+
 <h1>게시물</h1>
 <table border="1">
 <tr>
@@ -49,6 +103,7 @@
 <div id="likeModal"></div> <!-- 좋아요 모달 -->
 </body>
 <script type="text/javascript">
+
 	const modal=document.querySelector(".modal");
 	const overlay=modal.querySelector(".modal_overlay");
 	const closeBtn=modal.querySelector("button");
