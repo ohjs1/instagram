@@ -1,0 +1,379 @@
+@charset "UTF-8";
+.board{width: 100%; height: 100%;}
+td{width:200px;height:200px;}
+
+/* .modal_wrap{
+	height: 100%;
+    margin: 0 auto;
+    max-width: 935px;
+    pointer-events: none;
+    width: 100%;
+} */
+.modal2 {
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal_overlay {
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+#img{
+	position:relative;
+	width: 100%;
+	height: 638px;
+}
+
+.modal_content{
+	display: grid;
+	grid-template-columns: 600px 335px;
+	background: white;
+	z-index:10;
+}
+.modal_content .image-wrap {
+		position:relative;
+		max-width: 600px;
+		max-height: 100%;
+	}
+
+.mata-wrap{
+	padding:20px;
+}
+	
+.meta-wrap {
+  padding: 20px;
+  border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+}
+.meta img{
+	align-self: center;
+    max-width: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.meta p {
+    margin: 0;
+    color: $black;
+}
+.handle {
+    text-decoration: lowercase;
+    font-weight: 600;
+    color:black;
+}
+
+.meta .location {
+    font-size: 12px;
+    margin-top: 2px;
+}
+.meta.comments {
+	margin-top:20px;
+    border-bottom: none;
+}
+/* 게시자 CSS(meta) */
+.meta {
+	display: flex;    
+	align-items: center;
+	padding-bottom: 20px;
+}
+.meta .boardoption{
+	margin-left: 150px;
+	align-items: center;
+}
+.meta .boardbtn{
+	background: 0;
+	border: 0;
+	font-weight: 1000;
+	text-align: center;
+}
+.comments{
+	position:relative;
+	display: flex;    
+	align-items: center;
+}
+.comments p{
+	margin:0;
+}
+.comments .boardoption{
+	position:absolute;
+	right:0;
+	align-items: center;
+}
+.comments .boardbtn{
+	background: 0;
+	border: 0;
+	font-weight: 1000;
+	text-align: center;
+}
+.comments-wrap img{
+	align-self: center;
+    max-width: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+.comments-wrap .comments{
+	padding-top:5px;
+	padding-bottom: 20px;
+    border-bottom: none;
+}
+
+.meta-info {
+  display: grid;
+  grid-template-rows: 80px 400px 96px 55px;
+  border-top: 1px solid $offWhite;
+}
+#commtext{
+	background: 0 0;
+    border: 0;
+    width: 80%;
+}
+/*댓글목록 css*/
+.scroll1{
+	margin: 0 20px 20px;
+	margin-top: -10px;
+	overflow:scroll;
+	-ms-overflow-style: none; /*스크롤바 기능은 하면서 보이지는 않게 하기*/
+}
+/*스크롤바 기능은 하면서 보이지는 않게 하기*/
+::-webkit-scrollbar {
+	display:none;
+}
+.comments-wrap {
+
+  input {
+    border: none;
+    width: 100%;
+    outline: 0;
+  }
+  .handle {
+    text-decoration: lowercase;
+    font-weight: 600;
+  }  
+  &:last-child {
+    border-top: 1px solid rgba(var(--ce3,239,239,239),1);
+    padding-top: 20px;
+  }
+}
+
+.likeListBtn{
+	background-color: transparent;
+	border:0;
+	font-weight: 600;
+}
+.likeLink{
+	margin-left: 8px;
+}
+.likeLink p{
+	margin:0;
+}
+
+/* 게시일 css */
+#time{
+	margin-left: 8px;
+}
+.time p{
+	font-size: 10px;
+    letter-spacing: .2px;
+    color: gray;
+}
+
+.image-wrap{
+	display:inline-block;
+	float:left;
+	width:100%;
+	height: 100%;
+	border: 1px solid rgba(var(--ce3,239,239,239),1);
+}
+	
+.modal_close{
+	position:fixed;
+	right:0;
+	top:0;
+	z-index:10;
+}
+	.hidden{
+	display: none;
+}
+
+/* .items */
+
+  .items{
+  	border-top: 1px solid rgba(var(--ce3,239,239,239),1);
+  	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+  }
+  .items .btn1{
+  	border:0;
+  	background: 0 0;
+  	padding: 8px;
+  }
+  .commwrite{
+  	margin-top: 8px;
+  	
+  }
+  
+  #sendComment{
+  	margin-left:10px;
+	border: 0;
+	color: #0095f6;
+	color: rgba(var(--d69,0,149,246),1);
+	display: inline;
+	padding: 0;
+	position: relative;
+	opacity: .3;
+  }
+  
+/* ------------------- 슬라이더 CSS ---------------------*/
+	img.showImage {
+	  display: inline-block;
+	}
+	
+	img.hideImage {
+	  display: none;
+	}
+	
+	button:focus {outline:0;}
+	
+	button.next, button.prev {
+	  position: absolute;
+	  top:50%;
+	  width:30px;
+	  height: 30px;
+	  text-align:center;
+	  background-color: #fff;
+	  color: #212121;
+	  border-radius:50px;
+	  border: none;
+	  font-size: 15px;
+	  font-weight: 700;
+	  z-index: 999;
+	}
+	.image-wrap button:hover {
+	  opacity: 0.7;
+	  cursor: pointer;
+	}
+	
+	.next {
+	  right: 0;
+	  
+	  opacity: 0.4;
+	}
+	
+	.prev {
+	  left: 0;
+	  
+	  opacity: 0.4;
+	}
+	
+/*--------------------------- 삭제,수정,취소 모달 CSS ----------------------------------*/
+.boardOptionModal1{
+	position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.option_overlay{
+	background-color: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index:10000;
+}
+.option_content{
+	display: grid;
+	border-radius:10px;
+	text-align:center;
+	grid-template-columns: 400px;
+	grid-template-rows: 50px 50px 50px;
+	background: white;
+	z-index:10000;
+}
+.option_content .delete, .option_content .update{
+	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+}
+.option_btn{
+	background:0;
+	border:0;
+	width: 100%;
+	height: 100%;
+	border-radius:10px;
+}
+
+/*--------------------------- 좋아요 모달 CSS ----------------------------------*/
+.like_overlay {
+		background-color: rgba(0,0,0,0.6);
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index:10000;
+	}
+.like_content{
+		display: grid;
+		border-radius:10px;
+		text-align:center;
+		grid-template-columns: 300px;
+		grid-template-rows: 50px 250px;
+		background: white;
+		z-index:10000;
+	}
+.like_header{
+	font-family: 맑은고딕;
+	padding: 10px;
+	border-bottom: 1px solid rgba(var(--ce3,239,239,239),1);
+	font-weight: 600;
+}
+.likeModal1 {
+		position: fixed;
+		bottom:0px;
+		left:0px;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+.likemodal_close{
+	width: 18px;
+	height: 24px;
+	float:right;
+}
+	.hidden{
+	display: none;
+}
+/* 좋아요한 회원들 CSS */
+.like_list img{
+	align-self: center;
+    max-width: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+.likeusers{
+	display: flex;    
+	align-items: center;
+	padding-bottom: 8px;
+    padding-top: 8px;
+	padding-left: 16px;
+    padding-right: 16px;
+    overflow:scroll;
+	-ms-overflow-style: none; /*스크롤바 기능은 하면서 보이지는 않게 하기*/
+}
+.likeusers p{
+	margin: 0;
+
+}
+.name{
+	color: rgba(var(--f52,142,142,142),1);
+	font-weight: 400;
+	
+}
