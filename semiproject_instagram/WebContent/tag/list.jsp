@@ -33,6 +33,7 @@
 	}
 	#div_img{
 		display: inline-block;
+		width: 950px;
 	}
 </style>
 <!DOCTYPE html>
@@ -41,7 +42,7 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-<body>
+<body onload="test()">
 <div id="headerTag">
 	<img src="${cp}/upload/${vo[0].imagepath}" id="storyTagImg"><!-- 스토리 ajax로 보여지기 -->
 	<div id="dd"><strong>${keyword }</strong></div>
@@ -52,7 +53,7 @@
 	<div id="div_ajax">
 		<div id="div_img">
 			<c:forEach var="vo" items="${vo}">
-				<c:if test="${c<6 }">
+				<c:if test="${c<9 }">
 					<img src="${cp }/upload/${vo.imagepath}" class="list_img">
 					<c:set var="c" value="${c+1 }"/>
 				</c:if>
@@ -60,30 +61,27 @@
 		</div>
 	</div>
 </div>
-<div id="enters">
-
-</div>
 </body>
 <script type="text/javascript">
 	var storyTagImg=document.getElementById("storyTagImg");
 	var xhr=null;
-	function stroyTagImg(){
-		alert(storyTagImg.src);
+	function test() {
 		xhr=new XMLHttpRequest();
-		xhr.onreadystatechange=showTagImg;
-		xhr.open('get','${cp}/tag/showStroy?keyword=${keyword }',true);
-		xhr.send();
-	}
-	function showTagImg() {
-		if(xhr.readyState==4 && xhr.status==200){
-			var data=xhr.responseText;
-			var json=JSON.parse(data);
-			if(json[0].filepath!="" & json[0].filepath!=null){
-				storyTagImg.src="${cp}/upload/"+json[0].filepath;
-			}else{
-				storyTagImg.src="${cp }/upload/${vo[0].imagepath}";
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				var data=xhr.responseText;
+				var json=JSON.parse(data);
+				if(json[0].filepath!="" & json[0].filepath!=null){
+					storyTagImg.src="${cp}/upload/"+json[0].filepath;
+				}else{
+					storyTagImg.src="${cp }/upload/${vo[0].imagepath}";
+				}
 			}
 		}
+		var k='${keyword}';
+    	var test=k.replace("#", "%23");
+		xhr.open('get','${cp}/tag/showStroy?keyword='+test,true);
+		xhr.send();
 	}
 	
 	//무한스크롤
