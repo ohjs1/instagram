@@ -211,25 +211,7 @@
 			var ref="${vo.ref}";
 			var lev="${vo.lev}";
 			var step="${vo.step}";
-			var regdate=new Date("${vo.regdate}");
-			var date= new Date();
-			var dd=Math.floor((date-regdate)/1000);
-			var realDate="";
-			if(dd<60){
-				realDate="<p>"+dd+"초 전</p>";
-			}else if(dd<3600){
-				realDate="<p>"+Math.floor((dd/60))+"분 전</p>";
-			}else if(dd<86400){
-				realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
-			}else if(dd<604800){
-				realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
-			}else if(dd<2592000){
-				realDate="<p>"+Math.floor((dd/60/60/24/7))+"주 전</p>";
-			}else if(dd<31536000){
-				realDate="<p>"+Math.floor((dd/60/60/24/7/4.3))+"달 전</p>";
-			}else{
-				realDate="<p>"+Math.floor((dd/60/60/24/7/4.2/12))+"년 전</p>";
-			}
+			
 			var board1=document.getElementById("board1");
 			var div=document.createElement("div");
 			div.innerHTML=	"<div class='board_content'>"+
@@ -290,8 +272,7 @@
 			div.className="board2";
 			div.setAttribute("id","board2");
 			board1.appendChild(div);
-			var time=document.getElementsByClassName("time")[${i.index}];
-			time.innerHTML=realDate;
+			
 			
 			//글내용이 있을경우 board comment에 내용추가
 			var board_comments=document.querySelectorAll(".board.comments")[${i.index}];
@@ -307,7 +288,7 @@
 													"<span class='handle'>"+nickname+"</span> "+//닉네임
 												"</a>"+
 												"<span>"+content+"</span>"+//글내용
-												"<div class='time'><p>"+realDate+"</p></div>"+//작성시간
+												"<div class='time2'></div>"+//작성시간
 											"</p>"+
 										"</div>";
 			}else{
@@ -329,6 +310,11 @@
 				showBoardOptionModal(board_no,member_no,ref);
 				});
 			}
+			
+			//게시물 이미지 가져오기
+			getImgList(board_no,${i.index}); //이미지리스트
+			
+			
 ////////////////////////////////// 이벤트구역 /////////////////////////////////////////			
 			
 			
@@ -364,9 +350,108 @@
 			});
 		</c:forEach>
 		boardBtnNum=-1; //...버튼의 갯수 초기화
+		getTime();//게시글의 게시날짜 삽입
 	}
 	
-
+	//게시물 이미지 가져오기
+	var imgList=null;
+	function getImgList(board_no,index){
+		imgList=new XMLHttpRequest();
+		imgList.onreadystatechange=function(){
+			if(imgList.readyState==4 && imgList.status==200){
+				var data=imgList.responseText;
+				var json=JSON.parse(data);
+				var image_wrap=document.getElementsByClassName("image-wrap")[index];
+				for(var i=0;i<json.length;i++){
+					var image_no=json[i].image_no;
+					var board_no=json[i].board_no;
+					var imagePath=json[i].imagePath;
+					var img=document.createElement("img");
+					img.setAttribute("id","img");
+					img.src="../upload/"+imagePath;
+					image_wrap.appendChild(img);
+				}
+				showImage(0,index);
+			}
+		}
+		imgList.open('get','../image/list?board_no='+board_no,true);
+		imgList.send();
+	}
+	//이미지 슬라이더
+	var counter=0;
+	var slider=null;
+	var images=null;
+	function showImage(cnt,index){
+		counter=cnt;
+		slider=document.getElementsByClassName("image-wrap")[index];
+		images=slider.getElementsByTagName("img");
+		var prev=document.getElementsByClassName("prev")[index];
+		var next=document.getElementsByClassName("next")[index];
+		for(var i=0; i<images.length; i++){
+			images[i].className="hideImage";
+		}
+		images[cnt].className ="showImage";
+		if(counter==0 && counter==images.length-1){
+			prev.style.display="none";
+			next.style.display="none";
+		}else if(counter==images.length-1){
+			prev.style.display="inline";
+			next.style.display="none";
+		}else if(counter==0){
+			prev.style.display="none";
+			next.style.display="inline";
+		}else{
+			prev.style.display="inline";
+			next.style.display="inline";
+		}
+	}
+	//다음버튼
+	function nextImg(){
+		if (counter<images.length-1){
+			counter+= 1;
+		}else{
+			counter=0;
+		}
+		showImage(counter);
+	}
+	//이전버튼
+	function prevImg(){
+		if(counter > 0){
+			counter-=1;
+		}else{ 
+			counter=images.length-1;
+		}
+		showImage(counter);
+	}
+	
+	//게시글의 게시날짜 삽입
+	function getTime(){
+		<c:forEach items="${regdate}" var="longtime" varStatus="i">
+			//게시글 시간 삽입
+			var regdate=new Date(${longtime});
+			var date= new Date();
+			var dd=Math.floor((date-regdate)/1000);
+			var realDate="";
+			if(dd<60){
+				realDate="<p>"+dd+"초 전</p>";
+			}else if(dd<3600){
+				realDate="<p>"+Math.floor((dd/60))+"분 전</p>";
+			}else if(dd<86400){
+				realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
+			}else if(dd<604800){
+				realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
+			}else if(dd<2592000){
+				realDate="<p>"+Math.floor((dd/60/60/24/7))+"주 전</p>";
+			}else if(dd<31536000){
+				realDate="<p>"+Math.floor((dd/60/60/24/7/4.3))+"달 전</p>";
+			}else{
+				realDate="<p>"+Math.floor((dd/60/60/24/7/4.2/12))+"년 전</p>";
+			}
+			var time=document.getElementsByClassName("time")[${i.index}];
+			time.innerHTML=realDate;
+		</c:forEach>
+	}
+	
 </script>
 </html>
 
