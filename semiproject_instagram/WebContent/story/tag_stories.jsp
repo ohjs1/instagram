@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>Opponents_Stories</title>
+<title>Tag_Stories</title>
 <style>
 * {
 	padding: 0px;

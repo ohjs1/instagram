@@ -25,6 +25,7 @@ import com.vo.StoryVo;
 public class StoryOpponentListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//읽은 사람 저장하는 부분
 		int member_no=Integer.parseInt(req.getParameter("member_no"));
 
 		StoryDao dao=new StoryDao();
@@ -37,6 +38,7 @@ public class StoryOpponentListController extends HttpServlet{
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//opponentstories.jsp 상대방 프로필, 닉네임 띄우는거..getprofile
 		StoryDao dao=new StoryDao();
 		HttpSession session=req.getSession();
 		int login_no=(int)session.getAttribute("member_no");

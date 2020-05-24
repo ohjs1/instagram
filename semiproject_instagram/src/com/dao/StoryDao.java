@@ -109,7 +109,7 @@ public class StoryDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	//방금 올린 스토리 부터 가져오기 가능? 이전 누르면? ㅠ
+
 	//해당 멤버의 모든 스토리 정보 가져오기
 	public ArrayList<StoryMemberVo> mem_list(int member_no){
 		Connection con=null;

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>MyStoriess</title>
+<title>My_Stories</title>
 <style>
 * {
 	padding: 0px;
@@ -71,9 +71,6 @@ body {
 	color: white;
 	font-family: 맑은고딕;
 	font-size: 15px;
-	border:1px solid red;
-
-
 }
 
 #exit {
@@ -245,6 +242,19 @@ body {
 <div id="modal1"></div>
 </body>
 <script type="text/javascript">
+
+	function delete24story(readstory){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				console.log("24시간 지난 스토리 삭제됨");
+			}
+		}
+		xhr.open('get', '${cp}/story/delete?story_no='+readstory, true);
+		xhr.send();
+	}
+	
+	//스토리 올린 후 지난 시간 표시
 	function getStorydate(readstory,i){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
@@ -256,15 +266,25 @@ body {
 				var storydate=new Date(json.storydate);
 				var date=new Date();
 				var dd=Math.floor((date-storydate)/1000);
+				console.log("스토리올린시간:"+storydate);
+				console.log(date);
+				console.log(dd);
 				var realDate="";
 				if(dd<60){
 					realDate="<p>"+dd+"초 전</p>";
+					console.log(realDate);
 				}else if(dd<3600){
 					realDate="<p>"+Math.floor((dd/60))+"분 전</p>";
+					console.log(realDate);
 				}else if(dd<86400){
 					realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
+					console.log(realDate);
 				}else if(dd<604800){
 					realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
+					console.log(realDate);
+				}else{
+					console.log(realDate+"삭제됨");
+					delete24story(readstory);
 				}
 				var div = document.createElement("div");
 				div.innerHTML = realDate;

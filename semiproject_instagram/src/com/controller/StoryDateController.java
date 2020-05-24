@@ -22,10 +22,9 @@ public class StoryDateController extends HttpServlet{
 		int story_no=Integer.parseInt(req.getParameter("story_no"));
 		StoryDao dao=new StoryDao();
 		StoryVo vo=dao.story_date(story_no);
-		Date storydate=vo.getStorydate();
-		
+		System.out.println(story_no+"번 스토리 올린 날짜 : "+vo.getStorydate().getTime());
 		JSONObject json=new JSONObject();
-		json.put("storydate", storydate);
+		json.put("storydate", vo.getStorydate().getTime());
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();
 		pw.print(json);
