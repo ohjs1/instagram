@@ -289,6 +289,7 @@
 	//채팅 받기 기능 구현 ajax
 	var showMsg_xhr = null;
 	var onescroll = 0;
+
 	function dshowBox(){
 		showMsg_xhr = new XMLHttpRequest();
 		
@@ -298,14 +299,13 @@
 			var mText = document.getElementById("mText");
 			var mtextff = document.getElementById("mtextff");
 			
-			
 			if(showMsg_xhr.readyState==4 && showMsg_xhr.status==200){
-				
 				//초기화
 				mtextff.innerHTML = "";
 				
+				var logintimef = '${logintimef}'; //로그인 시간
+				//console.log(logintimef);
 				for(var i=0; i<json.length; i++){
-				
 					if(myMember_no == json[i].smember_no){
 						mtextff.innerHTML += "<div style='width:100%; text-align:right; margin-top:15px;'>" +
 						"<div class='tbox_dm' style='padding: 10px; background-color: white;" +
@@ -322,12 +322,19 @@
 						json[i].content + "</div></div>";
 					}
 				}
+
+				
 				if(onescroll == 0){
 					msgTextBox.scrollTop = msgTextBox.scrollHeight;
 					onescroll++;
 				}
 				//스크롤바 제일아래로
-				msgTextBox.scrollTop = msgTextBox.scrollHeight;
+				var _scrollTop = msgTextBox.scrollY || msgTextBox.scrollTop;
+				//console.log(_scrollTop + '>>_scrollTop');
+				//console.log(msgTextBox.scrollHeight + '>>scrollHeight');
+				if(_scrollTop+505 == msgTextBox.scrollHeight){
+					msgTextBox.scrollTop = msgTextBox.scrollHeight;
+				}
 			}			
 		}
 		

@@ -1,6 +1,8 @@
 package com.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +41,14 @@ public class LoginController extends HttpServlet{
 //			req.setAttribute("main", "/homefeed.jsp"); 
 			
 //			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
+			
+			//로그인 시간 생성
+			SimpleDateFormat logintime = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+			Calendar time = Calendar.getInstance();
+//			System.out.println( logintime.format( time.getTime() ) );
+			String logintimef = logintime.format( time.getTime() );
+			session.setAttribute("logintimef", logintimef);
+			
 			resp.sendRedirect(req.getContextPath()+"/board/homefeed"); // homefeed컨트롤러로 이동(송영현 수정)
 		}else {
 			req.setAttribute("errMsg", "아이디 또는 비밀번호가 맞지 않아요!");

@@ -191,10 +191,15 @@ public class DirectMessageDao {
 					}
 //					System.out.println("채팅상태값 유저 번호 : " + member_no);
 //					System.out.println("채팅상태값 채팅번호 : " + getChattingRoomNumber(m_num, y_num));
-					status += getStatusChat(member_no, getChattingRoomNumber(m_num, y_num));
+					status += getStatusChat(member_no, rs.getInt("chatroom_no"));
 
 				}
-				return status;
+				if(status>0) {
+					System.out.println("status : " + status);
+					return status;
+				} else {
+					return 0;
+				}
 				
 			} catch(SQLException s) {
 				System.out.println(s.getMessage());
@@ -310,9 +315,12 @@ public class DirectMessageDao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				return rs.getInt("sums");
+				int r = rs.getInt("sums");
+				if(r>0) {
+					return 1;
+				}
 			}
-			return -1;
+			return 0;
 		} catch(SQLException s) {
 			System.out.println(s.getMessage());
 			return -1;

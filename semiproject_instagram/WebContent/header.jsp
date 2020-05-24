@@ -59,7 +59,7 @@
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!-- DM검사 js -->
     <script src="${ cp }/dm/js/chat_module.js"></script>
-    
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <body>
 <div id="header_wrap">
@@ -78,7 +78,10 @@
 		<a href="${ cp }/board/homefeed"><img
 			src="${ cp }/images/icon/home.jpg" alt="홈" /></a>
 		<a href="${ cp }/dm/inbox?member_no=${member_no}"><img
-			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a><span class="badge badge-important">${ sessionScope.cc_result }</span>
+			src="${ cp }/images/icon/dm.jpg" alt="다이렉트 메시지" /></a>
+			<c:if test="${ sessionScope.cc_result != null && sessionScope.cc_result != 0 }">
+				<span class="badge badge-important">${ sessionScope.cc_result }</span>
+			</c:if>
 		<a href="${ cp }/feed/myfeed"> <img
 			src="${ cp }/images/icon/location.jpg" alt="내피드로가게함(임시)" />
 		</a>
