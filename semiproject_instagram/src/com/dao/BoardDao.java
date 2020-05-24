@@ -30,7 +30,7 @@ public class BoardDao {
 					"where m.member_no=bb.member_no and bb.lev=? and (bb.regdate,bb.board_no) in (select distinct b.regdate, b.board_no " + 
 					"                                                                from follow f,board b " + 
 					"                                                                where f.youmember_no=b.member_no and f.mymember_no=? or b.member_no=? and b.lev=? " + 
-					") \r\n" + 
+					") " + 
 					"order by bb.regdate desc";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, 0);

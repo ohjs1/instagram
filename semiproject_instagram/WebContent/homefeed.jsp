@@ -344,7 +344,6 @@
 	//좋아요 갯수
 	var likeList=null;
 	function getLikeCnt(num,index){
-		alert(index);
 		var board_no=num;
 		likeList=new XMLHttpRequest();
 		likeList.onreadystatechange=function(){
