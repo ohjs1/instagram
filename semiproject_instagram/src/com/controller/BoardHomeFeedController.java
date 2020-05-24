@@ -22,6 +22,12 @@ public class BoardHomeFeedController extends HttpServlet{
 		int member_no=(int)session.getAttribute("member_no");
 		BoardDao dao=new BoardDao();
 		ArrayList<Board_MemberVo> list=dao.selectHomeFeedMemberBoard(member_no);
+		long regdate[]=new long[list.size()];
+		for(int i=0; i<list.size(); i++) {
+			Board_MemberVo vo=list.get(i);
+			regdate[i]=vo.getRegdate().getTime();
+		}
+		req.setAttribute("regdate", regdate);
 		req.setAttribute("boardList", list);
 		req.setAttribute("main", "/homefeed.jsp");
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);

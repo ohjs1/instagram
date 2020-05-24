@@ -67,14 +67,14 @@
 <div id="following">
 		<c:choose>
 			<c:when test="${sessionScope.member_no != youmember_no }">
-				<img src="${cp }/upload/${profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
+				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
 				<h1 id="followh1">${id }</h1>
 				<a href="${cp }/follow/insert?youmember_no=${member_no}"><input type="submit" value="팔로우" id="followbtn" class="owbtn"></a>
 				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn1"></a>
 				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn1"></a>
 			</c:when>
 			<c:otherwise>
-				<img src="${cp }/upload/${profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
+				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
 				<h1 id="followh1">${id }</h1>
 				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn"></a>
 				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn"></a>

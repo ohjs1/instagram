@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import com.dao.BoardDao;
 import com.dao.ImageDao;
+import com.dao.MemberDao;
 import com.vo.ImageVo;
+import com.vo.MemberVo;
 
 @WebServlet("/feed/myfeed")
 public class BoardMyFeedController extends HttpServlet{
@@ -32,6 +34,8 @@ public class BoardMyFeedController extends HttpServlet{
 		System.out.println("member_no="+member_no);
 		BoardDao boardDao=new BoardDao();
 		ImageDao imageDao=new ImageDao();
+		MemberDao memberDao=MemberDao.getInstance();
+		MemberVo memberVo=memberDao.memberInfo(member_no);
 		//ArrayList<ImageVo> imagelist=dao.selectImg(member_no);
 //		ArrayList<Board_MemberVo> board_memberList=boardDao.selectMemberBoard(member_no);
 //		List<List<ImageVo>> boardImgList=new ArrayList<List<ImageVo>>();
@@ -45,6 +49,7 @@ public class BoardMyFeedController extends HttpServlet{
 		//게시물당 1개씩 메인이미지가 담긴 ImageVo를 ArrayList에 담음
 		ArrayList<ImageVo> mainImgList=imageDao.selectMainImg(member_no);
 		
+		req.setAttribute("profile", memberVo.getProfile());
 		req.setAttribute("mainImgList", mainImgList);
 //		req.setAttribute("board_memberList", board_memberList);
 //		req.setAttribute("boardImgList", boardImgList);
