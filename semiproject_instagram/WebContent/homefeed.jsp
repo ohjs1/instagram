@@ -95,7 +95,9 @@
 .board.comments {
     padding: 0;
 }
-
+#img{
+	height: 100%;
+}
 .board_info {
     display: grid;
     grid-template-rows: 80px 800px 226px;
@@ -197,6 +199,7 @@
 	function getBoardList(){
 		//게시글파트(송영현)
 		//var list="<c:out value='${boardList}'/>";
+		var halist= new Array();
 		var list = "${boardList}";
 
 		<c:forEach items="${boardList}" var="vo" varStatus="i">
@@ -231,8 +234,8 @@
 										"</div>"+
 									"</div>"+
 									"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
-										"<button class='prev' onclick='prevImg()'>&#60;</button>"+
-								    	"<button class='next' onclick='nextImg()'>&#62;</button>"+
+										"<button class='prev' onclick='prevImg(${i.index})'>&#60;</button>"+
+								    	"<button class='next' onclick='nextImg(${i.index})'>&#62;</button>"+
 									"</div>"+
 									
 									//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
@@ -311,12 +314,8 @@
 				});
 			}
 			
-			//게시물 이미지 가져오기
-			getImgList(board_no,${i.index}); //이미지리스트
-			
 			
 ////////////////////////////////// 이벤트구역 /////////////////////////////////////////			
-			
 			
 			//댓글 엔터버튼 누를 시 댓글생성
 			var commtext=document.getElementById("commtext");
@@ -348,35 +347,123 @@
 					commtext.value="";
 				}
 			});
+			//게시글번호 배열에 담기
+			halist.push(board_no);
 		</c:forEach>
+		console.log(halist)
+		getImgList(halist); //이미지리스트 가져오기
+		getLikeCnt(halist); //좋아요리스트 가져오기
 		boardBtnNum=-1; //...버튼의 갯수 초기화
 		getTime();//게시글의 게시날짜 삽입
 	}
 	
+	//좋아요 추가or삭제 ajax
+	var likeaction=null;
+	function likeAction(board_no,halist){
+		likeaction=new XMLHttpRequest();
+
+		halist = halist.split(",");
+		likeaction.onreadystatechange=function(){
+			if(likeaction.readyState==4 && likeaction.status==200){
+				var data=likeaction.responseText;
+				var json=JSON.parse(data);
+				getLikeCnt(halist);
+			}
+		}
+		likeaction.open('get','${cp}/good/insertdelete?board_no='+board_no+'&member_no=${sessionScope.member_no}',true);
+		likeaction.send();
+	}
+	
+	//좋아요리스트 가져오기
+	var likeList=null;
+	function getLikeCnt(halist){
+		console.log(halist)
+		likeList=new XMLHttpRequest();
+		likeList.onreadystatechange=function(){
+			if(likeList.readyState==4 && likeList.status==200){
+				var data=likeList.responseText;
+				var json=JSON.parse(data);
+				console.log(json);
+				var likeLink=document.getElementsByClassName("likeLink");
+				var likeImg=document.getElementsByClassName("likeImg");
+				if(json!=null && json!=""){
+					
+					for(var k=0;k<halist.length;k++){
+						var likeChk=false;
+						//var notLike = true;
+						for(var i=0; i<json.length; i++){
+							
+							if(json[i][0].board_no==halist[k]){
+								//좋아요가 있을경우
+								for(var j=0;j<json[i].length;j++){
+									if(halist[k]==json[i][j].board_no){
+										//게시글번호가 같을경우
+										var member_no=json[i][j].member_no;
+										if(member_no==${sessionScope.member_no}){
+											//내가 좋아요 눌렀을경우
+											//likeChk=true;
+											likeImg[k].innerHTML="<img src='${cp}/upload/like.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
+											break;
+										}
+									}
+								}
+								likeLink[k].innerHTML="<button class='likeListBtn' id='likeListBtn'>좋아요 "+json[i].length+"개</button>";
+								break;
+							}else{
+								//좋아요가 없을경우
+								likeLink[k].innerHTML="<p>가장 먼저 <label for='likeBtn' style='display:inline-block;font-weight:600'>좋아요</label>를 눌러보세요.</p>";
+								likeImg[k].innerHTML="<img src='${cp}/upload/likenull.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
+							}
+						}
+					}
+				}else{ //게시글중에서 좋아요가 하나도 없을경우
+					for(var k=0;k<halist.length;k++){
+						likeLink[k].innerHTML="<p>가장 먼저 <label for='likeBtn' style='display:inline-block;font-weight:600'>좋아요</label>를 눌러보세요.</p>";
+						likeImg[k].innerHTML="<img src='${cp}/upload/likenull.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
+					}
+				}
+				
+				
+				//생성된 좋아요 리스트클릭 이벤트 생성 및 좋아요 모달함수 호출
+				var likeListBtn=document.getElementsByClassName("likeListBtn");
+				for(let i=0; i<likeListBtn.length; i++){
+					likeListBtn.addEventListener('click', function() {
+						showLikeModal(json); //좋아요 모달함수 호출
+					});
+				}
+			}
+		}
+		likeList.open('get','${cp}/good/listhomefeed?halist='+halist,true);
+		likeList.send();
+	}
+	
 	//게시물 이미지 가져오기
 	var imgList=null;
-	function getImgList(board_no,index){
+	function getImgList(halist){
 		imgList=new XMLHttpRequest();
-		imgList.onreadystatechange=function(){
+		imgList.onreadystatechange=function (){
 			if(imgList.readyState==4 && imgList.status==200){
 				var data=imgList.responseText;
 				var json=JSON.parse(data);
-				var image_wrap=document.getElementsByClassName("image-wrap")[index];
-				for(var i=0;i<json.length;i++){
-					var image_no=json[i].image_no;
-					var board_no=json[i].board_no;
-					var imagePath=json[i].imagePath;
-					var img=document.createElement("img");
-					img.setAttribute("id","img");
-					img.src="../upload/"+imagePath;
-					image_wrap.appendChild(img);
+				for (var i=0;i<json.length;i++){
+					var image_wrap=document.getElementsByClassName("image-wrap");
+						for(var k=0;k<json[i].length;k++){
+							var imagePath = json[i][k].imagePath;
+							var img=document.createElement("img");
+							img.className="board_imgs";
+							img.setAttribute("id","img");
+							img.src="../upload/"+imagePath;
+							image_wrap[i].appendChild(img);
+						}
+					showImage(0,i);
 				}
-				showImage(0,index);
-			}
+			}			
 		}
-		imgList.open('get','../image/list?board_no='+board_no,true);
-		imgList.send();
-	}
+		imgList.open('post','${cp}/image/listhomefeed',true);
+		imgList.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		imgList.send('halist='+halist);
+	}	
+	
 	//이미지 슬라이더
 	var counter=0;
 	var slider=null;
@@ -406,22 +493,22 @@
 		}
 	}
 	//다음버튼
-	function nextImg(){
+	function nextImg(index){
 		if (counter<images.length-1){
 			counter+= 1;
 		}else{
 			counter=0;
 		}
-		showImage(counter);
+		showImage(counter,index);
 	}
 	//이전버튼
-	function prevImg(){
+	function prevImg(index){
 		if(counter > 0){
 			counter-=1;
 		}else{ 
 			counter=images.length-1;
 		}
-		showImage(counter);
+		showImage(counter,index);
 	}
 	
 	//게시글의 게시날짜 삽입

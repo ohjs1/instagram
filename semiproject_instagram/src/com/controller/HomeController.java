@@ -22,5 +22,5 @@ public class HomeController extends HttpServlet {
 		
 		req.getRequestDispatcher("/member/login").forward(req, resp);
 		
-	} 
+	}
 }
