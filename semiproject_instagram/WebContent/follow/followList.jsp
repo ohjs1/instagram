@@ -80,7 +80,7 @@ table {
 	<table id="list2">
 		<tr>
 		<td colspan="3">
-		<h1>팔로워</h1></td></tr>
+		<h1>팔로잉</h1></td></tr>
 			<c:forEach var="vo" items='${list }'>
 				<c:set var="i" value="${i+1 }"/>
 				<tr id="result${i }">
@@ -108,7 +108,7 @@ table {
 			<table id="list3">
 		<tr>
 		<td colspan="3">
-			<h1>팔로잉</h1></tr>
+			<h1>팔로워</h1></tr>
 			<c:forEach var="vo" items='${list }'>
 				<c:set var="j" value="${j+1 }"/>
 			<tr>
