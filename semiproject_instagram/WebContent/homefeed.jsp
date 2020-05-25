@@ -8,8 +8,17 @@
 <title>HomeFeed</title>
 <link rel="stylesheet" type="text/css" href="${cp}/css/myfeed.css"> <!-- myfeed CSS -->
 <style>
-#wrap{width:60%;height: 100%;margin:auto;}
-#s{width:97%;height: 25%; border:1px solid #d3d3d3; border-radius:5px;  margin:10px;padding:5px;display: flex;}
+#wrap{width:60%;height: 100%;margin:auto; margin-top: 50px;}
+#s{ 
+	width: 97%;
+    height: 12%;
+    max-width: 650px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    margin: auto;
+    padding-top: 20px;
+    display: flex;
+}
 #my {width:100px;height:100px; text-align: center;position:relative;}
 #plus {width:50px;height:50px;position:absolute;top:1px;right:1px;}
 .sto {width:100px;height:50px;text-align: center;}
@@ -19,11 +28,14 @@
 	position: relative;
 	top:0;
 	left:0;
-	width: 100%;
+	max-width:650px;
+	width: 97%%;
 	height: 100%;
+	max-width
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin:auto;
 	margin-top: 50px;
 	
 }
@@ -75,7 +87,7 @@
 
 .board_content {
     display: grid;
-    width:98%;
+    width:100%;
     grid-template-columns: 100%;
     background: white;
     z-index: 10;
@@ -84,8 +96,10 @@
 
 .board_content .image-wrap {
     position: relative;
-    max-width: 100%;
-    max-height: 100%;
+    width:100%;
+    height:100%;
+    max-width: 650px;
+    max-height: 650px;
     border: 1px solid rgba(var(--ce3,239,239,239),1);
 }
 .board-wrap {
@@ -100,7 +114,7 @@
 }
 .board_info {
     display: grid;
-    grid-template-rows: 80px 800px 226px;
+    grid-template-rows: 80px 650px 226px;
     border-top: 1px solid $offWhite;
 }
 /* 댓글달기 및 전송버튼 CSS */
@@ -130,12 +144,6 @@
 </head>
 <body onload="addStorys();getBoardList();">
 <div id="wrap">
-	<h1>홈피드입니다</h1>
-	계정설정 :
-	<a href="${ cp }/member/memberInfo">프로필 수정</a>
-	<a href="${cp }/member/logout">로그아웃</a><br>
-	<br>
-	<br>
 	<div id="s">
 		<div id="my">
 			<a href="${ cp }/story/list"><img id="myprofile"

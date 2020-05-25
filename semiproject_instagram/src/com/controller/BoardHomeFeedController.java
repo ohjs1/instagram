@@ -30,6 +30,7 @@ public class BoardHomeFeedController extends HttpServlet{
 				regdate[i]=vo.getRegdate().getTime();
 			}
 		}
+		System.out.println("¿©±â´ç"+list);
 		req.setAttribute("regdate", regdate);
 		req.setAttribute("boardList", list);
 		req.setAttribute("main", "/homefeed.jsp");
