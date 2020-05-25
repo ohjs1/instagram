@@ -33,49 +33,41 @@ table {
 	<table id="list2">
 		<tr>
 		<td colspan="3">
-		<h1>팔로잉</h1></td></tr>
+		<h1>팔로워</h1></td></tr>
 			<c:forEach var="vo" items='${list }'>
-				<c:set var="j" value="${j }"/>
-				<tr id="result${j }">
+				<c:set var="i" value="${i+1 }"/>
+				<tr id="result${i }">
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 						<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
 					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
-				<c:choose>
-					<c:when test="${sessionScope.member_no != vo.getMember_no() }">
-						<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
-						<input type="button" value="팔로우" class="folbtn" name="btn"></a>
-						</td>	
-					</c:when>			
-				</c:choose>			
+					<c:choose>
+						<c:when test="${sessionScope.member_no == mymember_no }">
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>	
+						</c:when>			
+					</c:choose>
 					</tr>
 			</c:forEach>
 		</table>
 		</c:if>
 		
 		<c:if test="${bl==false}">
-		<table id="list3">
+			<table id="list3">
 		<tr>
 		<td colspan="3">
-			<h1>팔로워</h1></tr>
-			<c:forEach var="vo" items='${list }'>		
+			<h1>팔로잉</h1></tr>
+			<c:forEach var="vo" items='${list }'>
+				<c:set var="j" value="${j+1 }"/>
 			<tr>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
 					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a>
 				</td>
 				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
 				<c:choose>
-						<c:when test="${sessionScope.member_no == mymember_no }">
-							<c:set var="j" value="${j }"/>
+						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
 							<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
 							<input type="button" value="팔로우" class="folbtn" name="btn"></a>
-							</td>	
-						</c:when>		
-				</c:choose>
-				<c:choose>
-						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
-							<c:set var="i" value="${i }"/>
-							<td><a href="javascript:callDelete(${vo.getMember_no()},${i+1 });">삭제</a></td>			
-						</c:when>		
+							</td>			
+						</c:when>			
 				</c:choose>
 			</tr>
 			</c:forEach>
@@ -92,8 +84,8 @@ table {
 		xhr.onreadystatechange=function(){
 			if(xhr.readyState==4 && xhr.status==200){
 				console.log("삭제");
-				var list3=document.getElementById("list3");
-				list3.deleteRow(i);
+				var list2=document.getElementById("list2");
+				list2.deleteRow(i);
 			}
 		};
 		xhr.open('get','${cp}/follow/delete?youmember_no='+member_no,true);

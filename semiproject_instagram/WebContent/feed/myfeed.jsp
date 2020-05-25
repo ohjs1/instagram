@@ -32,7 +32,7 @@
 }
 .erbtn{
 	position: relative;
-    left: 250px;
+    left: 256px;
     bottom: 152px;
 }
 .erbtn1{
@@ -52,12 +52,12 @@
 }
 .ingbtn{
 	position: relative;
-    left: 310px;
+    left: 340px;
     bottom: 152px;
 }
 .ingbtn1{
 	position: relative;
-    left: 257px;
+    left: 259px;
     bottom: 152px;
 }
 </style>
@@ -76,8 +76,8 @@
 			<c:otherwise>
 				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
 				<h1 id="followh1">${id }</h1>
-				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn"></a>
-				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn"></a>
+				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="erbtn"></a>
+				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="ingbtn"></a>
 				<a href="${cp }/member/memberInfo"><input type="submit" value="프로필편집" id="followbtn" class="repairbtn"></a>
 			</c:otherwise>
 		</c:choose>
