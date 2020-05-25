@@ -161,6 +161,7 @@ button.next, button.prev {
 	<div id="board1"></div> <!-- 내 게시글 및 내가 팔로우한 회원들의 게시글이 추가될 div -->
 	<div id="boardOptionModal"></div> <!-- 삭제,수정,취소 모달 -->
 	<div id="likeModal"></div> <!-- 좋아요 모달 -->
+	<div id="modal1"></div> <!-- 게시글 모달 -->
 </div>
 </body>
 <script>
@@ -212,7 +213,7 @@ button.next, button.prev {
 		//var list="<c:out value='${boardList}'/>";
 		var halist= new Array();
 		var list = "${boardList}";
-
+		var boardBtnNum=-1; //...버튼의 갯수를 카운트할 변수
 		<c:forEach items="${boardList}" var="vo" varStatus="i">
 			var id="${vo.id}";
 			var pwd="${vo.pwd}";
@@ -225,7 +226,6 @@ button.next, button.prev {
 			var ref="${vo.ref}";
 			var lev="${vo.lev}";
 			var step="${vo.step}";
-			
 			var board1=document.getElementById("board1");
 			var div=document.createElement("div");
 			div.innerHTML=	"<div class='board_content'>"+
@@ -260,7 +260,7 @@ button.next, button.prev {
 											"</span>"+
 											//댓글버튼
 											"<span class='comm'>"+
-												"<button class='btn1' onclick='commFocus()'>"+
+												"<button class='btn1 commBtn'>"+
 													"<img src='${cp}/upload/comm.PNG'>"+
 												"</button>"+
 											"</span>"+
@@ -288,6 +288,12 @@ button.next, button.prev {
 			board1.appendChild(div);
 			
 			
+			//댓글아이콘 클릭시 댓글 입력창으로 포커스주기
+			var commBtn=document.querySelectorAll(".btn1.commBtn")[${i.index}];
+			commBtn.addEventListener('click', function(e) {
+				commBtn.focus();
+			});
+			
 			//글내용이 있을경우 board comment에 내용추가
 			var board_comments=document.querySelectorAll(".board.comments")[${i.index}];
 			if(content!=null && content!=""){
@@ -311,17 +317,17 @@ button.next, button.prev {
 			}
 			
 			//자기게시글일경우 삭제,수정,업데이트 버튼 생성
-			var boardBtnNum=-1; //...버튼의 갯수를 카운트할 변수
 			var meta=document.getElementsByClassName("user")[${i.index}];
 			if(${sessionScope.member_no}==member_no){
+				let bnum=board_no; //let으로 선언해야 아래 boardbtn 이벤트리스너에 값이 잘 들어감
 				meta.innerHTML+= "<div class='boardoption' style='display:inline-block'>"+
 									 "<button class='boardbtn'>···</button>"+
 								 "</div>";
 			//회원정보 옆의 ...버튼 클릭시 게시글,댓글 삭제,수정,취소버튼 모달 함수호출
 			boardBtnNum++;
-			var boardbtn=document.getElementsByClassName("boardbtn")[boardBtnNum];
-			boardbtn.addEventListener('click',function(){
-				showBoardOptionModal(board_no,member_no,ref);
+			var boardbtn=document.getElementsByClassName("boardbtn");
+			boardbtn[boardBtnNum].addEventListener('click',function(){
+				showBoardOptionModal(bnum,member_no,ref);
 				});
 			}
 			
@@ -329,18 +335,18 @@ button.next, button.prev {
 ////////////////////////////////// 이벤트구역 /////////////////////////////////////////			
 			
 			//댓글 엔터버튼 누를 시 댓글생성
-			var commtext=document.getElementById("commtext");
+			var commtext=document.getElementsByClassName("commtext")[${i.index}];
 			commtext.addEventListener('keyup',function(e){
 				if(e.keyCode==13){
-					var commtext=document.getElementById("commtext");
+					var commtext=document.getElementsByClassName("commtext")[${i.index}];
 					if(commtext.value!=null && commtext.value!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
-						insertComment(json);
+						insertComment(${vo.board_no},commtext.value,${vo.ref},${vo.lev},${vo.step});
 						commtext.value="";
 					}
 				}else{
 					//댓글 입력시 전송버튼활성화
-					var sendComment=document.getElementById("sendComment");
-					var commtext=document.getElementById("commtext");
+					var sendComment=document.getElementsByClassName("sendComment")[${i.index}];
+					var commtext=document.getElementsByClassName("commtext")[${i.index}];
 					if(commtext.value!=null && commtext.value!=""){
 						sendComment.style.opacity=1;
 					}else{
@@ -350,11 +356,11 @@ button.next, button.prev {
 			});
 			
 			//전송버튼 클릭시 댓글생성 ajax함수 호출
-			var sendComment=document.getElementById("sendComment");
+			var sendComment=document.getElementsByClassName("sendComment")[${i.index}];
 			sendComment.addEventListener('click',function(){
-				var commtext=document.getElementById("commtext");
+				var commtext=document.getElementsByClassName("commtext")[${i.index}];
 				if(commtext.value!=null && commtext.value!=""){ //댓글 input에 내용이 있으면 댓글생성 ajax수행 
-					insertComment(json);
+					insertComment(${vo.board_no},commtext.value,${vo.ref},${vo.lev},${vo.step});
 					commtext.value="";
 				}
 			});
@@ -372,7 +378,8 @@ button.next, button.prev {
 	var likeaction=null;
 	function likeAction(board_no,halist){
 		likeaction=new XMLHttpRequest();
-
+		var likeModal=document.getElementById("likeModal");
+		likeModal.innerHTML="";
 		halist = halist.split(",");
 		likeaction.onreadystatechange=function(){
 			if(likeaction.readyState==4 && likeaction.status==200){
@@ -388,6 +395,7 @@ button.next, button.prev {
 	//좋아요리스트 가져오기
 	var likeList=null;
 	function getLikeCnt(halist){
+		
 		likeList=new XMLHttpRequest();
 		likeList.onreadystatechange=function(){
 			if(likeList.readyState==4 && likeList.status==200){
@@ -426,6 +434,7 @@ button.next, button.prev {
 									var song = JSON.parse(json);
 									alert(JSON.stringify(song)); */
 									var likeModal=document.getElementById("likeModal");
+									likeModal.innerHTML="";
 									var div=document.createElement("div");
 									div.innerHTML="<div class='like_overlay' onclick='closeLikeModal();'></div>"+//모달창의 배경색
 													"<div class='like_content'>"+
@@ -444,7 +453,7 @@ button.next, button.prev {
 								break;
 							}else{
 								//좋아요가 없을경우
-								likeLink[k].innerHTML="<p>가장 먼저 <label for='likeBtn' style='display:inline-block;font-weight:600'>좋아요</label>를 눌러보세요.</p>";
+								likeLink[k].innerHTML="<p>가장 먼저 <label style='display:inline-block;font-weight:600'>좋아요</label>를 눌러보세요.</p>";
 								likeImg[k].innerHTML="<img src='${cp}/upload/likenull.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
 							}
 						}
@@ -462,6 +471,26 @@ button.next, button.prev {
 		}
 		likeList.open('get','${cp}/good/listhomefeed?halist='+halist,true);
 		likeList.send();
+	}
+	
+	//댓글생성 ajax
+	var commInsert=null;
+	function insertComment(board_no,commtext,ref,lev,step){
+		commInsert=new XMLHttpRequest();
+		commInsert.onreadystatechange=function(){ //board_no받아서 commentList(board_no)으로 보내주기
+			if(commInsert.readyState==4 && commInsert.status==200){
+				var data=commInsert.responseText;
+				var json=JSON.parse(data);
+				if(json.chk>0){
+					commentList(board_no);
+				}else{
+					alert("댓글작성 실패!");
+				}
+			}
+		}
+		commInsert.open('post','../board/commentInsert',true);
+		commInsert.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		commInsert.send('board_no='+board_no+'&member_no=${member_no}&comment='+commtext+'&ref='+ref+'&lev='+lev+'&step='+step);
 	}
 	
 	//게시물 이미지 가져오기
@@ -566,6 +595,59 @@ button.next, button.prev {
 		</c:forEach>
 	}
 	
+	/////////////////////////////* 삭제,수정,취소 모달창 *////////////////////////////////////////
+	// 삭제,수정,취소 모달창 오픈
+	function showBoardOptionModal(board_no,member_no,ref){
+		var boardOptionModal=document.getElementById("boardOptionModal");
+		var div=document.createElement("div");
+		div.innerHTML="<div class='option_overlay' onclick='closeOptionModal();'></div>"+//모달창의 배경색
+					  "<div class='option_content'>"+
+						  "<div class='delete_option'>"+
+							  "<button class='option_btn' id='delete_btn'>삭제하기</button>"+
+						  "</div>"+
+						  "<div class='update_option'>"+
+						 	  "<button class='option_btn' id='update_btn'>수정하기</button>"+
+						  "</div>"+
+						  "<div class='cancle_option'>"+
+					 	 	  "<button class='option_btn' onclick='closeOptionModal();'>취소</button>"+
+					  	  "</div>"+
+					  "</div>";
+		div.className="boardOptionModal1";
+		div.setAttribute("id","boardOptionModal1");
+		boardOptionModal.appendChild(div);
+		var delete_btn=document.getElementById("delete_btn");
+		delete_btn.addEventListener('click', function() {
+			deleteBoard(board_no,member_no,ref);
+		});
+	}
+	//게시글 삭제버튼 ajax
+	var boardDelete=null;
+	function deleteBoard(board_no,member_no,ref){
+		boardDelete=new XMLHttpRequest();
+		boardDelete.onreadystatechange=function(){
+			if(boardDelete.readyState==4 && boardDelete.status==200){
+				var data=boardDelete.responseText;
+				var json=JSON.parse(data);
+				var result=json.result;
+				if(result>0 && ref==0){ //게시글삭제인경우
+					location.href="${cp}/board/homefeed";
+				}else if(result>0 && board_no!=ref){ //댓글삭제인경우
+					getBoardList(ref);
+				}else{
+					alert("삭제실패!");
+				}
+			}
+		}
+		boardDelete.open('get','${cp}/board/delete?board_no='+board_no,true);
+		boardDelete.send();
+	}
+	
+	//삭제,수정,취소 모달 닫기버튼
+	function closeOptionModal(){
+		var boardOptionModal=document.getElementById("boardOptionModal");
+		boardOptionModal.innerHTML="";
+	}	
+	
 /////////////////////////////* 좋아요 리스트 모달창 *////////////////////////////////////////
 	
 	//좋아요 모달창 오픈
@@ -630,6 +712,8 @@ button.next, button.prev {
 		likeModal.innerHTML="";
 	}
 	
+	
+	/////////////////////////////* 게시글 모달 *////////////////////////////////////////
 </script>
 </html>
 

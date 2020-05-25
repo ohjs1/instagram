@@ -71,6 +71,10 @@ th{
 	text-align: center;
 	clear: both;
 }
+.modal_wrap{
+	z-index:100;
+	
+}
 </style>
 <link rel="stylesheet" type="text/css" href="${cp}/css/myfeed.css"> <!-- myfeed CSS -->
 </head>
@@ -116,7 +120,10 @@ th{
 <div id="likeModal"></div> <!-- 좋아요 모달 -->
 </body>
 <script type="text/javascript">
-
+	var numList=new Array();
+	<c:forEach var="imageVo1" items="${mainImgList }" varStatus="i">
+		numList.push(${imageVo1.board_no});
+	</c:forEach>
 	//상대피드 팔로우 버튼 ajax
 	function callInsert(member_no){
 		var xhr = new XMLHttpRequest();
@@ -134,10 +141,6 @@ th{
 		xhr.open('get','${cp }/follow/insert?youmember_no='+member_no,true);
 		xhr.send();
 	}
-	
-	const modal=document.querySelector(".modal");
-	const overlay=modal.querySelector(".modal_overlay");
-	const closeBtn=modal.querySelector("button");
 	
 	//게시글 modal
 	var boardList=null;
@@ -191,54 +194,56 @@ th{
 			
 			var div=document.createElement("div");
 			div.innerHTML="<div class='modal_overlay' onclick='closeBoard();'></div>"+//모달창의 배경색
-								"<div class='modal_content'>"+
-								"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
-									"<button class='prev' onclick='prevImg()'>&#60;</button>"+
-								    "<button class='next' onclick='nextImg()'>&#62;</button>"+
-								"</div>"+
-								"<div class='meta-info'>"+//modal 우측의 사용자,글내용,댓글,댓글달기를 감싸는 div
-									"<div class='meta-wrap'>"+
-										"<div class='meta' id='meta'>"+//프로필사진,닉네임이 들어갈 div
-											"<div>"+
-												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
-													"<img src='../upload/"+profile+"'>"+//프로필사진
-												"</a>"+
+								"<div class='modal_wrap'>"+
+									"<div class='modal_content'>"+
+									"<div class='image-wrap' id='image-wrap'>"+ //이미지들이 들어갈 div
+										"<button class='prev' onclick='prevImg()'>&#60;</button>"+
+									    "<button class='next' onclick='nextImg()'>&#62;</button>"+
+									"</div>"+
+									"<div class='meta-info'>"+//modal 우측의 사용자,글내용,댓글,댓글달기를 감싸는 div
+										"<div class='meta-wrap'>"+
+											"<div class='meta' id='meta'>"+//프로필사진,닉네임이 들어갈 div
+												"<div>"+
+													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+														"<img src='../upload/"+profile+"'>"+//프로필사진
+													"</a>"+
+												"</div>"+
+												"<div>"+
+													"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+														"<p class='handle'>"+nickname+"</p>"+//닉네임
+													"</a>"+
+												"</div>"+
 											"</div>"+
-											"<div>"+
-												"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
-													"<p class='handle'>"+nickname+"</p>"+//닉네임
-												"</a>"+
+										"</div>"+
+										"<div class='scroll1'>"+
+											//게시글 글쓴이 프사,닉네임,글내용이 들어갈 공간
+											"<div class='meta comments' id='meta_comments'>"+
+											"</div>"+
+											"<div class='comments-wrap'></div>"+//작성된 댓글이 들어갈 div
+										"</div>"+
+										//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
+										"<div class='items'>"+
+											"<span class='like'>"+
+												//좋아요버튼
+												"<button class='btn1' id='likeBtn'>"+
+													"<div id='likeImg'></div>"+ //좋아요버튼 이미지가 들어갈 div
+												"</button>"+
+											"</span>"+
+											//댓글버튼
+											"<span class='comm'>"+
+												"<button class='btn1' onclick='commFocus()'>"+
+													"<img src='${cp}/upload/comm.PNG'>"+
+												"</button>"+
+											"</span>"+
+											"<div class='likeLink'>"+
+											"</div>"+
+											"<div class='time' id='time'>"+
 											"</div>"+
 										"</div>"+
-									"</div>"+
-									"<div class='scroll1'>"+
-										//게시글 글쓴이 프사,닉네임,글내용이 들어갈 공간
-										"<div class='meta comments' id='meta_comments'>"+
+										"<div class='commwrite'>"+//댓글작성하기
+											"<input type='text' placeholder='댓글 달기...' id='commtext'>"+
+											"<input type='button' id='sendComment' value='전송'>"+
 										"</div>"+
-										"<div class='comments-wrap'></div>"+//작성된 댓글이 들어갈 div
-									"</div>"+
-									//좋아요,댓글,게시글저장 버튼 및 좋아요 수, 게시일이 저장될 공간
-									"<div class='items'>"+
-										"<span class='like'>"+
-											//좋아요버튼
-											"<button class='btn1' id='likeBtn'>"+
-												"<div id='likeImg'></div>"+ //좋아요버튼 이미지가 들어갈 div
-											"</button>"+
-										"</span>"+
-										//댓글버튼
-										"<span class='comm'>"+
-											"<button class='btn1' onclick='commFocus()'>"+
-												"<img src='${cp}/upload/comm.PNG'>"+
-											"</button>"+
-										"</span>"+
-										"<div class='likeLink'>"+
-										"</div>"+
-										"<div class='time' id='time'>"+
-										"</div>"+
-									"</div>"+
-									"<div class='commwrite'>"+//댓글작성하기
-										"<input type='text' placeholder='댓글 달기...' id='commtext'>"+
-										"<input type='button' id='sendComment' value='전송'>"+
 									"</div>"+
 								"</div>"+
 							"</div>"+
@@ -254,7 +259,11 @@ th{
 			commentList(board_no); //댓글리스트 가져오기
 			getLikeCnt(board_no); //좋아요리스트 가져오기
 			
-			
+			//이미지 더블클릭시 좋아요 추가 or 삭제 ajax호출
+			var image_wrap=document.getElementById("image-wrap");
+			image_wrap.addEventListener('dblclick',function(){
+				likeAction(board_no);
+			});
 			//글내용이 있을경우 meta comment에 내용추가
 			var meta_comments=document.getElementById("meta_comments");
 			if(content!=null && content!=""){

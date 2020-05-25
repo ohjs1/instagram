@@ -6,6 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+.insert_wrap{
+	margin: auto;
+	align-items: center;
+	text-align: center;
+}
+
+</style>
 <script type="text/javascript">
 	var index=0;
 	//업로드하려는 이미지 미리보기
@@ -19,8 +27,8 @@
 			const span=document.getElementById("imgList");
 			
 			const img=document.createElement("img");
-			img.style.width="110px";
-			img.style.hight="110px";
+			img.style.width="200px";
+			img.style.height="200px";
 			img.style.display="none";
 			img.classList.add("slide");
 			img.file=file;
@@ -81,20 +89,23 @@
 </script>
 </head>
 <body> 
-<form method="post" action="<c:url value='/board/insert'/>" onsubmit="return fileChk()" enctype="multipart/form-data">
-	<input type="hidden" name="board_no" value="${param.board_no }">
-	<input type="hidden" name="ref" value="${param.ref }">
-	<input type="hidden" name="lev" value="${param.lev }">
-	<input type="hidden" name="step" value="${param.step }">
-	
-	<input type="button" onclick="previousImg()" value="이전">
-	<span id="imgList"></span>
-	<input type="button" onclick="nextImg()" value="다음">
-	<textarea rows="5" cols="50" name="content" placeholder="문구 입력..." ></textarea><br>
-	이미지 추가<br>
-	<input type="file" id="file1" name="file1" accept=".jpg,.jpeg,.png,.gif,.mp4" multiple onchange="showImg(this.files)"><br>
-	<input type="submit" value="확인">
-</form>
-<c:set var="file1" value="${fileList[0] }"/>
+<div class="insert_wrap">
+	<h1>게시글 작성</h1><br>
+	<form method="post" action="<c:url value='/board/insert'/>" onsubmit="return fileChk()" enctype="multipart/form-data">
+		<input type="hidden" name="board_no" value="${param.board_no }">
+		<input type="hidden" name="ref" value="${param.ref }">
+		<input type="hidden" name="lev" value="${param.lev }">
+		<input type="hidden" name="step" value="${param.step }">
+		
+		<input type="button" onclick="previousImg()" value="이전">
+		<span id="imgList"></span>
+		<input type="button" onclick="nextImg()" value="다음">
+		<textarea rows="5" cols="50" name="content" placeholder="문구 입력..." ></textarea><br>
+		<b>이미지 추가</b><br>
+		<input type="file" id="file1" name="file1" accept=".jpg,.jpeg,.png,.gif,.mp4" multiple onchange="showImg(this.files)"><br>
+		<input type="submit" value="확인">
+	</form>
+	<c:set var="file1" value="${fileList[0] }"/>
+</div>
 </body>
 </html>
