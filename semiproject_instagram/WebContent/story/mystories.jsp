@@ -178,14 +178,13 @@ body {
 
 </head>
 <body onload="showStory()">
-
 <div id="main">
 <div id="prebtn"><img src="${cp }/upload/pre.png" style="width:30px;height: 30px" onclick="previousImg()"></div>
 
 	<div id="wrap">
-		<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none;display: inline;">
+	<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none;display: inline;">
 		<img id="myprofile" style="width: 32px; height: 32px; border-radius: 50%;"> </a>
-		<div id="topm" style="text-align: center;line-height:33px; width: 80px;height: 32px;display: inline;">
+		<div id="topm" style="text-align: center;line-height:32px; width: 70px;height: 32px;display: inline;">
 			<a href="${cp }/feed/myfeed?mymember_no=${member_no}" style="color:white;text-decoration: none">
 			${nickname} 
 			</a>
@@ -223,10 +222,26 @@ body {
 				</c:choose>
 
 				<div id="content" class="cdivs">
-					${vo.getContent() } 
-					
-					<!--  ${vo.getStory_no() } -->
+				<c:set var="cont" value="${vo.getContent() }"/>
+					<c:choose>
+						<c:when test="${fn:contains(cont,'#') }">
+						<c:set var="tag" value="${fn:substringAfter(cont, '#') }"/>
+							<c:set var="start_tag" value="${fn:indexOf(cont, '#') }"/>
+							<c:set var="end_tag" value="${fn:indexOf(tag, ' ') }"/> 
+							<c:set var="realtag" value="${fn:substring(tag,0,end_tag) }"/>
+							<c:set var="cont1" value="${fn:substringBefore(cont, '#') }"/>
+							<c:set var="cont2" value="${fn:substringAfter(cont, realtag) }"/>
+
+							${cont1 } <a href="${cp }/tag/list?keyword=%23${realtag}" style="text-decoration: none; color:white;background-color: #FFFACD;"> #${realtag } </a> ${cont2 }
+							
+						</c:when>
+						<c:otherwise>
+							${cont }
+						</c:otherwise>
+						
+					</c:choose>
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
+					<input type="hidden" class="content_tag" name="content_tag" value="${vo.getContent()}">
 					<div class="readuser"></div>
 	
 				</div>
@@ -313,6 +328,7 @@ body {
 			if (i == index) {
 				getReaduser(readstory[i].value,i);
 				getStorydate(readstory[i].value,i);
+				getContent();
 				divs[i].style.display = "block";
 				imgs[i].style.display = "block";
 				cdivs[i].style.display = "block";
@@ -327,6 +343,11 @@ body {
 		if (index > imgs.length - 1) {
 			timeout2 = setTimeout(closeStory, 3000);
 		}
+	}
+	
+	// 내용/태그 가져오기
+	function getContent(){
+		
 	}
 
 	

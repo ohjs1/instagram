@@ -21,6 +21,7 @@ public class TagListController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String keyword=req.getParameter("keyword");
+		System.out.println(keyword+"+++");
 		String snum=req.getParameter("snum");//胶农费
 		String endnum=req.getParameter("endnum");//胶农费
 		TagDao dao=new TagDao();

@@ -86,14 +86,14 @@ body {
 <body onload="showStory()">
 <div id="main">
 <div id="prebtn"><img src="${cp }/upload/pre.png" style="width:30px;height: 30px" onclick="previousImg()"></div>
+	
 	<div id="wrap">
 		<div id="oppprofile"></div>
-		 
 		<div id="exit">
 			<input type="image" style="width: 32px; height: 32px"
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
-<br><br>
+<br>
 		<c:forEach var="vo" items="${list }">
 
 
@@ -121,10 +121,24 @@ body {
 				</c:choose>
 
 				<div id="content" class="cdivs">
-					${vo.getContent() } 
-					<!-- <br> 저장될 읽은사람(현재로그인한 나) ${nickname } <br>
-					${vo.getNickname()} 의 현재 스토리 번호 : ${vo.getStory_no() }
-					 <c:set var="snolist">${vo.getStory_no() }</c:set>  -->
+					<c:set var="cont" value="${vo.getContent() }"/>
+					<c:choose>
+						<c:when test="${fn:contains(cont,'#') }">
+						<c:set var="tag" value="${fn:substringAfter(cont, '#') }"/>
+							<c:set var="start_tag" value="${fn:indexOf(cont, '#') }"/>
+							<c:set var="end_tag" value="${fn:indexOf(tag, ' ') }"/> 
+							<c:set var="realtag" value="${fn:substring(tag,0,end_tag) }"/>
+							<c:set var="cont1" value="${fn:substringBefore(cont, '#') }"/>
+							<c:set var="cont2" value="${fn:substringAfter(cont, realtag) }"/>
+
+							${cont1 } <a href="${cp }/tag/list?keyword=%23${realtag}" style="text-decoration: none; color:white;background-color: #FFFACD;"> #${realtag } </a> ${cont2 }
+							
+						</c:when>
+						<c:otherwise>
+							${cont }
+						</c:otherwise>
+						
+					</c:choose>
 					<input type="hidden" class="readuser" name="readuser" value="${member_no }"> 
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 					<input type="hidden" id="oppnickname" name="oppnickname" value="${vo.getNickname()}">
@@ -137,7 +151,7 @@ body {
 
 
 	</div>
-	<div id="nextbtn"><img src="${cp }/upload/next.png" style="width:30px;height: 30px" onclick="nextImg()"></div>
+	<div id="nextbtn"><img src="${cp }/upload/next.png" style="width:30px;height:30px;padding-left: 18px;" onclick="nextImg()"></div>
 </div>
 
 </body>
@@ -163,8 +177,8 @@ body {
 						"<img src='${cp}/upload/"
 								+ json[i].profile
 								+ "' style='width: 32px; height: 32px;border-radius: 50%;'></a>"+
-								"<a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"
-								+ nick  +"</a>";
+								"<div id='topm' style='text-align: center;padding-left:5px;line-height:32px; width: 70px;height: 32px;display: inline;'><a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"
+								+ nick  +"</a></div>";
 						div.style.display = "inline";
 						div.style.height="54px";
 						div.style.paddingBottom="15px";
@@ -184,6 +198,7 @@ body {
 
 	var index = 0;
 	var timeout = null;
+	var timeout2 = null;
 	function showStory() {
 		getProfile();
 
@@ -208,7 +223,7 @@ body {
 		index++;
 		timeout = setTimeout(showStory, 3000);
 		if (index > imgs.length - 1) {
-			setTimeout(closeStory, 3000);
+			timeout2=setTimeout(closeStory, 3000);
 		}
 	}
 	
@@ -282,7 +297,8 @@ body {
 	for (var i = 0; i < imgs.length; i++) {
 		imgs[i].addEventListener('mousedown', function() {
 			console.log("imgs/////down");
-			clearTimeout(timeout)
+			clearTimeout(timeout);
+			clearTimeout(timeout2);
 		});
 
 		imgs[i].addEventListener('mouseup', function() {
@@ -291,13 +307,6 @@ body {
 		});
 	}
 
-	function stopImg() {
-		clearTimeout(timeout);
-	}
-
-	function showImg() {
-		timeout = setTimeout(showStory, 3000);
-	}
 
 	function insertReadUser(readuser, readstory) {
 		let xhr1 = new XMLHttpRequest();
