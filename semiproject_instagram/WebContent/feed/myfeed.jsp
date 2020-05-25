@@ -60,6 +60,17 @@
     left: 259px;
     bottom: 152px;
 }
+/* 테이블부분 */
+table{
+		display: inline-block;
+	}
+th{
+	padding: 10px;
+}
+.table_wrap{
+	text-align: center;
+	clear: both;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="${cp}/css/myfeed.css"> <!-- myfeed CSS -->
 </head>
@@ -83,20 +94,22 @@
 		</c:choose>
 </div>	
 
-<h1>게시물</h1>
-<table border="1">
-<tr>
-<c:forEach var="imageVo1" items="${mainImgList }" varStatus="i">
-		<c:set var="imageVo" value="${imageVo1 }" scope="request"/>
-		<c:if test="${i.index!=0 and i.index%3==0 }">
-			<tr>
-		</c:if> 
-		<td>
-			<img src="../upload/${imageVo.imagepath }" class="board" onclick="getBoardList(${imageVo.board_no})">
-		</td>
-</c:forEach>
-	</tr>
-</table>
+<div class="table_wrap">
+	<h1>게시물</h1>
+	<table>
+	<tr>
+	<c:forEach var="imageVo1" items="${mainImgList }" varStatus="i">
+			<c:set var="imageVo" value="${imageVo1 }" scope="request"/>
+			<c:if test="${i.index!=0 and i.index%3==0 }">
+				<tr>
+			</c:if> 
+			<th>
+				<img src="../upload/${imageVo.imagepath }" class="board" onclick="getBoardList(${imageVo.board_no})" style='width: 293px;height: 293px'>
+			</th>
+	</c:forEach>
+		</tr>
+	</table>
+</div>
 
 <div id="modal1"></div> <!-- 게시글 모달 -->
 <div id="boardOptionModal"></div> <!-- 삭제,수정,취소 모달 -->

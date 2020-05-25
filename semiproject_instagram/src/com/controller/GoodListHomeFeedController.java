@@ -48,5 +48,6 @@ public class GoodListHomeFeedController extends HttpServlet{
 		resp.setContentType("text/plain;charset=utf-8");
 		PrintWriter pw=resp.getWriter();
 		pw.print(arr);
+		System.out.println(arr);
 	}
 }

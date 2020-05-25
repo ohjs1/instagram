@@ -24,6 +24,9 @@
 .sto {width:100px;height:50px;text-align: center;}
 
 /*******************************게시글 공간*****************************/
+button.next, button.prev {
+	z-index:1;
+}
 .board2 {
 	position: relative;
 	top:0;
@@ -385,28 +388,27 @@
 	//좋아요리스트 가져오기
 	var likeList=null;
 	function getLikeCnt(halist){
-		console.log(halist)
 		likeList=new XMLHttpRequest();
 		likeList.onreadystatechange=function(){
 			if(likeList.readyState==4 && likeList.status==200){
-				var data=likeList.responseText;
-				var json=JSON.parse(data);
+				let data=likeList.responseText;
+				let json=JSON.parse(data);
 				console.log(json);
-				var likeLink=document.getElementsByClassName("likeLink");
-				var likeImg=document.getElementsByClassName("likeImg");
+				let likeLink=document.getElementsByClassName("likeLink");
+				let likeImg=document.getElementsByClassName("likeImg");
 				if(json!=null && json!=""){
-					for(var k=0;k<halist.length;k++){
+					for(let k=0;k<halist.length;k++){
 						//var likeChk=false;
 						//var notLike = true;
-						for(var i=0; i<json.length; i++){
+						for(let i=0; i<json.length; i++){
 							
 							//좋아요가 있을경우
 							if(json[i][0].board_no==halist[k]){
-								for(var j=0;j<json[i].length;j++){
+								for(let j=0;j<json[i].length;j++){
 									//게시글번호가 같을경우
 									if(halist[k]==json[i][j].board_no){
 										
-										var member_no=json[i][j].member_no;
+										let member_no=json[i][j].member_no;
 										if(member_no==${sessionScope.member_no}){
 											//내가 좋아요 눌렀을경우
 											//likeChk=true;
@@ -417,8 +419,28 @@
 										}
 									}
 								}
-	
 								likeLink[k].innerHTML="<button class='likeListBtn' id='likeListBtn'>좋아요 "+json[i].length+"개</button>";
+								likeLink[k].addEventListener('click', function(e) {
+									//alert(json[0].id);
+									/* json[0].id
+									var song = JSON.parse(json);
+									alert(JSON.stringify(song)); */
+									var likeModal=document.getElementById("likeModal");
+									var div=document.createElement("div");
+									div.innerHTML="<div class='like_overlay' onclick='closeLikeModal();'></div>"+//모달창의 배경색
+													"<div class='like_content'>"+
+														"<div class='like_header'>좋아요"+
+															"<span class='likemodal_close' onclick='closeLikeModal();'>"+
+																"<button>❌</button>"+
+															"</span><br>"+
+														"</div>"+
+														"<div class='like_list'></div>"+
+													"</div>";
+									div.className="likeModal1";
+									div.setAttribute("id","likeModal1");
+									likeModal.appendChild(div);
+									getLikeList(json[i]);
+								}, true);
 								break;
 							}else{
 								//좋아요가 없을경우
@@ -435,13 +457,7 @@
 				}
 				
 				
-				//생성된 좋아요 리스트클릭 이벤트 생성 및 좋아요 모달함수 호출
-				var likeListBtn=document.getElementsByClassName("likeListBtn");
-				for(let i=0; i<likeListBtn.length; i++){
-					likeListBtn.addEventListener('click', function() {
-						showLikeModal(json); //좋아요 모달함수 호출
-					});
-				}
+				
 			}
 		}
 		likeList.open('get','${cp}/good/listhomefeed?halist='+halist,true);
@@ -548,6 +564,70 @@
 			var time=document.getElementsByClassName("time")[${i.index}];
 			time.innerHTML=realDate;
 		</c:forEach>
+	}
+	
+/////////////////////////////* 좋아요 리스트 모달창 *////////////////////////////////////////
+	
+	//좋아요 모달창 오픈
+/* 	function showLikeModal(json){
+		//alert(json[0].id);
+		 json[0].id
+		var song = JSON.parse(json);
+		alert(JSON.stringify(song)); 
+		var likeModal=document.getElementById("likeModal");
+		var div=document.createElement("div");
+		div.innerHTML="<div class='like_overlay' onclick='closeLikeModal();'></div>"+//모달창의 배경색
+						"<div class='like_content'>"+
+							"<div class='like_header'>좋아요"+
+								"<span class='likemodal_close' onclick='closeLikeModal();'>"+
+									"<button>❌</button>"+
+								"</span><br>"+
+							"</div>"+
+							"<div class='like_list'></div>"+
+						"</div>";
+		div.className="likeModal1";
+		div.setAttribute("id","likeModal1");
+		likeModal.appendChild(div);
+		getLikeList(json);
+	} */
+
+	//좋아요한 회원리스트 추가
+	function getLikeList(json){
+		var like_list=document.getElementsByClassName("like_list")[0];
+		for(let i=0; i<json.length; i++){
+			var id=json[i].id;
+			var pwd=json[i].pwd;
+			var name=json[i].name;
+			var nickname=json[i].nickname;
+			var profile=json[i].profile;
+			var good_no=json[i].good_no;
+			var member_no=json[i].member_no;
+			var board_no=json[i].board_no;
+			like_list.innerHTML+="<div class='likeusers'>"+
+									"<div>"+
+										"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+											"<img src='../upload/"+profile+"'>"+//프로필사진
+										"</a>"+
+									"</div>"+
+									"<div style='text-align:left;'>"+
+										"<p>"+
+											"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+												"<span class='handle'>"+nickname+"</span> "+//닉네임
+											"</a>"+
+										"</p>"+
+										"<p>"+
+											"<a href='${cp}/follow/move?youmember_no="+member_no+"'>"+
+												"<span class='name'>"+name+"</span> "+//이름
+											"</a>"+
+										"</p>"+
+									"</div>"+
+								"</div>";
+		}
+	}
+	//좋아요 모달 닫기버튼
+	function closeLikeModal(){
+		var likeModal=document.getElementById("likeModal");
+		likeModal.innerHTML="";
 	}
 	
 </script>
