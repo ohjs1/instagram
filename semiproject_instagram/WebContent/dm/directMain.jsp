@@ -120,13 +120,13 @@
 </style>
 <!-- Bootstrap -->
     <link href="${ cp }/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-   
+    <script src="${ cp }/dm/js/chat_module.js"></script>
 </head>
 <body>
 <div id="maxSize">
 	<table id="dmtId">
 		<tr>
-			<th>Direct<a href="javascript:showModal();"><img src="${ cp }/images/icon/dmmsg.png" alt="다이렉트 메시지 보내기" /></a></th>
+			<th>Direct<a href="javascript:showModal();">&nbsp;&nbsp;&nbsp;&nbsp;<img src="${ cp }/images/icon/dmmsg.png" alt="다이렉트 메시지 보내기" /></a></th>
 			<th rowspan='5' id="userlisthidden">
 				<div id="selectedMsg">
 					<h2>내 메시지</h2>
@@ -150,7 +150,6 @@
 				검색되어 선택된 유저 : [ ${ nickname } ]
 			
 				<br><br>
-				
 				DM 보낼 유저목록
 				<ul>
 				<c:if test="${ dmlist != null }">
@@ -159,11 +158,14 @@
 						<div id="dmuserlist">
 							<a href="${cp}/dm/connectClient?yourMember_no=${n.getMember_no()}&myMember_no=${member_no}">
 								<img src="${ cp }/upload/${n.getProfile()}" alt="프로필사진" style="width:55px; height:55px; border-radius: 70%; margin-top:5px;" />
-								${ n.getNickname() }
 							</a>
+							<script type="text/javascript">
+								//console.log('${n.getMember_no()}');
+								chatConfirmUser('${n.getMember_no()}');
+							</script>
+				</li>
 						<br>
 						</div>
-				</li>
 					</c:forEach>
 				</c:if>
 				</ul>
@@ -172,6 +174,7 @@
 		</tr>
 		</tr>
 	</table>
+	
 	<div id="myModal" class="modal2">
 		 <!-- Modal content -->
 		 <div class="modal-content">

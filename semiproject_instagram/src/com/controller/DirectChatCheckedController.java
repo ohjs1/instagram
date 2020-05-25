@@ -22,20 +22,22 @@ public class DirectChatCheckedController extends HttpServlet {
 		
 //		System.out.println("myMember_no>>>" + myMember_no);
 		
-		//채팅방 번호 구하기
 		DirectMessageDao dao = DirectMessageDao.getInstance();
 		
 		//새글있는지 검사
 		int result = dao.getDMUserStatusList(myMember_no);
+		
 		if(result>0) {
 			//새글이 존재함
 			System.out.println("새로운글 갯수 : " + result);
 			session.setAttribute("cc_result", result);
+			
 			session.setAttribute("main", "/dm/directMain.jsp");
 			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		} else {
 			System.out.println("새글이 존재하지 않음..");
 			session.setAttribute("cc_result", result);
+			
 			session.setAttribute("main", "/dm/directMain.jsp");
 			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 		}

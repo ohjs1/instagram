@@ -40,6 +40,7 @@
 	}
 	#header_search{
 		display: inline-block;
+		margin-top: 10px;
 	}
 	#header_wrap{
 		width: 60%;
