@@ -32,7 +32,7 @@
 }
 .erbtn{
 	position: relative;
-    left: 256px;
+    left: 382px;
     bottom: 152px;
 }
 .erbtn1{
@@ -52,7 +52,7 @@
 }
 .ingbtn{
 	position: relative;
-    left: 340px;
+    left: 193px;
     bottom: 152px;
 }
 .ingbtn1{
@@ -69,7 +69,7 @@
 			<c:when test="${sessionScope.member_no != youmember_no }">
 				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
 				<h1 id="followh1">${id }</h1>
-				<a href="${cp }/follow/insert?youmember_no=${member_no}"><input type="submit" value="팔로우" id="followbtn" class="owbtn"></a>
+				<a href="javascript:callInsert(${member_no});"><input type="button" value="팔로우" id="followbtn" class="owbtn" name="btn"></a>
 				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn1"></a>
 				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn1"></a>
 			</c:when>
@@ -104,6 +104,24 @@
 </body>
 <script type="text/javascript">
 
+	//상대피드 팔로우 버튼 ajax
+	function callInsert(member_no){
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				var xml = xhr.responseXML;
+				var json = JSON.parse(xml);
+					var btn=document.getElementsByName("btn");
+					btn.value="팔로우됨";
+					btn.disabled=true;
+					btn.style.backgroundColor="black";
+					btn.style.color="white";
+			}
+		};
+		xhr.open('get','${cp }/follow/insert?youmember_no='+member_no,true);
+		xhr.send();
+	}
+	
 	const modal=document.querySelector(".modal");
 	const overlay=modal.querySelector(".modal_overlay");
 	const closeBtn=modal.querySelector("button");
