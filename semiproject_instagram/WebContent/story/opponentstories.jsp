@@ -73,13 +73,38 @@ body {
 	width: 200px;
 	height: 100px;
 	position: absolute;
-	top: -45px;
+	top: -68px;
 	left: 150px;
 	color: white;
 	font-family: ∏º¿∫∞ÌµÒ;
 	font-size: 15px;
 }
 
+#stop{
+	width: 77px;
+	height: 25px;
+	position: absolute;
+	top: -68px;
+	right: 50px;
+	color: white;
+	font-family: ∏º¿∫∞ÌµÒ;
+	font-size: 15px;
+	border: 1px solid white;
+	border-radius:10%;
+	display: none;
+}
+.dots{
+	width:17px;
+	height: 17px;
+	display:inline-block;
+}
+
+#wrap2{
+	width: 400px;
+	height:20px;
+	text-align:center;
+	margin:0 auto;
+}
 </style>
 
 </head>
@@ -94,6 +119,12 @@ body {
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
 <br>
+		<div id="wrap2">
+		<c:forEach var="vo" items="${list }">
+			<div class="dots"><img src="../upload/dot.png" style="width:15px;height: 15px;">
+			</div>
+		</c:forEach>
+		</div>
 		<c:forEach var="vo" items="${list }">
 
 
@@ -104,7 +135,7 @@ body {
 				style="width: 400px; height: 700px; position: absolute; display: none"
 				class="divs">
 				<div class="date"></div>
-
+				<div id="stop">¿œΩ√¡§¡ˆµ </div>
 				<c:choose>
 					<c:when
 						test="${fn:endsWith(file2,'.png') or fn:endsWith(file2,'.jpg') }">
@@ -205,16 +236,19 @@ body {
 		const divs = document.getElementsByClassName("divs");
 		const cdivs = document.getElementsByClassName("cdivs");
 		const imgs = document.getElementsByClassName("imgs");
+		const dots = document.getElementsByClassName("dots");
 		var readuser = document.getElementsByClassName("readuser");
 		var readstory = document.getElementsByClassName("readstory");
 		for (let i = 0; i < imgs.length; i++) {
 			if (i == index) {
 				insertReadUser(readuser[i].value, readstory[i].value);
 				getStorydate(readstory[i].value,i);
+				dots[i].firstChild.src="../upload/dotr.png";
 				divs[i].style.display = "block";
 				imgs[i].style.display = "block";
 				cdivs[i].style.display = "block";
 			} else {
+				dots[i].firstChild.src="../upload/dot.png";
 				divs[i].style.display = "none";
 				imgs[i].style.display = "none";
 				cdivs[i].style.display = "none";
@@ -294,19 +328,23 @@ body {
 	}
 
 	const imgs = document.getElementsByClassName("imgs");
+	const stop = document.getElementById("stop");
 	for (var i = 0; i < imgs.length; i++) {
 		imgs[i].addEventListener('mousedown', function() {
 			console.log("imgs/////down");
+			
 			clearTimeout(timeout);
 			clearTimeout(timeout2);
+			stop.style.display="inline-block";
+			
 		});
 
 		imgs[i].addEventListener('mouseup', function() {
 			console.log("imgs/////up");
 			timeout = setTimeout(showStory, 3000);
+			stop.style.display="none";
 		});
 	}
-
 
 	function insertReadUser(readuser, readstory) {
 		let xhr1 = new XMLHttpRequest();

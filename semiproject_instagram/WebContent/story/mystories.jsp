@@ -41,6 +41,12 @@ body {
 	position: relative;
 }
 
+#wrap2{
+	width: 400px;
+	height:20px;
+	text-align:center;
+	margin:0 auto;
+}
 #nextbtn{
 	width: 50px;
 	height: 600px;
@@ -66,13 +72,26 @@ body {
 	width: 200px;
 	height: 100px;
 	position: absolute;
-	top: -45px;
+	top: -68px;
 	left: 150px;
 	color: white;
 	font-family: 맑은고딕;
 	font-size: 15px;
 }
 
+#stop{
+	width: 77px;
+	height: 25px;
+	position: absolute;
+	top: -68px;
+	right: 50px;
+	color: white;
+	font-family: 맑은고딕;
+	font-size: 15px;
+	border: 1px solid white;
+	border-radius:10%;
+	display: none;
+}
 #exit {
 	width: 32px;
 	height: 32px;
@@ -89,6 +108,12 @@ body {
 	position: absolute;
 }
 
+.dots{
+	width:17px;
+	height: 17px;
+	display:inline-block;
+
+}
 .modal_overlay {
 	background-color: rgba(0,0,0,0.6);
 	width: 100%;
@@ -196,7 +221,12 @@ body {
 				src="../upload/whitex.png" onclick="closeStory()">
 		</div>
 		<br><br>
-
+		<div id="wrap2">
+		<c:forEach var="vo" items="${list }">
+			<div class="dots"><img src="../upload/dot.png" style="width:15px;height: 15px;">
+			</div>
+		</c:forEach>
+		</div>
 		<c:forEach var="vo" items="${list }">
 
 			<c:set var="file2" value="${vo.getFilepath()}" />
@@ -206,6 +236,7 @@ body {
 			<a href="#" onclick="delchk(${vo.getStory_no()})">	
 			<img src="../upload/del.png" id="del"></a>
 			<div class="date"></div>
+			<div id="stop">일시정지됨</div>
 				<c:choose>
 					<c:when
 						test="${fn:endsWith(file2,'.png') or fn:endsWith(file2,'.jpg') }">
@@ -323,16 +354,19 @@ body {
 		const divs = document.getElementsByClassName("divs");
 		const cdivs = document.getElementsByClassName("cdivs");
 		const imgs = document.getElementsByClassName("imgs");
+		const dots = document.getElementsByClassName("dots");
 		var readstory = document.getElementsByClassName("readstory");
 		for (let i = 0; i < imgs.length; i++) {
 			if (i == index) {
 				getReaduser(readstory[i].value,i);
 				getStorydate(readstory[i].value,i);
 				getContent();
+				dots[i].firstChild.src="../upload/dotr.png";
 				divs[i].style.display = "block";
 				imgs[i].style.display = "block";
 				cdivs[i].style.display = "block";
 			} else {
+				dots[i].firstChild.src="../upload/dot.png";
 				divs[i].style.display = "none";
 				imgs[i].style.display = "none";
 				cdivs[i].style.display = "none";
@@ -493,18 +527,21 @@ body {
 	
 	//마우스 클릭 중: 멈춤 / 클릭 떼면 다시 재생
 	const imgs = document.getElementsByClassName("imgs");
+	const stop = document.getElementById("stop");
 	for (var i = 0; i < imgs.length; i++) {
-		console.log("imgs:" + imgs);
 		imgs[i].addEventListener('mousedown', function() {
 			console.log("imgs/////down");
+			
 			clearTimeout(timeout);
 			clearTimeout(timeout2);
+			stop.style.display="inline-block";
+			
 		});
 
 		imgs[i].addEventListener('mouseup', function() {
 			console.log("imgs/////up");
 			timeout = setTimeout(showStory, 3000);
-			
+			stop.style.display="none";
 		});
 	}
 
