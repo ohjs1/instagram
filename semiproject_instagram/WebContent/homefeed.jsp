@@ -395,26 +395,29 @@
 				var likeLink=document.getElementsByClassName("likeLink");
 				var likeImg=document.getElementsByClassName("likeImg");
 				if(json!=null && json!=""){
-					
 					for(var k=0;k<halist.length;k++){
-						var likeChk=false;
+						//var likeChk=false;
 						//var notLike = true;
 						for(var i=0; i<json.length; i++){
 							
+							//좋아요가 있을경우
 							if(json[i][0].board_no==halist[k]){
-								//좋아요가 있을경우
 								for(var j=0;j<json[i].length;j++){
+									//게시글번호가 같을경우
 									if(halist[k]==json[i][j].board_no){
-										//게시글번호가 같을경우
+										
 										var member_no=json[i][j].member_no;
 										if(member_no==${sessionScope.member_no}){
 											//내가 좋아요 눌렀을경우
 											//likeChk=true;
 											likeImg[k].innerHTML="<img src='${cp}/upload/like.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
 											break;
+										}else{
+											likeImg[k].innerHTML="<img src='${cp}/upload/likenull.PNG' onclick=\"likeAction("+halist[k]+",'"+halist+"')\">";
 										}
 									}
 								}
+	
 								likeLink[k].innerHTML="<button class='likeListBtn' id='likeListBtn'>좋아요 "+json[i].length+"개</button>";
 								break;
 							}else{

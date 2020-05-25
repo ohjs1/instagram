@@ -608,9 +608,9 @@
 				var data=boardDelete.responseText;
 				var json=JSON.parse(data);
 				var result=json.result;
-				if(result>0 && board_no==ref){
+				if(result>0 && ref==0){ //게시글삭제인경우
 					location.href="${cp}/follow/move?youmember_no="+member_no;
-				}else if(result>0 && board_no!=ref){
+				}else if(result>0 && board_no!=ref){ //댓글삭제인경우
 					getBoardList(ref);
 				}else{
 					alert("삭제실패!");
