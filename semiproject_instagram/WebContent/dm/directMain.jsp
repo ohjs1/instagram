@@ -159,10 +159,7 @@
 							<a href="${cp}/dm/connectClient?yourMember_no=${n.getMember_no()}&myMember_no=${member_no}">
 								<img src="${ cp }/upload/${n.getProfile()}" alt="프로필사진" style="width:55px; height:55px; border-radius: 70%; margin-top:5px;" />
 							</a>
-							<script type="text/javascript">
-								//console.log('${n.getMember_no()}');
-								chatConfirmUser('${n.getMember_no()}');
-							</script>
+							${n.getNickname()}
 				</li>
 						<br>
 						</div>
