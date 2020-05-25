@@ -31,6 +31,7 @@ public class TagListController extends HttpServlet{
 			ArrayList<ImageVo> vo=dao.list(keyword);
 			req.setAttribute("main", "/tag/list.jsp");
 			req.setAttribute("keyword", keyword);
+			
 			req.setAttribute("vo", vo);
 			
 			req.getRequestDispatcher("/layout.jsp").forward(req, resp);
@@ -43,6 +44,7 @@ public class TagListController extends HttpServlet{
 			for(ImageVo l : list) {
 				JSONObject json=new JSONObject();
 				json.put("filepath", l.getImagepath());
+				json.put("board_no", l.getBoard_no());
 				jrr.put(json);
 			}
 			

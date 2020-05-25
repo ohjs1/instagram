@@ -96,7 +96,7 @@
 		var name=document.getElementById("name").value;
 		xhrfind=new XMLHttpRequest;
 		xhrfind.onreadystatechange=insertOk;
-		xhrfind.open('post','/member/findpwd',true);
+		xhrfind.open('post','${cp}/member/findpwd',true);
 		xhrfind.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhrfind.send('id='+ id + '&name=' + name);
 	}

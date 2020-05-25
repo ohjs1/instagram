@@ -19,6 +19,8 @@ public class MemberFindpwdController extends HttpServlet{
 		req.setCharacterEncoding("utf-8");
 		String id=req.getParameter("id");
 		String name=req.getParameter("name");
+		System.out.println("아이디:"+id);
+		System.out.println("이름:"+name);
 		
 		MemberDao dao=MemberDao.getInstance();
 		String pwd=dao.memberFindpwd(id,name);
