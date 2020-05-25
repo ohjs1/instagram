@@ -44,7 +44,7 @@
 </head>
 <body onload="test()">
 <div id="headerTag">
-	<a href="#" id="alink" onclick="storytaglist()"><img src="${cp}/upload/${vo[0].imagepath}" id="storyTagImg"></a>
+	<a href="#" id="alink"><img src="${cp}/upload/${vo[0].imagepath}" id="storyTagImg"></a>
 
 	<div id="dd"><strong>${keyword }</strong></div>
 	<h3>게시물<span id="cnt"> ${vo.size() }</span><h3>
@@ -72,31 +72,37 @@
 	function test() {
 		xhr=new XMLHttpRequest();
 		xhr.onreadystatechange=function(){
-		var k='${keyword}';
-	    var test=k.replace("#", "%23");
+
 			if(xhr.readyState==4 && xhr.status==200){
 				var data=xhr.responseText;
 				var json=JSON.parse(data);
 				var alink=document.getElementById("alink");
-				if(json[0].filepath!="" & json[0].filepath!=null){
+				if(json[0].filepath!="" && json[0].filepath!=null){
 					storyTagImg.src="${cp}/upload/"+json[0].filepath;
-					if(alink.clicked){
+					
+					
+					
+					var alink=document.getElementById("alink");
+					alink.addEventListener('click', function(){
 						storytaglist(test);
-					}
+					});
 				}else{
 					storyTagImg.src="${cp }/upload/${vo[0].imagepath}";
 				}
 			}
 		}
-		xhr.open('get','${cp}/tag/showStroy?keyword='+test,true);
+		var k='${keyword}';
+	    var test=k.replace("#", "%23");
+
+		xhr.open('get','${cp}/tag/showStory?keyword='+test,true);
 		xhr.send();
 	}
 	
 	function storytaglist(test){
-		console.log(test);
-		location.href="${cp}/story/storytaglist?keword="+test;
+		console.log(test); 
+		location.href="${cp}/story/storytaglist?keyword="+test;
 		
-	}
+	} 
 	//무한스크롤
 	xhrImg=null;
 	var snum=7;

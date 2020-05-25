@@ -121,10 +121,7 @@ body {
 				</c:choose>
 
 				<div id="content" class="cdivs">
-					${vo.getContent() } 
-					<!-- <br> 저장될 읽은사람(현재로그인한 나) ${nickname } <br>
-					${vo.getNickname()} 의 현재 스토리 번호 : ${vo.getStory_no() }
-					 <c:set var="snolist">${vo.getStory_no() }</c:set>  -->
+					${vo.getContent() }
 					<input type="hidden" class="readuser" name="readuser" value="${member_no }"> 
 					<input type="hidden" class="readstory" name="readstory" value="${vo.getStory_no()}">
 					<input type="hidden" id="oppnickname" name="oppnickname" value="${vo.getNickname()}">
@@ -142,19 +139,19 @@ body {
 
 </body>
 <script type="text/javascript">
-	function getProfile() {
+	function getProfile(i) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var opp = document.getElementById("oppprofile");
 				var oppnickname = document.getElementById("oppnickname").value;
-
+				console.log("현재스토리 닉네임 : "+oppnickname);
 				var data = xhr.responseText;
 				var json = JSON.parse(data);
-				for (var i = 0; i < json.length; i++) {
+			
 					var nick = json[i].nickname;
 
-					if (oppnickname == nick) {
+					
 						if (opp.firstChild != null) {
 							opp.removeChild(opp.firstChild);
 						}
@@ -172,20 +169,21 @@ body {
 
 						opp.appendChild(div);
 
-					}
+					
 
-				}
+				
 			}
 		}
-		xhr.open('post', '${cp}/story/opponentlist', true);
+
+		xhr.open('post', '${cp}/story/storytaglist', true);
 		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		xhr.send();
+		xhr.send('keyword=${requestScope.keyword}');
 	}
 
 	var index = 0;
 	var timeout = null;
 	function showStory() {
-		getProfile();
+		
 
 		const divs = document.getElementsByClassName("divs");
 		const cdivs = document.getElementsByClassName("cdivs");
@@ -193,7 +191,9 @@ body {
 		var readuser = document.getElementsByClassName("readuser");
 		var readstory = document.getElementsByClassName("readstory");
 		for (let i = 0; i < imgs.length; i++) {
+			
 			if (i == index) {
+				getProfile(i);
 				insertReadUser(readuser[i].value, readstory[i].value);
 				getStorydate(readstory[i].value,i);
 				divs[i].style.display = "block";
@@ -261,7 +261,7 @@ body {
 	}
 
 	function closeStory() {
-		location.href = "../layout.jsp";
+		location.href = "${cp}/board/homefeed";
 	}
 
 	function previousImg() {

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,14 +22,23 @@ public class StoryDao {
 		ResultSet rs=null;
 		try {
 			con=ConnectionPool.getCon();
-			String sql="select storydate from story where story_no=?";
+			String sql="select to_char(storydate,'YYYYMMDDHH24MISS') storydate from story where story_no=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, story_no);
 			rs=pstmt.executeQuery();
 			StoryVo vo=new StoryVo();
 			if(rs.next()) {
-				Date storydate=rs.getDate("storydate");
-
+				String storydate1=rs.getString("storydate");
+				String y=storydate1.substring(0, 4);
+				String m=storydate1.substring(4,6);
+				String d=storydate1.substring(6, 8);
+				String h=storydate1.substring(8,10);
+				String mm=storydate1.substring(10,12);
+				String s=storydate1.substring(12,14);
+				String date=y+"-"+m+"-"+d+" "+h+":"+mm+":"+s;
+				SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date ddd = sd.parse(date);		
+				Date storydate=new Date(ddd.getTime());
 				vo.setStorydate(storydate);
 				
 			}
@@ -35,7 +46,11 @@ public class StoryDao {
 		}catch(SQLException se) {
 			se.printStackTrace();
 			return null;
-		}finally {
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		finally {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}

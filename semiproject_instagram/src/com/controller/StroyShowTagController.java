@@ -14,17 +14,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.dao.TagDao;
+import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
-@WebServlet("/tag/showStroy")
+@WebServlet("/tag/showStory")
 public class StroyShowTagController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String keyword=req.getParameter("keyword");
 		TagDao dao=new TagDao();
-		ArrayList<StoryVo> list=dao.showTagImg(keyword);
+		ArrayList<StoryMemberVo> list=dao.showTagImg(keyword);
 		JSONArray jrr =new JSONArray();
 		
-		for(StoryVo l : list) {
+		for(StoryMemberVo l : list) {
 			JSONObject json=new JSONObject();
 			json.put("filepath", l.getFilepath());
 			System.out.println(l.getFilepath()+"------");

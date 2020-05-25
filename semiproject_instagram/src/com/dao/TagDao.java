@@ -1,5 +1,6 @@
 package com.dao;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.util.Set;
 import com.db.ConnectionPool;
 import com.vo.ImageVo;
 import com.vo.MemberVo;
+import com.vo.StoryMemberVo;
 import com.vo.StoryVo;
 import com.vo.TagVo;
 import com.vo.Tag_linkVo;
@@ -211,23 +213,22 @@ public class TagDao {
 	}
 	
 	//검색한 태그 스토리이미지
-	public ArrayList<StoryVo> showTagImg(String keyword) {
+	public ArrayList<StoryMemberVo> showTagImg(String keyword) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet rs =null;
 		try {
 			con=ConnectionPool.getCon();
-			String sql ="select * from story where story_no in\r\n" + 
+			String sql ="select s.*, nickname, profile from story s, member m where story_no in\r\n" + 
 					"(\r\n" + 
-					"    select story_no from link,tag\r\n" + 
-					"    where link.tag_no=tag.tag_no\r\n" + 
-					"    and link.tag_no=(select tag_no from tag where search=?)\r\n" + 
-					")";
+					"select story_no from link,tag\r\n" + 
+					"where link.tag_no=tag.tag_no\r\n" + 
+					"and link.tag_no=(select tag_no from tag where search=?)) and s.member_no=m.member_no";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			rs=pstmt.executeQuery();
 			
-			ArrayList<StoryVo> list=new ArrayList<StoryVo>();
+			ArrayList<StoryMemberVo> list=new ArrayList<StoryMemberVo>();
 
 			while(rs.next()) {
 				int story_no=rs.getInt("story_no");
@@ -235,8 +236,11 @@ public class TagDao {
 				String content=rs.getString("content");
 				String filepath=rs.getString("filepath");
 				Date storydate=rs.getDate("storydate");
+				String nickname=rs.getString("nickname");
+				String profile=rs.getString("profile");
 				System.out.println("Dao---"+filepath);
-				list.add(new StoryVo(story_no, member_no, content, filepath, storydate));
+				list.add(new StoryMemberVo(story_no, member_no, content, filepath, storydate, null, null, null, nickname, null, profile));
+				System.out.println("리스트.add들어감");
 			}
 			return list;
 		} catch(SQLException se) {

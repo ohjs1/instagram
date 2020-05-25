@@ -236,9 +236,6 @@ body {
 				}else if(dd<86400){
 					realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
 					console.log(realDate);
-				}else if(dd<604800){
-					realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
-					console.log(realDate);
 				}else{
 					console.log(realDate+"삭제됨");
 					delete24story(readstory);
@@ -261,7 +258,7 @@ body {
 	}
 
 	function closeStory() {
-		location.href = "../layout.jsp";
+		location.href = "${cp}/board/homefeed";
 	}
 
 	function previousImg() {

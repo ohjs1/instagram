@@ -279,9 +279,6 @@ body {
 				}else if(dd<86400){
 					realDate="<p>"+Math.floor((dd/60/60))+"시간 전</p>";
 					console.log(realDate);
-				}else if(dd<604800){
-					realDate="<p>"+Math.floor((dd/60/60/24))+"일 전</p>";
-					console.log(realDate);
 				}else{
 					console.log(realDate+"삭제됨");
 					delete24story(readstory);
@@ -305,6 +302,7 @@ body {
 	//기본
 	var index = 0;
 	var timeout = null;
+	var timeout2 = null;
 	function showStory() {
 		getProfile();		
 		const divs = document.getElementsByClassName("divs");
@@ -327,7 +325,7 @@ body {
 		index++;
 		timeout = setTimeout(showStory, 3000);
 		if (index > imgs.length - 1) {
-			setTimeout(closeStory, 3000);
+			timeout2 = setTimeout(closeStory, 3000);
 		}
 	}
 
@@ -452,7 +450,7 @@ body {
 	
 	//스토리 종료 : index가 끝에 도달했을 때 실행되는데.. mousedown/up 안됨 
 	function closeStory() {
-		location.href = "../layout.jsp";
+		location.href = "${cp}/board/homefeed";
 	}
 
 	function previousImg() {
@@ -478,12 +476,14 @@ body {
 		console.log("imgs:" + imgs);
 		imgs[i].addEventListener('mousedown', function() {
 			console.log("imgs/////down");
-			clearTimeout(timeout)
+			clearTimeout(timeout);
+			clearTimeout(timeout2);
 		});
 
 		imgs[i].addEventListener('mouseup', function() {
 			console.log("imgs/////up");
 			timeout = setTimeout(showStory, 3000);
+			
 		});
 	}
 
