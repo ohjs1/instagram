@@ -12,7 +12,7 @@ import com.vo.MemberVo;
 
 public class FollowDao {
 	
-	//ÆÈ·Î¿ì
+	//ï¿½È·Î¿ï¿½
 	public int insert(int mymember_no, int youmember_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -33,7 +33,7 @@ public class FollowDao {
 				ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	// ÆÈ·Î¿ö ÆÈ·ÎÀ× Ã£±â
+	// ï¿½È·Î¿ï¿½ ï¿½È·ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
 	public ArrayList<MemberVo> followingMem(int mymember_no, int youmember_no, boolean bl){
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -51,6 +51,7 @@ public class FollowDao {
 				pstmt=con.prepareStatement(sql);
 				pstmt.setInt(1, youmember_no);
 			}
+			System.out.println(sql);
 			rs=pstmt.executeQuery();
 			while(rs.next()) {
 				MemberVo vo=new MemberVo(
@@ -71,7 +72,7 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
-	//ÆÈ·Î¿ì ÇØÁ¦
+	//ï¿½È·Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 	public int delete(int mymember_no,int youmember_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -79,8 +80,8 @@ public class FollowDao {
 			con = ConnectionPool.getCon();
 			String sql = "delete from follow where mymember_no=? and youmember_no=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, mymember_no);
-			pstmt.setInt(2, youmember_no);
+			pstmt.setInt(2, mymember_no);
+			pstmt.setInt(1, youmember_no);
 			int n = pstmt.executeUpdate();
 			return n;
 		}catch(SQLException se) {
@@ -90,7 +91,7 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, null);
 		}
 	}
-	//ÆÈ·Î¿ì Áßº¹ Ã£±â
+	//ï¿½È·Î¿ï¿½ ï¿½ßºï¿½ Ã£ï¿½ï¿½
 	public boolean followfind(int mymember_no,int youmember_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -113,7 +114,7 @@ public class FollowDao {
 			ConnectionPool.close(con, pstmt, rs);
 		}
 	}
-	//ÆÈ·Î¿ö Ä«¿îÆ®
+	//ï¿½È·Î¿ï¿½ Ä«ï¿½ï¿½Æ®
 /*	public boolean followcount(int mymember_no, int youmember_no, boolean bl) {
 		Connection con = null;
 		PreparedStatement pstmt = null;

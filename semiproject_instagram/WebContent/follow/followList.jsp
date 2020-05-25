@@ -29,7 +29,54 @@ table {
 
 <div id="list">
 	<div id="list1">
+	<c:if test="${check == 'true' }">
 		<c:if test="${bl==true}">
+	<table id="list2">
+		<tr>
+		<td colspan="3">
+		<h1>팔로잉</h1></td></tr>
+			<c:forEach var="vo" items='${list }'>
+				<c:set var="i" value="${i+1 }"/>
+				<tr id="result${i }">
+					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
+						<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a></td>
+					<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
+					<c:choose>
+						<c:when test="${sessionScope.member_no == mymember_no }">
+							<td><a href="javascript:callInsert(${vo.getMember_no()},${i });">
+								<input type="button" value="팔로우" class="folbtn" name="btn"></a>
+								</td>
+						</c:when>		
+					</c:choose>
+					</tr>
+			</c:forEach>
+		</table>
+		</c:if>
+		<c:if test="${bl==false}">
+			<table id="list2">
+		<tr>
+		<td colspan="3">
+			<h1>팔로워</h1></tr>
+			<c:forEach var="vo" items='${list }'>
+				<c:set var="i" value="${i+1 }"/>
+			<tr>
+				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">
+					<img src="${cp }/upload/${vo.getProfile()}"style="width: 50px; height: 50px;border-radius: 50%;"></a>
+				</td>
+				<td class="mem"><a href="${cp }/follow/move?youmember_no=${vo.getMember_no()}">${vo.getNickname() }</a></td>
+				<c:choose>
+						<c:when test="${sessionScope.member_no != vo.getMember_no() }">
+							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>	
+						</c:when>			
+				</c:choose>
+			</tr>
+			</c:forEach>
+		</table><br>
+		</c:if>
+	</c:if>
+	
+	<c:if test="${check !='true' }">
+	<c:if test="${bl==true}">
 	<table id="list2">
 		<tr>
 		<td colspan="3">
@@ -57,7 +104,6 @@ table {
 			</c:forEach>
 		</table>
 		</c:if>
-		
 		<c:if test="${bl==false}">
 			<table id="list3">
 		<tr>
@@ -81,6 +127,8 @@ table {
 			</c:forEach>
 		</table><br>
 		</c:if>
+	</c:if>	
+	
 	<a href="javascript:history.back()" id="back">뒤로가기</a>
 	</div>
 </div>

@@ -16,7 +16,7 @@ import com.vo.MemberVo;
 public class FollowSelectController extends HttpServlet{
 	 @Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			String syoumember_no=req.getParameter("youmember_no");
+		 	String syoumember_no=req.getParameter("youmember_no");
 			String smymember_no=req.getParameter("mymember_no");
 			String profile=req.getParameter("profile");
 			int youmember_no=0;
@@ -28,6 +28,11 @@ public class FollowSelectController extends HttpServlet{
 			}else {
 				youmember_no=Integer.parseInt(syoumember_no);
 			}
+			boolean bool = false;
+			int n=(int)req.getSession().getAttribute("member_no");
+			if(n==youmember_no || n==mymember_no) {
+				bool=true;
+			}
 			FollowDao dao=new FollowDao();
 			ArrayList<MemberVo> list=dao.followingMem(mymember_no, youmember_no, bl);
 			req.setAttribute("bl", bl);
@@ -35,6 +40,7 @@ public class FollowSelectController extends HttpServlet{
 			req.setAttribute("main", "/follow/followList.jsp");
 			req.setAttribute("mymember_no", smymember_no);
 			req.setAttribute("profile", profile);
+			req.setAttribute("check",bool);
 			req.getRequestDispatcher("/layout.jsp").forward(req,resp);
 	}
 }
