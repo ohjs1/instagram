@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Instagram</title>
 <style type="text/css">
 	#login_wrap{
 		width: 850px;

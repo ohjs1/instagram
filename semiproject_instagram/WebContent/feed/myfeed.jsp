@@ -42,12 +42,12 @@
 }
 .repairbtn{
 	position: relative;
-    left: 254px;
+    left: 324px;
     bottom: 207px;
 }
 .owbtn{
 	position: relative;
-    left: 405px;
+    left: 483px;
     bottom: 210px;
 }
 .ingbtn{
@@ -70,8 +70,8 @@
 				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
 				<h1 id="followh1">${id }</h1>
 				<a href="javascript:callInsert(${member_no});"><input type="button" value="팔로우" id="followbtn" class="owbtn" name="btn"></a>
-				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="erbtn1"></a>
-				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="ingbtn1"></a>
+				<a href="${cp }/follow/select?youmember_no=${member_no}"><input type="submit" value="팔로잉" id="followbtn" class="erbtn1"></a>
+				<a href="${cp }/follow/select?mymember_no=${member_no}"><input type="submit" value="팔로워" id="followbtn" class="ingbtn1"></a>
 			</c:when>
 			<c:otherwise>
 				<img src="${cp }/upload/${requestScope.profile}"style="width: 200px; height: 200px;border-radius: 70%;" id="profileimg">
@@ -111,8 +111,8 @@
 			if(xhr.readyState==4 && xhr.status==200){
 				var xml = xhr.responseXML;
 				var json = JSON.parse(xml);
-					var btn=document.getElementsByName("btn");
-					btn.value="팔로우됨";
+					var btn=document.getElementById("followbtn");
+					btn.value="팔로우";
 					btn.disabled=true;
 					btn.style.backgroundColor="black";
 					btn.style.color="white";

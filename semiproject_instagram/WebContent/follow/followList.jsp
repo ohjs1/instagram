@@ -43,7 +43,15 @@ table {
 					<c:choose>
 						<c:when test="${sessionScope.member_no == mymember_no }">
 							<td><a href="javascript:callDelete(${vo.getMember_no()},${i });">삭제</a></td>	
-						</c:when>			
+						</c:when>
+						<c:otherwise>
+							<c:if test="${sessionScope.member_no != vo.getMember_no() }">
+								<c:set var="j" value="${j+1 }"/>
+								<td><a href="javascript:callInsert(${vo.getMember_no()},${j });">
+								<input type="button" value="팔로우" class="folbtn" name="btn"></a>
+								</td>
+							</c:if>
+						</c:otherwise>			
 					</c:choose>
 					</tr>
 			</c:forEach>
