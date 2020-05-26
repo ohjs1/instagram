@@ -115,7 +115,7 @@ public class BoardInsertController extends HttpServlet{
         }
 		
         req.setAttribute("fileList", fileList);
-		req.setAttribute("main", "/board/insert.jsp");
+		req.setAttribute("main", "/board/homefeed");
         
 		req.getRequestDispatcher("/layout.jsp").forward(req, resp);
 
