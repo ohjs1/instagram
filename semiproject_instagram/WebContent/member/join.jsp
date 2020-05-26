@@ -102,7 +102,7 @@
 	var pwd="";
 	
 	var btn=document.getElementById("btn");
-	var srcCheck="http://192.168.0.37:8081${cp}/images/o.PNG";
+	var srcCheck="http://localhost:8081${cp}/images/o.PNG";
 	var xhrId=null;
 	
 	function idcheck() {
