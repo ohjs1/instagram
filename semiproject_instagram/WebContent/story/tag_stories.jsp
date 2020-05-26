@@ -205,11 +205,11 @@ body {
 							opp.removeChild(opp.firstChild);
 						}
 						var div = document.createElement("div");
-						div.innerHTML = "<a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"+
+						div.innerHTML = "<a href='${cp }/follow/move?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"+
 						"<img src='${cp}/upload/"
 								+ json[i].profile
 								+ "' style='width: 32px; height: 32px;border-radius: 50%;'></a>"+
-								"<div id='topm' style='text-align: center;padding-left:5px;line-height:32px; width: 70px;height: 32px;display: inline;'><a href='${cp }/feed/myfeed?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"
+								"<div id='topm' style='text-align: center;padding-left:5px;line-height:32px; width: 70px;height: 32px;display: inline;'><a href='${cp }/follow/move?youmember_no=" + json[i].member_no+ "' style='color:white;text-decoration: none'>"
 								+ nick  +"</a></div>";
 						div.style.display = "inline";
 						div.style.height="54px";
