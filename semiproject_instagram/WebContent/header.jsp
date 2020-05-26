@@ -19,11 +19,12 @@
 	}
 	#tag{
 		display: inline-block;
-	    overflow: auto;
+		overflow: auto;
 	    width: 241px;
 	    height: 362px;
-	    margin:auto;
+	    margin-left:790px;
     	background-color: white;
+    	
 	}
 	#myAccount{
 		border-radius: 70%;

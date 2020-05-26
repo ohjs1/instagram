@@ -20,6 +20,7 @@ import com.vo.StoryVo;
 public class TagListController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
 		String keyword=req.getParameter("keyword");
 		System.out.println(keyword+"+++");
 		String snum=req.getParameter("snum");//½ºÅ©·Ñ

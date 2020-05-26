@@ -606,9 +606,6 @@ th{
 						  "<div class='delete_option'>"+
 							  "<button class='option_btn' id='delete_btn'>삭제하기</button>"+
 						  "</div>"+
-						  "<div class='update_option'>"+
-						 	  "<button class='option_btn' id='update_btn'>수정하기</button>"+
-						  "</div>"+
 						  "<div class='cancle_option'>"+
 					 	 	  "<button class='option_btn' onclick='closeOptionModal();'>취소</button>"+
 					  	  "</div>"+
