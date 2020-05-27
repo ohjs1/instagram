@@ -12,6 +12,23 @@
 	align-items: center;
 	text-align: center;
 }
+#next,#prev{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: #fff;
+    color: #212121;
+    border-radius: 50px;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    z-index: 999;
+}
+#submit{
+	width:300px;
+	height:35px;
+	border:0;
+}
 
 </style>
 <script type="text/javascript">
@@ -97,13 +114,13 @@
 		<input type="hidden" name="lev" value="${param.lev }">
 		<input type="hidden" name="step" value="${param.step }">
 		
-		<input type="button" onclick="previousImg()" value="이전">
+		<input type="button" onclick="previousImg()" id="prev" value="<">
 		<span id="imgList"></span>
-		<input type="button" onclick="nextImg()" value="다음">
+		<input type="button" onclick="nextImg()" id="next" value=">">
 		<textarea rows="5" cols="50" name="content" placeholder="문구 입력..." ></textarea><br>
-		<b>이미지 추가</b><br>
+		<h4>이미지 추가</h4><br>
 		<input type="file" id="file1" name="file1" accept=".jpg,.jpeg,.png,.gif,.mp4" multiple onchange="showImg(this.files)"><br>
-		<input type="submit" value="확인">
+		<input type="submit" value="추가하기" id="submit">
 	</form>
 	<c:set var="file1" value="${fileList[0] }"/>
 </div>
